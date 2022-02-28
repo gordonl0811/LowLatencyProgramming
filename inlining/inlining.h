@@ -4,9 +4,11 @@
 
 class Inlining {
 
-    static int exampleInline(int x);
+public:
 
-    static int exampleNoInline(int x);
+    static int CubeInline(int x);
+
+    static int CubeNoInline(int x);
 
 };
 

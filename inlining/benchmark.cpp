@@ -1,14 +1,13 @@
 #include "inlining.h"
 #include <benchmark/benchmark.h>
 #include <iostream>
-#include <random>
 
 using namespace std;
 
 static void benchmarkInlining(benchmark::State& state) {
     for (auto _ : state) {
         for (auto i = 0; i < state.range(0); i++) {
-            auto cubed = Inlining::exampleInline(5);
+            auto cubed = Inlining::CubeNoInline(5);
             benchmark::DoNotOptimize(cubed);
         }
     }
