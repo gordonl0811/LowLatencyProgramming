@@ -22,9 +22,7 @@ ExternalProject_Add(googlebenchmark
 
 #################################### Targets ####################################
 
-#################### Inlining ####################
-
-set(InliningFiles inlining/benchmark.cpp inlining/inlining.h)
+set(InliningFiles benchmark.cpp inlining.h)
 
 add_executable(InliningBenchmarks ${InliningFiles})
 
