@@ -7,7 +7,7 @@
 
 using namespace std;
 
-static vector<int> generateRandomInts(int size) {
+static vector<int> GenerateRandomInts(int size) {
 
     std::random_device rd;
     std::mt19937 mt(rd());
@@ -23,25 +23,25 @@ static vector<int> generateRandomInts(int size) {
     return ints;
 }
 
-static void benchmarkSimpleLoop(benchmark::State& state) {
+static void BenchmarkSimpleLoop(benchmark::State& state) {
     for (auto _ : state) {
         int size = state.range(0);
-        auto zippedVector = LoopUnrolling::SimpleLoop(generateRandomInts(size), generateRandomInts(size), size);
+        auto zippedVector = LoopUnrolling::SimpleLoop(GenerateRandomInts(size), GenerateRandomInts(size), size);
         benchmark::DoNotOptimize(zippedVector);
     }
 }
 
-static void benchmarkSimpleLoopUnrolled(benchmark::State& state) {
+static void BenchmarkSimpleLoopUnrolled(benchmark::State& state) {
     for (auto _ : state) {
         for (auto i = 0; i < state.range(0); i++) {
             int size = state.range(0);
-            auto zippedVector = LoopUnrolling::SimpleLoopUnrolled(generateRandomInts(size), generateRandomInts(size), size);
+            auto zippedVector = LoopUnrolling::SimpleLoopUnrolled(GenerateRandomInts(size), GenerateRandomInts(size), size);
             benchmark::DoNotOptimize(zippedVector);
         }
     }
 }
 
-BENCHMARK(benchmarkSimpleLoop)->RangeMultiplier(10)->Range(1, 10000);
-BENCHMARK(benchmarkSimpleLoopUnrolled)->RangeMultiplier(10)->Range(1, 10000);
+BENCHMARK(BenchmarkSimpleLoop)->RangeMultiplier(10)->Range(1, 10000);
+BENCHMARK(BenchmarkSimpleLoopUnrolled)->RangeMultiplier(10)->Range(1, 10000);
 
 BENCHMARK_MAIN();

@@ -4,16 +4,7 @@
 
 using namespace std;
 
-static void benchmarkInlining(benchmark::State& state) {
-    for (auto _ : state) {
-        for (auto i = 0; i < state.range(0); i++) {
-            auto cubed = Inlining::CubeInline(5);
-            benchmark::DoNotOptimize(cubed);
-        }
-    }
-}
-
-static void benchmarkNoInlining(benchmark::State& state) {
+static void BenchmarkNoInlining(benchmark::State& state) {
     for (auto _ : state) {
         for (auto i = 0; i < state.range(0); i++) {
             auto cubed = Inlining::CubeNoInline(5);
@@ -22,7 +13,17 @@ static void benchmarkNoInlining(benchmark::State& state) {
     }
 }
 
-BENCHMARK(benchmarkInlining)->RangeMultiplier(10)->Range(1, 10000000);
-BENCHMARK(benchmarkNoInlining)->RangeMultiplier(10)->Range(1, 10000000);
+static void BenchmarkInlining(benchmark::State& state) {
+    for (auto _ : state) {
+        for (auto i = 0; i < state.range(0); i++) {
+            auto cubed = Inlining::CubeInline(5);
+            benchmark::DoNotOptimize(cubed);
+        }
+    }
+}
+
+
+BENCHMARK(BenchmarkNoInlining)->RangeMultiplier(10)->Range(1, 10000000);
+BENCHMARK(BenchmarkInlining)->RangeMultiplier(10)->Range(1, 10000000);
 
 BENCHMARK_MAIN();
