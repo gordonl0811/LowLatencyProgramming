@@ -10,7 +10,7 @@ using namespace std;
 class LoopUnrolling {
 
 public:
-    static vector<int> SimpleLoop(const vector<int> x, const vector<int> y, int size) {
+    static vector<int> SimpleLoop(const vector<int>& x, const vector<int>& y, int size) {
         vector<int> z;
         z.reserve(size);
         for (auto i = 0; i < size; i++) {
@@ -20,7 +20,7 @@ public:
     }
 
     // Array size is an exponent of 2
-    static vector<int> SimpleLoopUnrolled(const vector<int> x, const vector<int> y, int size) {
+    static vector<int> SimpleLoopUnrolled(const vector<int>& x, const vector<int>& y, int size) {
         vector<int> z;
         z.reserve(size);
         for (auto i = 0; i < size / UNROLL_FACTOR; i += UNROLL_FACTOR) {

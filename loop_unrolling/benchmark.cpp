@@ -24,24 +24,28 @@ static vector<int> GenerateRandomInts(int size) {
 }
 
 static void BenchmarkSimpleLoop(benchmark::State& state) {
+    int size = state.range(0);
+    vector<int> x = GenerateRandomInts(size);
+    vector<int> y = GenerateRandomInts(size);
+
     for (auto _ : state) {
-        int size = state.range(0);
-        auto zippedVector = LoopUnrolling::SimpleLoop(GenerateRandomInts(size), GenerateRandomInts(size), size);
+        auto zippedVector = LoopUnrolling::SimpleLoop(x, y, size);
         benchmark::DoNotOptimize(zippedVector);
     }
 }
 
 static void BenchmarkSimpleLoopUnrolled(benchmark::State& state) {
+    int size = state.range(0);
+    vector<int> x = GenerateRandomInts(size);
+    vector<int> y = GenerateRandomInts(size);
+
     for (auto _ : state) {
-        for (auto i = 0; i < state.range(0); i++) {
-            int size = state.range(0);
-            auto zippedVector = LoopUnrolling::SimpleLoopUnrolled(GenerateRandomInts(size), GenerateRandomInts(size), size);
-            benchmark::DoNotOptimize(zippedVector);
-        }
+        auto zippedVector = LoopUnrolling::SimpleLoopUnrolled(x, y, size);
+        benchmark::DoNotOptimize(zippedVector);
     }
 }
 
-BENCHMARK(BenchmarkSimpleLoop)->RangeMultiplier(10)->Range(1, 10000);
-BENCHMARK(BenchmarkSimpleLoopUnrolled)->RangeMultiplier(10)->Range(1, 10000);
+BENCHMARK(BenchmarkSimpleLoop)->RangeMultiplier(10)->Range(1, 1000000);
+BENCHMARK(BenchmarkSimpleLoopUnrolled)->RangeMultiplier(10)->Range(1, 1000000);
 
 BENCHMARK_MAIN();
