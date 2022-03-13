@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 # Add -O0 to remove optimizations
 IF(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O2")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O0")
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ############################### External Projects ###############################
@@ -22,15 +22,15 @@ ExternalProject_Add(googlebenchmark
 
 #################################### Targets ####################################
 
-set(InliningFiles benchmark.cpp inlining.h)
+set(BranchPredictionFiles benchmark.cpp branch_prediction.h)
 
-add_executable(InliningBenchmarks ${InliningFiles})
+add_executable(BranchPredictionBenchmarks ${BranchPredictionFiles})
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(InliningBenchmarks Threads::Threads)
+target_link_libraries(BranchPredictionBenchmarks Threads::Threads)
 
-add_dependencies(InliningBenchmarks googlebenchmark)
-target_include_directories(InliningBenchmarks SYSTEM PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/deps/include)
-target_link_libraries(InliningBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
-target_link_libraries(InliningBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
+add_dependencies(BranchPredictionBenchmarks googlebenchmark)
+target_include_directories(BranchPredictionBenchmarks SYSTEM PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/deps/include)
+target_link_libraries(BranchPredictionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
+target_link_libraries(BranchPredictionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
