@@ -15,11 +15,9 @@ public:
 
             mid = (left + right) / 2;
 
-            int pivot = nums[mid];
-
-            if (pivot < target) {
+            if (nums[mid] < target) {
                 left = mid + 1;
-            } else if (pivot > target) {
+            } else if (nums[mid] > target) {
                 right = mid - 1;
             } else {
                 return mid;
@@ -40,14 +38,12 @@ public:
 
             mid = (left + right) / 2;
 
-            __builtin_prefetch (&nums[(mid + 1 + right) / 2], 0, 0);
-            __builtin_prefetch (&nums[(left + mid - 1) / 2], 0, 0);
+            __builtin_prefetch (&nums[(mid + 1 + right) / 2], 0, 1);
+            __builtin_prefetch (&nums[(left + mid - 1) / 2], 0, 1);
 
-            int pivot = nums[mid];
-
-            if (pivot < target) {
+            if (nums[mid] < target) {
                 left = mid + 1;
-            } else if (pivot > target) {
+            } else if (nums[mid] > target) {
                 right = mid - 1;
             } else {
                 return mid;
