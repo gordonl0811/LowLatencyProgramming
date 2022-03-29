@@ -5,15 +5,13 @@
 #include <vector>
 #include <random>
 
-using namespace std;
-
-static vector<int> GenerateRandomInts(int size) {
+static std::vector<int> GenerateRandomInts(int size) {
 
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(1, 100);
 
-    vector<int> ints;
+    std::vector<int> ints;
     ints.reserve(size);
 
     for (int i = 0; i < size; i++) {
@@ -25,8 +23,8 @@ static vector<int> GenerateRandomInts(int size) {
 
 static void BenchmarkSimpleLoop(benchmark::State& state) {
     int size = state.range(0);
-    vector<int> x = GenerateRandomInts(size);
-    vector<int> y = GenerateRandomInts(size);
+    std::vector<int> x = GenerateRandomInts(size);
+    std::vector<int> y = GenerateRandomInts(size);
 
     for (auto _ : state) {
         auto zippedVector = LoopUnrolling::SimpleLoop(x, y, size);
@@ -36,8 +34,8 @@ static void BenchmarkSimpleLoop(benchmark::State& state) {
 
 static void BenchmarkSimpleLoopUnrolled(benchmark::State& state) {
     int size = state.range(0);
-    vector<int> x = GenerateRandomInts(size);
-    vector<int> y = GenerateRandomInts(size);
+    std::vector<int> x = GenerateRandomInts(size);
+    std::vector<int> y = GenerateRandomInts(size);
 
     for (auto _ : state) {
         auto zippedVector = LoopUnrolling::SimpleLoopUnrolled(x, y, size);
