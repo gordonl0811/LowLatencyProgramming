@@ -6,36 +6,32 @@
 class Predication {
 
 public:
-    static void Heapify(std::vector<int> input, int i) {
-        int max = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
 
-        if(left < input.size() && input[left] > input[max])
-            max = left;
-        if(right < input.size() && input[right] > input[max])
-            max = right;
-        if(max != i) {
-            std::swap(input[i], input[max]);
-            Heapify(input, max);
+    static std::vector<int> Trim(int max, const std::vector<int>& input, int size) {
+
+        std::vector<int> output(size);
+        int outputI = 0;
+
+        for (auto i = 0; i < size; i++) {
+            if (input[i] < max) {
+                output[outputI++] = input[i];
+            }
         }
+
+        return output;
     }
 
-    static void HeapifyWithPredication(std::vector<int> input, int i) {
-        int max = i;
-        int left = 2 * i + 1;
-        int right = 2 * i + 2;
+    static std::vector<int> TrimPredicated(int max, const std::vector<int>& input, int size) {
 
-        bool resultLeft = left < input.size() && input[left] > input[max];
-        max = (left * resultLeft) + (max * (1 - resultLeft));
+        std::vector<int> output(size);
+        int outputI = 0;
 
-        bool resultRight = right < input.size() && input[right] > input[max];
-        max = (right * resultRight) + (max * (1 - resultRight));
-
-        if(max != i) {
-            std::swap(input[i], input[max]);
-            HeapifyWithPredication(input, max);
+        for (auto i = 0; i < size; i++) {
+            output[outputI] = input[i];
+            outputI += (input[i] < max);
         }
+
+        return output;
     }
 };
 
