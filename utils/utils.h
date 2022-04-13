@@ -4,17 +4,16 @@
 #include <vector>
 #include <random>
 
-static float* GenerateRandomFloats(int size, int range) {
+static std::vector<float> GenerateRandomFloats(int size, int range) {
 
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<float> dist(1, range);
 
-    float* floats = new float[size];
+    auto generator = [&dist, &mt](){ return dist(mt); };
 
-    for (int i = 0; i < size; i++) {
-        floats[i] = dist(mt);
-    }
+    std::vector<float> floats(size);
+    std::generate(std::begin(floats), std::end(floats), generator);
 
     return floats;
 }
