@@ -19,8 +19,10 @@ static void BenchmarkMultiplyAddScalar(benchmark::State& state) {
     std::copy(floats_c.begin(), floats_c.end(), c);
 
     for (auto _ : state) {
-        SimdInstructions::MultiplyAddScalar(a, b, c, d);
-        benchmark::DoNotOptimize(d);
+        for (int i = 0; i < state.range(0); i++) {
+            SimdInstructions::MultiplyAddScalar(a, b, c, d);
+            benchmark::DoNotOptimize(d);
+        }
     }
 
 }
@@ -44,12 +46,14 @@ static void BenchmarkMultiplyAddVectorized(benchmark::State& state) {
     __m256 c_simd = _mm256_load_ps(c);
 
     for (auto _ : state) {
-        benchmark::DoNotOptimize(SimdInstructions::MultiplyAddVectorized(a_simd, b_simd, c_simd));
+        for (int i = 0; i < state.range(0); i++) {
+            benchmark::DoNotOptimize(SimdInstructions::MultiplyAddVectorized(a_simd, b_simd, c_simd));
+        }
     }
 
 }
 
-BENCHMARK(BenchmarkMultiplyAddScalar);
-BENCHMARK(BenchmarkMultiplyAddVectorized);
+BENCHMARK(BenchmarkMultiplyAddScalar)->RangeMultiplier(10)->Range(1, 10000000);;
+BENCHMARK(BenchmarkMultiplyAddVectorized)->RangeMultiplier(10)->Range(1, 10000000);;
 
 BENCHMARK_MAIN();
