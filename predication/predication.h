@@ -7,7 +7,7 @@ class Predication {
 
 public:
 
-    static std::vector<int> Trim(int max, const std::vector<int>& input, int size) {
+    static std::vector<int> TrimVector(int max, const std::vector<int>& input, int size) {
 
         std::vector<int> output(size);
         int outputI = 0;
@@ -21,7 +21,7 @@ public:
         return output;
     }
 
-    static std::vector<int> TrimPredicated(int max, const std::vector<int>& input, int size) {
+    static std::vector<int> TrimVectorPredicated(int max, const std::vector<int>& input, int size) {
 
         std::vector<int> output(size);
         int outputI = 0;

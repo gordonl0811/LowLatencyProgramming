@@ -1,51 +1,39 @@
-#include "prefetching.h"
 #include <benchmark/benchmark.h>
+#include "prefetching.h"
 
-using namespace std;
+#include "../utils/utils.h"
 
-static int* GenerateSortedArray(int size) {
+static void BenchmarkBinarySearch(benchmark::State& state) {
 
-    int* nums = new int[size];
-
-    for (int i = 0; i < size; i++) {
-        nums[i] = i;
-    }
-
-    return nums;
-}
-
-static void BenchmarkBinarySearchNoPrefetching(benchmark::State& state) {
+    int size = state.range(0);
+    int* nums = GenerateSequencedArray(size);
 
     srand( (unsigned)time(NULL) );
-    int size = state.range(0);
-    int* nums = GenerateSortedArray(size);
 
     for (auto _ : state) {
         int target = rand() % size;
-        int idx = Prefetching::BinarySearchNoPrefetch(target, nums, size);
-        benchmark::DoNotOptimize(idx);
+        benchmark::DoNotOptimize(Prefetching::BinarySearch(target, nums, size));
     }
 
     delete nums;
 }
 
-static void BenchmarkBinarySearchPrefetching(benchmark::State& state) {
+static void BenchmarkBinarySearchPrefetched(benchmark::State& state) {
+
+    int size = state.range(0);
+    int* nums = GenerateSequencedArray(size);
 
     srand( (unsigned)time(NULL) );
-    int size = state.range(0);
-    int* nums = GenerateSortedArray(size);
 
     for (auto _ : state) {
         int target = rand() % size;
-        int idx = Prefetching::BinarySearchPrefetch(target, nums, size);
-        benchmark::DoNotOptimize(idx);
+        benchmark::DoNotOptimize(Prefetching::BinarySearchPrefetched(target, nums, size));
     }
 
     delete nums;
-
 }
 
-BENCHMARK(BenchmarkBinarySearchNoPrefetching)->RangeMultiplier(8)->Range(1, 4096*4096*8);
-BENCHMARK(BenchmarkBinarySearchPrefetching)->RangeMultiplier(8)->Range(1, 4096*4096*8);
+BENCHMARK(BenchmarkBinarySearch)->RangeMultiplier(10)->Range(1, 1000000000);
+BENCHMARK(BenchmarkBinarySearchPrefetched)->RangeMultiplier(10)->Range(1, 1000000000);
 
 BENCHMARK_MAIN();

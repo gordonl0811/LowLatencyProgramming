@@ -5,7 +5,7 @@ class Prefetching {
 
 public:
 
-    static int BinarySearchNoPrefetch(int target, const int nums[], int size) {
+    static int BinarySearch(int target, const int nums[], int size) {
 
         int left = 0;
         int mid;
@@ -28,7 +28,7 @@ public:
 
     }
 
-    static int BinarySearchPrefetch(int target, int nums[], int size) {
+    static int BinarySearchPrefetched(int target, int nums[], int size) {
         
         int left = 0;
         int mid;

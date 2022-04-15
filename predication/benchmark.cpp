@@ -1,32 +1,31 @@
-#include "predication.h"
-#include "../utils/utils.h"
 #include <benchmark/benchmark.h>
+#include "predication.h"
 
-#include <vector>
+#include "../utils/utils.h"
 
-static void BenchmarkTrim(benchmark::State& state) {
+static void BenchmarkTrimVector(benchmark::State& state) {
+
+    int n = (int) state.range(0);
+    std::vector<int> ints = GenerateRandomInts(n, 1000);
 
     for (auto _ : state) {
-        int n = (int) state.range(0);
-        std::vector<int> ints = GenerateRandomInts(n, 1000);
-        std::vector<int> trimmedInts = Predication::Trim(500, ints, n);
-        benchmark::DoNotOptimize(trimmedInts);
+        benchmark::DoNotOptimize(Predication::TrimVector(500, ints, n));
     }
 
 }
 
-static void BenchmarkTrimPredicated(benchmark::State& state) {
+static void BenchmarkTrimVectorPredicated(benchmark::State& state) {
+
+    int n = (int) state.range(0);
+    std::vector<int> ints = GenerateRandomInts(n, 1000);
 
     for (auto _ : state) {
-        int n = (int) state.range(0);
-        std::vector<int> ints = GenerateRandomInts(n, 1000);
-        std::vector<int> trimmedInts = Predication::TrimPredicated(500, ints, n);
-        benchmark::DoNotOptimize(trimmedInts);
+        benchmark::DoNotOptimize(Predication::TrimVectorPredicated(500, ints, n));
     }
 
 }
 
-BENCHMARK(BenchmarkTrim)->RangeMultiplier(10)->Range(1, 100000);
-BENCHMARK(BenchmarkTrimPredicated)->RangeMultiplier(10)->Range(1, 100000);
+BENCHMARK(BenchmarkTrimVector)->RangeMultiplier(10)->Range(1, 10000000);
+BENCHMARK(BenchmarkTrimVectorPredicated)->RangeMultiplier(10)->Range(1, 10000000);
 
 BENCHMARK_MAIN();

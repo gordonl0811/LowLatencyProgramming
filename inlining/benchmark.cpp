@@ -1,29 +1,24 @@
-#include "inlining.h"
 #include <benchmark/benchmark.h>
-#include <iostream>
+#include "inlining.h"
 
-using namespace std;
-
-static void BenchmarkNoInlining(benchmark::State& state) {
+static void BenchmarkCube(benchmark::State& state) {
     for (auto _ : state) {
         for (auto i = 0; i < state.range(0); i++) {
-            auto cubed = Inlining::CubeNoInline(5);
-            benchmark::DoNotOptimize(cubed);
+            benchmark::DoNotOptimize(Inlining::Cube(5));
         }
     }
 }
 
-static void BenchmarkInlining(benchmark::State& state) {
+static void BenchmarkCubeInlined(benchmark::State& state) {
     for (auto _ : state) {
         for (auto i = 0; i < state.range(0); i++) {
-            auto cubed = Inlining::CubeInline(5);
-            benchmark::DoNotOptimize(cubed);
+            benchmark::DoNotOptimize(Inlining::CubeInlined(5));
         }
     }
 }
 
 
-BENCHMARK(BenchmarkNoInlining)->RangeMultiplier(10)->Range(1, 10000000);
-BENCHMARK(BenchmarkInlining)->RangeMultiplier(10)->Range(1, 10000000);
+BENCHMARK(BenchmarkCube)->RangeMultiplier(10)->Range(1, 10000000);
+BENCHMARK(BenchmarkCubeInlined)->RangeMultiplier(10)->Range(1, 10000000);
 
 BENCHMARK_MAIN();

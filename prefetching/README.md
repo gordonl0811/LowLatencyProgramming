@@ -30,7 +30,7 @@ Without carefully timing the prefetch requests, prefetching will not be useful f
 Consider the following implementation of a binary search:
 
 ```c++
-static int BinarySearchPrefetch(int target, int nums[], int size) {
+static int BinarySearchPrefetched(int target, int nums[], int size) {
     
     int left = 0;
     int mid;

@@ -15,7 +15,7 @@ Function inlining is a good example of "partial evaluation", which turns the jum
 Consider the following function, which returns a copy of a `vector<int>` excluding values above a defined threshold:
 
 ```c++
-static std::vector<int> Trim(int max, const std::vector<int>& input, int size) {
+static std::vector<int> TrimVector(int max, const std::vector<int>& input, int size) {
 
     std::vector<int> output(size);
     int outputI = 0;
@@ -32,10 +32,10 @@ static std::vector<int> Trim(int max, const std::vector<int>& input, int size) {
 
 A branch is performed on each iteration of the loop, checking if the current value exceeds the threshold. This means that each iteration has the risk of a branch misprediction, which could result in a total latency penalty of a considerable size.
 
-Consider the improved implementation of the `Trim` function below:
+Consider the improved implementation of the `TrimVector` function below:
 
 ```c++
-static std::vector<int> TrimPredicated(int max, const std::vector<int>& input, int size) {
+static std::vector<int> TrimVectorPredicated(int max, const std::vector<int>& input, int size) {
 
     std::vector<int> output(size);
     int outputI = 0;

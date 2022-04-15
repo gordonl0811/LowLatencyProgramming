@@ -11,7 +11,7 @@ Program bottlenecks can come from the execution of loops, which have overhead as
 The example below shows a function that takes two `int` vectors, `x` and `y`, of (presumably) equal `size`. It adds the elements together per-index and stores the result in a third array, `z`, which is returned.
 
 ```c++
-static vector<int> SimpleLoop(const vector<int>& x, const vector<int>& y, int size) {
+static vector<int> SumVectors(const vector<int>& x, const vector<int>& y, int size) {
     vector<int> z;
     z.reserve(size);
     for (auto i = 0; i < size; i++) {
@@ -32,7 +32,7 @@ Manual loop unrolling is performed by refactoring a loop's iterations into a seq
 The example used earlier can be rewritten as follows, with a loop unrolling factor of 2:
 
 ```c++
-static vector<int> SimpleLoopUnrolled(const vector<int>& x, const vector<int>& y, int size) {
+static vector<int> SumVectorsUnrolled(const vector<int>& x, const vector<int>& y, int size) {
     vector<int> z;
     z.reserve(size);
     for (auto i = 0; i < size / 2; i += 2) {

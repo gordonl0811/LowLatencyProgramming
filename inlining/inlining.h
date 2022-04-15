@@ -6,11 +6,11 @@ class Inlining {
 
 public:
 
-    static int __attribute__ ((always_inline)) CubeInline(int x) {
+    static int __attribute__ ((always_inline)) CubeInlined(int x) {
         return x * x * x;
     };
 
-    static int __attribute__ ((noinline)) CubeNoInline(int x) {
+    static int __attribute__ ((noinline)) Cube(int x) {
         return x * x * x;
     }
 

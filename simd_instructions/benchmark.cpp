@@ -1,22 +1,21 @@
-#include "simd_instructions.h"
 #include <benchmark/benchmark.h>
+#include "simd_instructions.h"
 
 #include "../utils/utils.h"
 
 static void BenchmarkMultiplyAddScalar(benchmark::State& state) {
+
+    std::vector<float> floats_a = GenerateRandomFloats(8, 100);
+    std::vector<float> floats_b = GenerateRandomFloats(8, 100);
+    std::vector<float> floats_c = GenerateRandomFloats(8, 100);
 
     float a[8];
     float b[8];
     float c[8];
     float d[8];
 
-    std::vector<float> floats_a = GenerateRandomFloats(8, 100);
     std::copy(floats_a.begin(), floats_a.end(), a);
-
-    std::vector<float> floats_b = GenerateRandomFloats(8, 100);
     std::copy(floats_b.begin(), floats_b.end(), b);
-
-    std::vector<float> floats_c = GenerateRandomFloats(8, 100);
     std::copy(floats_c.begin(), floats_c.end(), c);
 
     for (auto _ : state) {
@@ -28,17 +27,16 @@ static void BenchmarkMultiplyAddScalar(benchmark::State& state) {
 
 static void BenchmarkMultiplyAddVectorized(benchmark::State& state) {
 
+    std::vector<float> floats_a = GenerateRandomFloats(8, 100);
+    std::vector<float> floats_b = GenerateRandomFloats(8, 100);
+    std::vector<float> floats_c = GenerateRandomFloats(8, 100);
+
     float a[8];
     float b[8];
     float c[8];
 
-    std::vector<float> floats_a = GenerateRandomFloats(8, 100);
     std::copy(floats_a.begin(), floats_a.end(), a);
-
-    std::vector<float> floats_b = GenerateRandomFloats(8, 100);
     std::copy(floats_b.begin(), floats_b.end(), b);
-
-    std::vector<float> floats_c = GenerateRandomFloats(8, 100);
     std::copy(floats_c.begin(), floats_c.end(), c);
 
     __m256 a_simd = _mm256_load_ps(a);
@@ -50,7 +48,6 @@ static void BenchmarkMultiplyAddVectorized(benchmark::State& state) {
     }
 
 }
-
 
 BENCHMARK(BenchmarkMultiplyAddScalar);
 BENCHMARK(BenchmarkMultiplyAddVectorized);
