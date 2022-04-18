@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include "simd_instructions.h"
 
-#include "../utils/utils.h"
+#include "../../utils/utils.h"
 
 static void BenchmarkMultiplyAddScalar(benchmark::State& state) {
 

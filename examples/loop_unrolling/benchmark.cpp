@@ -2,7 +2,7 @@
 #include "loop_unrolling.h"
 
 #include <vector>
-#include "../utils/utils.h"
+#include "../../utils/utils.h"
 
 static void BenchmarkSumVectors(benchmark::State& state) {
 
