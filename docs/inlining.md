@@ -105,6 +105,17 @@ These are a few of the main cases - several more subtle restrictions can be foun
 
 # Benchmark Results
 
+| Iterations Performed | Cube Execution Time (ns) | CubeInlined Execution Time (ns) |
+|----------------------|--------------------------|---------------------------------|
+|                    1 |                     6.06 |                            5.22 |
+|                   10 |                       35 |                            29.9 |
+|                  100 |                      339 |                             287 |
+|                 1000 |                     3237 |                            2756 |
+|                10000 |                    32711 |                           27364 |
+|               100000 |                   322723 |                          274317 |
+|              1000000 |                  3266517 |                         2755897 |
+|             10000000 |                 32828489 |                        27445521 |
+
 ![Cube Benchmark Results](./images/Cube.png)
 
 # Use Cases

@@ -86,6 +86,17 @@ Together the instructions have both function calls, but one will execute whilst 
 
 # Benchmark Results
 
+| Vector Size | TrimVector Execution Time (ns) | TrimVectorPredicated Execution Time (ns) |
+|-------------|--------------------------------|------------------------------------------|
+|           1 |                           99.8 |                                      106 |
+|          10 |                            148 |                                      189 |
+|         100 |                            598 |                                      806 |
+|        1000 |                           6638 |                                     6609 |
+|       10000 |                          91995 |                                    64771 |
+|      100000 |                         955303 |                                   648566 |
+|     1000000 |                        9568340 |                                  6481235 |
+|    10000000 |                      106974999 |                                 76089237 |
+
 ![TrimVector Benchmark Results](./images/TrimVector.png)
 
 # Use cases

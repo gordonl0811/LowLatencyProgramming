@@ -51,6 +51,17 @@ As with many other optimisations (see inlining), loop unrolling is a space-time 
 
 # Benchmark Results
 
+| Vector Size | SumVectors Execution Time (ns) | SumVectorsUnrolled Execution Time (ns) |
+|-------------|--------------------------------|----------------------------------------|
+|          10 |                            159 |                                    143 |
+|         100 |                            720 |                                    476 |
+|        1000 |                           6233 |                                   3693 |
+|       10000 |                          60547 |                                  36349 |
+|      100000 |                         609585 |                                 359499 |
+|     1000000 |                        6084840 |                                3581000 |
+|    10000000 |                       72235795 |                               47303487 |
+|    10000000 |                       32828489 |                               27445521 |
+
 ![SumVectors Benchmark Results](./images/SumVectors.png)
 
 # Use cases

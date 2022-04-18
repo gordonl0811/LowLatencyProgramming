@@ -61,6 +61,19 @@ The two "mid" locations are prefetched for the next iteration of the `while` loo
 
 # Benchmark Results
 
+| Array Size | BinarySearch Execution Time (ns) | BinarySearchPrefetched Execution Time (ns) |
+|------------|----------------------------------|--------------------------------------------|
+|          1 |                             10.7 |                                       11.7 |
+|         10 |                             31.8 |                                       32.5 |
+|        100 |                               53 |                                       55.5 |
+|       1000 |                             76.9 |                                       83.6 |
+|      10000 |                              108 |                                        114 |
+|     100000 |                              143 |                                        146 |
+|    1000000 |                              190 |                                        181 |
+|   10000000 |                              324 |                                        292 |
+|  100000000 |                              506 |                                        450 |
+| 1000000000 |                              745 |                                        653 |
+
 ![BinarySearch Benchmark Results](./images/BinarySearch.png)
 
 # Use cases
