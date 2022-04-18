@@ -51,6 +51,8 @@ As with many other optimisations (see inlining), loop unrolling is a space-time 
 
 # Benchmark Results
 
+![SumVectors Benchmark Results](./images/SumVectors.png)
+
 # Use cases
 
 Loop unrolling can be beneficial to performance if executed correctly, with the danger of thrashing in mind. As a general rule (as with most hand optimisations), one should always profile and benchmark the performance before and after the optimisation to study its benefits.

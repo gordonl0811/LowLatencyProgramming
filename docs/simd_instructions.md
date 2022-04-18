@@ -33,7 +33,8 @@ static __m256 MultiplyAddVectorized(__m256 a, __m256 b, __m256 c) {
 }
 ```
 
-
 # Benchmark Results
+
+![SumVectors Benchmark Results](./images/SumVectors.png)
 
 # Use cases

@@ -105,7 +105,7 @@ These are a few of the main cases - several more subtle restrictions can be foun
 
 # Benchmark Results
 
-TODO
+![Cube Benchmark Results](./images/Cube.png)
 
 # Use Cases
 

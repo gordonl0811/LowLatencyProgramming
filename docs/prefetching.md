@@ -61,6 +61,8 @@ The two "mid" locations are prefetched for the next iteration of the `while` loo
 
 # Benchmark Results
 
+![BinarySearch Benchmark Results](./images/BinarySearch.png)
+
 # Use cases
 
 There are plenty of cases where software prefetching is advantageous to relying on automatic hardware prefetching. This section contains examples of when explicitly requesting data is beneficial to an application.

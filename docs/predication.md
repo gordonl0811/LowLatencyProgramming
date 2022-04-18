@@ -86,6 +86,8 @@ Together the instructions have both function calls, but one will execute whilst 
 
 # Benchmark Results
 
+![TrimVector Benchmark Results](./images/TrimVector.png)
+
 # Use cases
 
 Writing branch-free code is usually non-trivial, but this technique is fairly straightforward to understand - the opportunities for improving performance comes from manipulating `if-else` and similar statements that are compiled into branches. Vector processors and GPUs heavily use predication because of the absence of branches.
