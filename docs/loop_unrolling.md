@@ -12,12 +12,15 @@ The example below shows a function that takes two `int` vectors, `x` and `y`, of
 
 ```c++
 static vector<int> SumVectors(const vector<int>& x, const vector<int>& y, int size) {
-    vector<int> z;
-    z.reserve(size);
+
+    vector<int> z(size);
+    
     for (auto i = 0; i < size; i++) {
         z[i] = x[i] + y[i];
     }
+    
     return z;
+
 }
 ```
 
@@ -33,13 +36,16 @@ The example used earlier can be rewritten as follows, with a loop unrolling fact
 
 ```c++
 static vector<int> SumVectorsUnrolled(const vector<int>& x, const vector<int>& y, int size) {
-    vector<int> z;
-    z.reserve(size);
+    
+    vector<int> z(size);
+
     for (auto i = 0; i < size / 2; i += 2) {
         z[i] = x[i] + y[i];
         z[i+1] = x[i+1] + y[i+1];
     }
+    
     return z;
+    
 };
 ```
 
@@ -47,22 +53,113 @@ The structure of the loop has been changed so that `i` is incremented by 2 inste
 
 This example is simple because of the assumed precondition that `size` is divisible by 2. Without this guarantee, another check may need to be performed (i.e. `size` is odd) to perform a final iteration of the loop after the main loop shown above.
 
-As with many other optimisations (see inlining), loop unrolling is a space-time tradeoff, but excessively using the technique may actually degrade performance. Naturally, larger loop unrolling factors can be used to reduce the number of branches, but the larger blocks of code may cause thrashing if the program code doesn't fit into the instruction cache. The programmer must carefully tune the loop unrolling factor by profiling and benchmarking their code.
+As with many other optimisations (see inlining), loop unrolling is a space-time tradeoff, but excessively using the technique may actually degrade performance. 
+
+This is the generated assembly of the body of the for-loop in `SumVectors`:
+
+```asm
+.L8:
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-48]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     ebx, DWORD PTR [rax]
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-56]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     eax, DWORD PTR [rax]
+        add     ebx, eax
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-40]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long)
+        mov     DWORD PTR [rax], ebx
+        add     DWORD PTR [rbp-20], 1
+```
+
+And now the example with an unrolling factor of 2:
+
+```asm
+.L8:
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-48]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     ebx, DWORD PTR [rax]
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-56]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     eax, DWORD PTR [rax]
+        add     ebx, eax
+        mov     eax, DWORD PTR [rbp-20]
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-40]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long)
+        mov     DWORD PTR [rax], ebx
+        mov     eax, DWORD PTR [rbp-20]
+        add     eax, 1
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-48]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     ebx, DWORD PTR [rax]
+        mov     eax, DWORD PTR [rbp-20]
+        add     eax, 1
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-56]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long) const
+        mov     eax, DWORD PTR [rax]
+        add     ebx, eax
+        mov     eax, DWORD PTR [rbp-20]
+        add     eax, 1
+        movsx   rdx, eax
+        mov     rax, QWORD PTR [rbp-40]
+        mov     rsi, rdx
+        mov     rdi, rax
+        call    std::vector<int, std::allocator<int> >::operator[](unsigned long)
+        mov     DWORD PTR [rax], ebx
+        add     DWORD PTR [rbp-20], 2
+```
+
+The assembly produced has almost doubled in size. The Benchmarking section of this document will demonstrate the performance impact of implementing this optimisation.
+
+Naturally, larger loop unrolling factors can be used to reduce the number of branches, but the larger blocks of code may cause thrashing if the program code doesn't fit into the instruction cache. The programmer must carefully tune the loop unrolling factor by profiling and benchmarking their code.
 
 # Benchmark Results
 
-| Vector Size | SumVectors Execution Time (ns) | SumVectorsUnrolled Execution Time (ns) |
-|-------------|--------------------------------|----------------------------------------|
-|          10 |                            159 |                                    143 |
-|         100 |                            720 |                                    476 |
-|        1000 |                           6233 |                                   3693 |
-|       10000 |                          60547 |                                  36349 |
-|      100000 |                         609585 |                                 359499 |
-|     1000000 |                        6084840 |                                3581000 |
-|    10000000 |                       72235795 |                               47303487 |
-|    10000000 |                       32828489 |                               27445521 |
-
 ![SumVectors Benchmark Results](./images/SumVectors.png)
+
+| Vector Size (8^n) | SumVectors Execution Time (ns) | SumVectorsUnrolledTwo Execution Time (ns) | SumVectorsUnrolledFour Execution Time (ns) |
+|-------------------|--------------------------------|-------------------------------------------|--------------------------------------------|
+|                 1 |                            148 |                                       128 |                                        129 |
+|                 2 |                            501 |                                       333 |                                        259 |
+|                 3 |                           3204 |                                      1905 |                                       1357 |
+|                 4 |                          24682 |                                     14468 |                                       9843 |
+|                 5 |                         197597 |                                    115575 |                                      78331 |
+|                 6 |                        1584229 |                                    954879 |                                     626115 |
+|                 7 |                       12884701 |                                   7495871 |                                    5089184 |
+|                 8 |                      118495092 |                                  76134393 |                                   56429343 |
+
+An unrolled implementation demonstrates a steady performance increase of about 40% when using a loop unrolling factor of 2, and 60 when using an unrolling factor of 4. This shows a clear performance boost for medium/large-sized streams of data, though the benefits aren't as pronounced for smaller vectors (and in the case of using a factor of 4, we see slightly worse performance than the factor of 2).
+
+It's worth reiterating that these benchmarks and functions exploited the fact that the size of the vectors were divisible by 2 and 4. Without this precondition, extra guards could be set up after the core loop to catch these extra cases. Omitting these guards saves the functions a few branches, which saves microscopic amounts of time. The programmer should include these based on the preconditions of the data/vector being processed - functional correctness is usually more important than performance.
 
 # Use cases
 

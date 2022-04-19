@@ -13,9 +13,7 @@ However, function calls within a program are expensive. This is a brief overview
 - The stack frame is popped from the stack
 - The function returns to its return address
 
-In lower-level/assembly terms, the call for the destination function can also cause the instruction pipeline to be flushed, causing a frontend stall. Repeatedly calling small functions means that a lot of overhead is generated for little work done.
-
-This could be avoided by the programmer by copying the code into the function call site, but this contradicts the software engineering philosophy of creating modular, well-organised code.
+In lower-level/assembly terms, the call for the destination function can also cause the instruction pipeline to be flushed, causing a frontend stall. Repeatedly calling small functions means that a lot of overhead is generated for little work done. This could be avoided by the programmer by copying the code into the function call site, but this contradicts the software engineering philosophy of creating modular, well-organised code.
 
 # Description
 
@@ -105,6 +103,8 @@ These are a few of the main cases - several more subtle restrictions can be foun
 
 # Benchmark Results
 
+![Cube Benchmark Results](./images/Cube.png)
+
 | Iterations Performed | Cube Execution Time (ns) | CubeInlined Execution Time (ns) |
 |----------------------|--------------------------|---------------------------------|
 |                    1 |                     6.06 |                            5.22 |
@@ -116,7 +116,7 @@ These are a few of the main cases - several more subtle restrictions can be foun
 |              1000000 |                  3266517 |                         2755897 |
 |             10000000 |                 32828489 |                        27445521 |
 
-![Cube Benchmark Results](./images/Cube.png)
+The `Cube` function was tested against the inlined version, scaling the number of times the function was performed in a for loop by 10 each time. The results show a noticeable improvement using the inlined version of the function, with approximately 15% increased performance throughout each test.
 
 # Use Cases
 

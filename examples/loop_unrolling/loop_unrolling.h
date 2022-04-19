@@ -26,7 +26,6 @@ public:
         vector<int> z(size);
 
         for (auto i = 0; i < size / 2; i += 2) {
-            // UNROLL_FACTOR lines of loop unrolling
             z[i] = x[i] + y[i];
             z[i+1] = x[i+1] + y[i+1];
         }
@@ -40,7 +39,6 @@ public:
         vector<int> z(size);
 
         for (auto i = 0; i < size / 4; i += 4) {
-            // UNROLL_FACTOR lines of loop unrolling
             z[i] = x[i] + y[i];
             z[i+1] = x[i+1] + y[i+1];
             z[i+2] = x[i+2] + y[i+2];
