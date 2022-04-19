@@ -2,7 +2,7 @@
 #include "loop_unrolling.h"
 
 #include <vector>
-#include "../../utils/utils.h"
+#include "../utils/utils.h"
 
 static void BenchmarkSumVectors(benchmark::State& state) {
 
@@ -16,19 +16,32 @@ static void BenchmarkSumVectors(benchmark::State& state) {
 
 }
 
-static void BenchmarkSumVectorsUnrolled(benchmark::State& state) {
+static void BenchmarkSumVectorsUnrolledTwo(benchmark::State& state) {
 
     int size = (int) state.range(0);
     std::vector<int> x = GenerateRandomInts(size);
     std::vector<int> y = GenerateRandomInts(size);
 
     for (auto _ : state) {
-        benchmark::DoNotOptimize(LoopUnrolling::SumVectorsUnrolled(x, y, size));
+        benchmark::DoNotOptimize(LoopUnrolling::SumVectorsUnrolledTwo(x, y, size));
     }
 
 }
 
-BENCHMARK(BenchmarkSumVectors)->RangeMultiplier(10)->Range(10, 10000000);
-BENCHMARK(BenchmarkSumVectorsUnrolled)->RangeMultiplier(10)->Range(10, 10000000);
+static void BenchmarkSumVectorsUnrolledFour(benchmark::State& state) {
+
+    int size = (int) state.range(0);
+    std::vector<int> x = GenerateRandomInts(size);
+    std::vector<int> y = GenerateRandomInts(size);
+
+    for (auto _ : state) {
+        benchmark::DoNotOptimize(LoopUnrolling::SumVectorsUnrolledFour(x, y, size));
+    }
+
+}
+
+BENCHMARK(BenchmarkSumVectors)->RangeMultiplier(8)->Range(8, 4096*4096);
+BENCHMARK(BenchmarkSumVectorsUnrolledTwo)->RangeMultiplier(8)->Range(8, 4096*4096);
+BENCHMARK(BenchmarkSumVectorsUnrolledFour)->RangeMultiplier(8)->Range(8, 4096*4096);
 
 BENCHMARK_MAIN();

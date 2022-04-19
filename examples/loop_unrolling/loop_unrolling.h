@@ -1,8 +1,6 @@
 #ifndef LOW_LATENCY_MICROBENCHMARKS_LOOP_UNROLLING_H
 #define LOW_LATENCY_MICROBENCHMARKS_LOOP_UNROLLING_H
 
-#define UNROLL_FACTOR 2
-
 #include <vector>
 
 using namespace std;
@@ -23,14 +21,30 @@ public:
 
     }
 
-    static vector<int> SumVectorsUnrolled(const vector<int>& x, const vector<int>& y, int size) {
+    static vector<int> SumVectorsUnrolledTwo(const vector<int>& x, const vector<int>& y, int size) {
 
         vector<int> z(size);
 
-        for (auto i = 0; i < size / UNROLL_FACTOR; i += UNROLL_FACTOR) {
+        for (auto i = 0; i < size / 2; i += 2) {
             // UNROLL_FACTOR lines of loop unrolling
             z[i] = x[i] + y[i];
             z[i+1] = x[i+1] + y[i+1];
+        }
+
+        return z;
+
+    };
+
+    static vector<int> SumVectorsUnrolledFour(const vector<int>& x, const vector<int>& y, int size) {
+
+        vector<int> z(size);
+
+        for (auto i = 0; i < size / 4; i += 4) {
+            // UNROLL_FACTOR lines of loop unrolling
+            z[i] = x[i] + y[i];
+            z[i+1] = x[i+1] + y[i+1];
+            z[i+2] = x[i+2] + y[i+2];
+            z[i+3] = x[i+3] + y[i+3];
         }
 
         return z;
