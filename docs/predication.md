@@ -86,6 +86,8 @@ Together the instructions have both function calls, but one will execute whilst 
 
 # Benchmark Results
 
+![TrimVector Benchmark Results](./images/TrimVector.png)
+
 | Vector Size | TrimVector Execution Time (ns) | TrimVectorPredicated Execution Time (ns) |
 |-------------|--------------------------------|------------------------------------------|
 |           1 |                           99.8 |                                      106 |
@@ -97,7 +99,9 @@ Together the instructions have both function calls, but one will execute whilst 
 |     1000000 |                        9568340 |                                  6481235 |
 |    10000000 |                      106974999 |                                 76089237 |
 
-![TrimVector Benchmark Results](./images/TrimVector.png)
+The benchmarks for `TrimVector` show a considerable performance improvement when predicated once the given vector exceeds a certain size, just before the vector contains 1000 elements.
+
+Looking at the numbers produced in more detail, it is interesting to note that the original function takes 14 times longer between a vector size of 1000 and 10000, whilst its counterpart has the expected 10x increase. The reason for this increase needs further investigation.
 
 # Use cases
 
