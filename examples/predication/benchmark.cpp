@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include "predication.h"
 
-#include "../../utils/utils.h"
+#include "../utils/utils.h"
 
 static void BenchmarkTrimVector(benchmark::State& state) {
 
