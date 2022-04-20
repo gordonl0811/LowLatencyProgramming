@@ -1,6 +1,8 @@
 # Programming Optimisations and Techniques for Low-Latency Applications
 
-A repository demonstrating a subset of techniques designed to increasing the performance of applications, particularly those that should be optimised for low-latency.
+This repository demonstrates a subset of techniques designed to increase the performance of applications, particularly those that should be optimised for low-latency.
+
+Many of these code transformations are performed automatically by modern optimising compilers, but even the best compilers can miss out on optimising opportunities for complex functions and codebases. In the low-latency domain, a difference of nanoseconds can determine the success of an application, whether that be in high-frequency trading, networking, or other services where performance is critical.
 
 ## Index
 
@@ -13,12 +15,15 @@ The following table is a directory of the optimisations included and their corre
 | Predication       | [Link](docs/predication.md)       | [Link](examples/predication/benchmark.cpp)       |
 | Prefetching       | [Link](docs/prefetching.md)       | [Link](examples/prefetching/benchmark.cpp)       |
 | SIMD Instructions | [Link](docs/simd_instructions.md) | [Link](examples/simd_instructions/benchmark.cpp) |
+| Branch Prediction | WIP                               | WIP                                              |
+
+The repository is gradually being expanded - if there are any mistakes within the documentation, or there are any interesting optimisations that haven't been included, please feel free to get in touch!
 
 ## Benchmarks
 
 ### Overview
 
-Benchmarks were collected using Imperial College London Department of Computing's undergraduate lab machines, with an Intel Core i7-8700 (3.20GHz) and 16GB of RAM, using g++ `9.4.0`.
+Benchmarks were collected using Imperial College London Department of Computing's undergraduate laboratory machines, with an Intel Core i7-8700 (3.20GHz) and 16GB of RAM, using g++ `9.4.0`. Most of the benchmarks were run without optimisations enabled (`-O0`), particularly because some optimisations may already be performed at certain optimisation levels.
 
 ### Requirements
 
@@ -27,7 +32,7 @@ Benchmarks were collected using Imperial College London Department of Computing'
 
 ### Running Benchmarks Locally
 
-Follow these instructions to rerun the benchmarks in the `examples` directory:
+Follow these instructions to run the benchmarks in the `examples` directory:
 
 ```
 // Navigate to the directory of the optimisation
