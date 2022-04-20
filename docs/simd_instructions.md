@@ -54,3 +54,17 @@ There was a clear disparity between the speed of the calculation performed when 
 It is worth noting that the movement of the data in the array to the vector registers were not accounted for, so the performance impact suggested by the numbers may be slightly overstated. However, real-world applications will often perform multiple operations on the vector registers before unloading the values, so the overhead from loading/unloading will be less significant.
 
 # Use cases
+
+The usefulness of SIMD instructions/operations are almost universal, and are widely utilised for applications for 3D graphics or audio/video processing. The following list describes applications that benefit from vectorisation significantly:
+
+## 3-Dimensional Processing
+
+There is significant potential for parallelism when working with 3D vertices and their transformations, which applications can exploit by using SIMD instructions to increase performance. This allows more objects to be rendered in scenes, and opens up the possibility of shadows and reflections to be rendered in real-time.
+
+## Image Processing
+
+The parallelism in both the code and data structures of imaging software allows SIMD instructions to improve the performance of the application. The increased performance enables users to maintain interactivity even as the image size increases greatly, and should result in gains of the speed of image transformations and manipulations.
+
+## Video Processing
+
+Considering that videos are streams of images shown to an end user, the benefits of image processing described in the previous section also apply to video processing, which typically are even more demanding performance-wise. SIMDs provide the potential for video transformations to be performed in real-time, which requires a huge amount of optimisation considering the performance challenges that are already present in image processing.
