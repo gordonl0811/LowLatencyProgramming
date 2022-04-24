@@ -1,31 +1,93 @@
 #include <benchmark/benchmark.h>
 #include "lock_contention.h"
 
-#include "../utils/utils.h"
+#include <atomic>
+#include <mutex>
+#include <vector>
+#include <thread>
+#include <functional>
 
-static void BenchmarkTrimVector(benchmark::State& state) {
+#include <iostream>
 
-    int n = (int) state.range(0);
-    std::vector<int> ints = GenerateRandomInts(n, 1000);
+#define MAX_ITERATIONS 16777216
+#define MAX_THREADS 8
 
+static void BenchmarkIncrement(benchmark::State& state) {
+    int counter;
+    int increment = (int) state.range(0);
     for (auto _ : state) {
-        benchmark::DoNotOptimize(Predication::TrimVector(500, ints, n));
+        counter = 0;
+        LockContention::Increment(counter, increment);
+        benchmark::DoNotOptimize(counter);
     }
-
 }
 
-static void BenchmarkTrimVectorPredicated(benchmark::State& state) {
+static void BenchmarkIncrementAtomic(benchmark::State& state) {
 
-    int n = (int) state.range(0);
-    std::vector<int> ints = GenerateRandomInts(n, 1000);
+    std::atomic<int> counter;
+
+    int increment = (int) state.range(0);
+    int threadCount = (int) state.range(1);
+
+    std::vector<std::thread> threads(threadCount);
+    int threadIncrement = increment / threadCount;
 
     for (auto _ : state) {
-        benchmark::DoNotOptimize(Predication::TrimVectorPredicated(500, ints, n));
-    }
 
+        counter.store(0);
+
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = (std::thread(LockContention::IncrementAtomic, std::ref(counter), threadIncrement));
+        }
+
+        for (auto& thread : threads) {
+            thread.join();
+        }
+
+        benchmark::DoNotOptimize(counter);
+
+    }
 }
 
-BENCHMARK(BenchmarkTrimVector)->RangeMultiplier(10)->Range(1, 10000000);
-BENCHMARK(BenchmarkTrimVectorPredicated)->RangeMultiplier(10)->Range(1, 10000000);
+static void BenchmarkIncrementMutex(benchmark::State& state) {
+
+    int counter;
+
+    int increment = (int) state.range(0);
+    int threadCount = (int) state.range(1);
+
+    std::vector<std::thread> threads(threadCount);
+    int threadIncrement = increment / threadCount;
+
+    std::mutex mtx;
+
+    for (auto _ : state) {
+
+        counter = 0;
+
+        for (int i = 0; i < threadCount; i++) {
+            threads[i] = (std::thread(LockContention::IncrementMutex, std::ref(counter), threadIncrement, std::ref(mtx)));
+        }
+
+        for (auto& thread : threads) {
+            thread.join();
+        }
+
+        benchmark::DoNotOptimize(counter);
+
+        std::cout << counter;
+    }
+}
+
+
+BENCHMARK(BenchmarkIncrement)->RangeMultiplier(8)->Range(8, MAX_ITERATIONS);
+BENCHMARK(BenchmarkIncrementAtomic)->ArgsProduct({
+    benchmark::CreateRange(8, MAX_ITERATIONS, 8),
+    benchmark::CreateRange(1, MAX_THREADS, 2)
+});
+BENCHMARK(BenchmarkIncrementMutex)->ArgsProduct({
+    benchmark::CreateRange(8, MAX_ITERATIONS, 8),
+    benchmark::CreateRange(1, MAX_THREADS, 2)
+});
 
 BENCHMARK_MAIN();
