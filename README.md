@@ -1,6 +1,6 @@
 # Programming Optimisations and Techniques for Low-Latency Applications
 
-This repository demonstrates a subset of techniques designed to increase the performance of applications, particularly those that should be optimised for low-latency.
+This repository demonstrates a subset of techniques designed to increase the performance of applications, particularly those that should be optimised for low-latency. Reproducible benchmarks are provided and documented (see the index section below), with instructions on how to run them.
 
 Many of these code transformations are performed automatically by modern optimising compilers, but even the best compilers can miss out on optimising opportunities for complex functions and codebases. In the low-latency domain, a difference of nanoseconds can determine the success of an application, whether that be in high-frequency trading, networking, or other services where performance is critical.
 
@@ -15,7 +15,8 @@ The following table is a directory of the optimisations included and their corre
 | Predication       | [Link](docs/predication.md)       | [Link](examples/predication/benchmark.cpp)       |
 | Prefetching       | [Link](docs/prefetching.md)       | [Link](examples/prefetching/benchmark.cpp)       |
 | SIMD Instructions | [Link](docs/simd_instructions.md) | [Link](examples/simd_instructions/benchmark.cpp) |
-| Branch Prediction | WIP                               | WIP                                              |
+| Branch Prediction | [Link](docs/branch_prediction.md) | [Link](examples/branch_prediction/benchmark.cpp) |
+| Lock Contention   | [Link](docs/lock_contention.md)   | [Link](examples/lock_contention/benchmark.cpp)   |
 
 The repository is gradually being expanded - if there are any mistakes within the documentation, or there are any interesting optimisations that haven't been included, please feel free to get in touch!
 
