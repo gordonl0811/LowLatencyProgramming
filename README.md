@@ -1,8 +1,11 @@
 # Programming Optimisations and Techniques for Low-Latency Applications
 
-This repository demonstrates a subset of techniques designed to increase the performance of applications, particularly those that should be optimised for low-latency. Reproducible benchmarks are provided and documented (see the index section below), with instructions on how to run them.
+This repository includes content related to writing low-latency applications and the considerations that should be made in their development:
 
-Many of these code transformations are performed automatically by modern optimising compilers, but even the best compilers can miss out on optimising opportunities for complex functions and codebases. In the low-latency domain, a difference of nanoseconds can determine the success of an application, whether that be in high-frequency trading, networking, or other services where performance is critical.
+- Documentation of important concepts that are critical for high-performance applications, e.g. computer architecture, systems design.
+- Demonstrations of techniques designed to increase the performance of applications. Reproducible benchmarks are provided (see the index section below), with instructions on how to run them.
+
+Many of the code transformations are performed automatically by modern optimising compilers, but even the best compilers can miss out on optimising opportunities for complex functions and codebases. In the low-latency domain, a difference of nanoseconds can determine the success of an application, whether that be in high-frequency trading, networking, or other services where performance is critical.
 
 ## Index
 
