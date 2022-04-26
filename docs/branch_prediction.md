@@ -1,16 +1,51 @@
 # Overview
 
-Understanding the mechanics of branch prediction and the performance costs behind it is important for the development of high performance applications. Latency does not necessarily scale with the number of branches within code, but eliminating branches where possible usually increases performance, and the predictability of programs and the data being processed within them are a key component of success.
+Understanding the mechanics of branch prediction and the performance costs behind it is important for the development of high performance applications. Latency does not necessarily scale with the number of branches within code, but eliminating branches where possible can often increase performance, and the predictability of programs and the data being processed within them are a key component of success.
 
 # Motivation
 
-Modern computers/CPUs use a pipelining
+Modern computers/CPUs use a pipelined architecture where instructions are processed in parallel (instruction-level parallelism) by passing them through different stages. An example of a five-stage pipeline (RISC) would have the following stages:
 
-In simple terms, branch predictors keep track of whether branches from conditional jumps are taken or not. 
+- Fetch
+- Decode
+- Execute
+- Memory Access
+- Writeback
 
-An alternative way to visualise how this works is with
+However, this method of processing instructions comes with potential pitfalls in the form of pipeline hazards, which can lead to incorrect computations or delays in processing. Pipeline hazards are defined under certain classes; one class of hazards are "control hazards", caused by both conditional and unconditional branches (jumps).
+
+Branches instructions are implementations of control flow in loops (for-loops, while-loops, etc.) and conditionals (if statements, switch statements) that cause computers to execute a different sequence of instructions if it is "taken". If it is "not taken" then the instruction following it is executed.
+
+Conditional branches are a source of latency in applications because its condition must be evaluated and the conditional branch instruction must have completed the execution stage in the instruction pipeline. It is unknown whether the branch is taken until this is completed, so the correct instruction that should be executed after it is unknown. This results in a "pipeline bubble" - empty slots in the instruction pipeline because the following instruction cannot be determined.
 
 # Description
+
+There are different schemes to solve the performance issues with branches at the hardware level. Branch predictors are one such solution which keep track of whether branches from conditional jumps are taken or not. These are digital circuits that attempt to improve the performance of the instruction pipeline and minimise control hazards.
+
+One method of branch prediction is to use a state machine with four states, as shown below:
+
+![Branch Prediction State Machine](./images/StateMachine.png)
+
+Evaluated branches update their corresponding state machine by moving its state closer towards the "strongly not taken" and "strongly taken" states based on the result of the conditional branch.
+
+Another implementation of a branch predictor uses a "pattern history table", with its entries being two-bit counters. The advantage is that it can spot recurring patterns, which would not be picked up by the earlier example of the 4-state state machine.
+
+Consider the following function:
+
+```c++
+static int CountEvens(std::vector<int> &nums) {
+
+    int count = 0;
+
+    for (int i = 0; i < nums.size(); i++) {
+        if (nums[i] % 2 == 0) {
+            count++;
+        }
+    }
+
+    return count;
+}
+```
 
 # Benchmark Results
 
@@ -39,3 +74,11 @@ An alternative way to visualise how this works is with
 |                                   90 |                        4165762 |
 |                                   95 |                        3654579 |
 |                                  100 |                        3202696 |
+
+The benchmarks for the `CountEvents` function demonstrates how a vector with an equal number of odd and even numbers suffers the most from branch misprediction penalties, with the execution time of the function being 2.5x the duration of the function of entirely odd numbers.
+
+This result supports the desire for predictable input data, or at least for deterministic programs where conditional jumps and branches are minimised.
+
+# Related
+
+- Predication: an example of a branch-free approach to writing programs
