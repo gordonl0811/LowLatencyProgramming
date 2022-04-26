@@ -20,7 +20,7 @@ Conditional branches are a source of latency in applications because its conditi
 
 # Description
 
-There are different schemes to solve the performance issues with branches at the hardware level. Branch predictors are one such solution which keep track of whether branches from conditional jumps are taken or not. These are digital circuits that attempt to improve the performance of the instruction pipeline and minimise control hazards.
+There are different schemes to solve the performance issues with branches at the hardware level. Branch predictors are one such solution which keep track of whether branches from conditional jumps are taken or not. These are digital circuits that attempt to improve the performance of the instruction pipeline and minimise control hazards. By "predicting" whether a branch is taken or not, instructions can be speculatively processed within the pipeline, keeping it full and minimising delays. Making an incorrect decision (otherwise known as a branch misprediction) results in the following instructions in the pipeline to be flushed, as they were processed prematurely.
 
 One method of branch prediction is to use a state machine with four states, as shown below:
 
@@ -28,9 +28,13 @@ One method of branch prediction is to use a state machine with four states, as s
 
 Evaluated branches update their corresponding state machine by moving its state closer towards the "strongly not taken" and "strongly taken" states based on the result of the conditional branch.
 
-Another implementation of a branch predictor uses a "pattern history table", with its entries being two-bit counters. The advantage is that it can spot recurring patterns, which would not be picked up by the earlier example of the 4-state state machine.
+Another implementation of a branch predictor uses a "pattern history table", with its entries being two-bit counters. The advantage is that it can spot recurring patterns, which would not be picked up by the earlier example of the 4-state state machine. The branch predictor can then preemptively process the instructions that should follow the branch.
 
-Consider the following function:
+With this understanding of branch predictors and how they operate, the penalties that can come with branches can be mitigated in a number of ways. One way is to use "predictable" data, i.e. data that will cause branches to mostly be either taken or not, which assists the branch predictor in making the correct decision for which instructions should be fetched. The next section demonstrates how the randomness of data being processed affects the execution speed of programs, therefore increasing the latency within the application.
+
+# Benchmark Results
+
+Consider the following function, which returns the number of even numbers in a vector of integers:
 
 ```c++
 static int CountEvens(std::vector<int> &nums) {
@@ -47,7 +51,7 @@ static int CountEvens(std::vector<int> &nums) {
 }
 ```
 
-# Benchmark Results
+Benchmarking this function with vectors that have different proportions of even numbers yields an interesting graph of results, shown below:
 
 ![CountEvens Benchmark Results](./images/CountEvens.png)
 
@@ -75,9 +79,7 @@ static int CountEvens(std::vector<int> &nums) {
 |                                   95 |                        3654579 |
 |                                  100 |                        3202696 |
 
-The benchmarks for the `CountEvents` function demonstrates how a vector with an equal number of odd and even numbers suffers the most from branch misprediction penalties, with the execution time of the function being 2.5x the duration of the function of entirely odd numbers.
-
-This result supports the desire for predictable input data, or at least for deterministic programs where conditional jumps and branches are minimised.
+The benchmarks demonstrate how a vector with an equal number of odd and even numbers suffers the most from branch misprediction penalties, with the execution time of the function being 2.5x the duration of the function of entirely odd numbers. The conclusion that can be taken from this is that branches do not necessarily result in longer execution times, as predictable input data can mitigate the number of branch mispredictions caused.
 
 # Related
 
