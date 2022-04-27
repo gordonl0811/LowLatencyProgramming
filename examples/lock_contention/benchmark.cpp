@@ -7,9 +7,7 @@
 #include <thread>
 #include <functional>
 
-#include <iostream>
-
-#define MAX_ITERATIONS 16777216
+#define INCREMENT 4032000
 #define MAX_THREADS 8
 
 static void BenchmarkIncrement(benchmark::State& state) {
@@ -25,12 +23,10 @@ static void BenchmarkIncrement(benchmark::State& state) {
 static void BenchmarkIncrementAtomic(benchmark::State& state) {
 
     std::atomic<int> counter;
-
-    int increment = (int) state.range(0);
-    int threadCount = (int) state.range(1);
+    int threadCount = (int) state.range(0);
 
     std::vector<std::thread> threads(threadCount);
-    int threadIncrement = increment / threadCount;
+    int threadIncrement = INCREMENT / threadCount;
 
     for (auto _ : state) {
 
@@ -52,12 +48,10 @@ static void BenchmarkIncrementAtomic(benchmark::State& state) {
 static void BenchmarkIncrementMutex(benchmark::State& state) {
 
     int counter;
-
-    int increment = (int) state.range(0);
-    int threadCount = (int) state.range(1);
+    int threadCount = (int) state.range(0);
 
     std::vector<std::thread> threads(threadCount);
-    int threadIncrement = increment / threadCount;
+    int threadIncrement = INCREMENT / threadCount;
 
     std::mutex mtx;
 
@@ -74,20 +68,11 @@ static void BenchmarkIncrementMutex(benchmark::State& state) {
         }
 
         benchmark::DoNotOptimize(counter);
-
-        std::cout << counter;
     }
 }
 
-
-BENCHMARK(BenchmarkIncrement)->RangeMultiplier(8)->Range(8, MAX_ITERATIONS);
-BENCHMARK(BenchmarkIncrementAtomic)->ArgsProduct({
-    benchmark::CreateRange(8, MAX_ITERATIONS, 8),
-    benchmark::CreateRange(1, MAX_THREADS, 2)
-});
-BENCHMARK(BenchmarkIncrementMutex)->ArgsProduct({
-    benchmark::CreateRange(8, MAX_ITERATIONS, 8),
-    benchmark::CreateRange(1, MAX_THREADS, 2)
-});
+BENCHMARK(BenchmarkIncrement)->Arg(INCREMENT);
+BENCHMARK(BenchmarkIncrementAtomic)->DenseRange(1, MAX_THREADS);
+BENCHMARK(BenchmarkIncrementMutex)->DenseRange(1, MAX_THREADS);
 
 BENCHMARK_MAIN();
