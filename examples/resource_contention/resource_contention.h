@@ -1,10 +1,10 @@
-#ifndef LOCK_CONTENTION_H
-#define LOCK_CONTENTION_H
+#ifndef RESOURCE_CONTENTION_H
+#define RESOURCE_CONTENTION_H
 
 #include <atomic>
 #include <mutex>
 
-class LockContention {
+class ResourceContention {
 
 public:
 
@@ -29,4 +29,4 @@ public:
     }
 };
 
-#endif //LOCK_CONTENTION_H
+#endif //RESOURCE_CONTENTION_H

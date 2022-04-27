@@ -1,5 +1,5 @@
 #include <benchmark/benchmark.h>
-#include "lock_contention.h"
+#include "resource_contention.h"
 
 #include <atomic>
 #include <mutex>
@@ -15,7 +15,7 @@ static void BenchmarkIncrement(benchmark::State& state) {
     int increment = (int) state.range(0);
     for (auto _ : state) {
         counter = 0;
-        LockContention::Increment(counter, increment);
+        ResourceContention::Increment(counter, increment);
         benchmark::DoNotOptimize(counter);
     }
 }
@@ -33,7 +33,7 @@ static void BenchmarkIncrementAtomic(benchmark::State& state) {
         counter.store(0);
 
         for (int i = 0; i < threadCount; i++) {
-            threads[i] = (std::thread(LockContention::IncrementAtomic, std::ref(counter), threadIncrement));
+            threads[i] = (std::thread(ResourceContention::IncrementAtomic, std::ref(counter), threadIncrement));
         }
 
         for (auto& thread : threads) {
@@ -60,7 +60,7 @@ static void BenchmarkIncrementMutex(benchmark::State& state) {
         counter = 0;
 
         for (int i = 0; i < threadCount; i++) {
-            threads[i] = (std::thread(LockContention::IncrementMutex, std::ref(counter), threadIncrement, std::ref(mtx)));
+            threads[i] = (std::thread(ResourceContention::IncrementMutex, std::ref(counter), threadIncrement, std::ref(mtx)));
         }
 
         for (auto& thread : threads) {

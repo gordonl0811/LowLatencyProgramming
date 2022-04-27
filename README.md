@@ -19,7 +19,7 @@ The following table is a directory of the optimisations included and their corre
 | Prefetching       | [Link](docs/prefetching.md)       | [Link](examples/prefetching/benchmark.cpp)       |
 | SIMD Instructions | [Link](docs/simd_instructions.md) | [Link](examples/simd_instructions/benchmark.cpp) |
 | Branch Prediction | [Link](docs/branch_prediction.md) | [Link](examples/branch_prediction/benchmark.cpp) |
-| Lock Contention   | [Link](docs/lock_contention.md)   | [Link](examples/lock_contention/benchmark.cpp)   |
+| Lock Contention   | [Link](docs/resource_contention.md)   | [Link](examples/resource_contention/benchmark.cpp)   |
 
 The repository is gradually being expanded - if there are any mistakes within the documentation, or there are any interesting optimisations that haven't been included, please feel free to get in touch!
 

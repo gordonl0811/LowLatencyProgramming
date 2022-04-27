@@ -22,15 +22,15 @@ ExternalProject_Add(googlebenchmark
 
 #################################### Targets ####################################
 
-set(LockContentionFiles benchmark.cpp lock_contention.h)
+set(ResourceContentionFiles benchmark.cpp resource_contention.h)
 
-add_executable(LockContentionBenchmarks ${LockContentionFiles})
+add_executable(ResourceContentionBenchmarks ${ResourceContentionFiles})
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(LockContentionBenchmarks Threads::Threads)
+target_link_libraries(ResourceContentionBenchmarks Threads::Threads)
 
-add_dependencies(LockContentionBenchmarks googlebenchmark)
-target_include_directories(LockContentionBenchmarks SYSTEM PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/deps/include)
-target_link_libraries(LockContentionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
-target_link_libraries(LockContentionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
+add_dependencies(ResourceContentionBenchmarks googlebenchmark)
+target_include_directories(ResourceContentionBenchmarks SYSTEM PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/deps/include)
+target_link_libraries(ResourceContentionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark.a)
+target_link_libraries(ResourceContentionBenchmarks ${CMAKE_CURRENT_BINARY_DIR}/deps/lib/${CMAKE_SHARED_LIBRARY_PREFIX}benchmark_main.a)
