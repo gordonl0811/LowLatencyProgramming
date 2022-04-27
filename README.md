@@ -11,15 +11,15 @@ Many of the code transformations are performed automatically by modern optimisin
 
 The following table is a directory of the optimisations included and their corresponding benchmarks. More detail about the benchmarking results can be found in the Documentation, also provided in the table.
 
-| Optimisation      | Documentation                     | Benchmarks                                       |
-|-------------------|-----------------------------------|--------------------------------------------------|
-| Inlining          | [Link](docs/inlining.md)          | [Link](examples/inlining/benchmark.cpp)          |
-| Loop Unrolling    | [Link](docs/loop_unrolling.md)    | [Link](examples/loop_unrolling/benchmark.cpp)    |
-| Predication       | [Link](docs/predication.md)       | [Link](examples/predication/benchmark.cpp)       |
-| Prefetching       | [Link](docs/prefetching.md)       | [Link](examples/prefetching/benchmark.cpp)       |
-| SIMD Instructions | [Link](docs/simd_instructions.md) | [Link](examples/simd_instructions/benchmark.cpp) |
-| Branch Prediction | [Link](docs/branch_prediction.md) | [Link](examples/branch_prediction/benchmark.cpp) |
-| Lock Contention   | [Link](docs/resource_contention.md)   | [Link](examples/resource_contention/benchmark.cpp)   |
+| Optimisation      | Documentation                       | Benchmarks                                       |
+|-------------------|-------------------------------------|--------------------------------------------------|
+| Inlining          | [Link](docs/inlining.md)            | [Link](examples/inlining/benchmark.cpp)          |
+| Loop Unrolling    | [Link](docs/loop_unrolling.md)      | [Link](examples/loop_unrolling/benchmark.cpp)    |
+| Predication       | [Link](docs/predication.md)         | [Link](examples/predication/benchmark.cpp)       |
+| Prefetching       | [Link](docs/prefetching.md)         | [Link](examples/prefetching/benchmark.cpp)       |
+| SIMD Instructions | [Link](docs/simd_instructions.md)   | [Link](examples/simd_instructions/benchmark.cpp) |
+| Branch Prediction | [Link](docs/branch_prediction.md)   | [Link](examples/branch_prediction/benchmark.cpp) |
+| Lock Contention   | [Link](docs/resource_contention.md) | [Link](examples/resource_contention/benchmark.cpp)   |
 
 The repository is gradually being expanded - if there are any mistakes within the documentation, or there are any interesting optimisations that haven't been included, please feel free to get in touch!
 
