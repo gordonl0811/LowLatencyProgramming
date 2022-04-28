@@ -52,17 +52,14 @@ Contrary to the idea that more threads corresponds to increased performance, the
 
 # Description
 
-# Benchmark Results
+The broader issue that we are observing in the `Increment` implementations is write-contention - two threads are attempting to modify a variable, but to preserve the correctness of the data concurrency primitives must be used to maintain "mutual exclusion". In other examples, read-contention may also be an issue though the overheads associated with it are less pronounced. Read/write locks are designed to give threads access to variables whenever possible, restricting access to variables unless absolutely necessary.
 
-| Number of Threads | Increment Execution Time (ns) | IncrementAtomic Execution Time (ns) | IncrementMutex Execution Time (ns) |
-|-------------------|-------------------------------|-------------------------------------|------------------------------------|
-|                 1 |                       5083685 |                            22228341 |                           65573654 |
-|                 2 |                           N/A |                            64777800 |                          184217894 |
-|                 3 |                           N/A |                            68674781 |                          233319335 |
-|                 4 |                           N/A |                            68748340 |                          253981544 |
-|                 5 |                           N/A |                            70246825 |                          292990498 |
-|                 6 |                           N/A |                            71283986 |                          327506162 |
-|                 7 |                           N/A |                            66261171 |                          377840225 |
-|                 8 |                           N/A |                            68845000 |                          417544009 |
+This level of overhead is significant for low-latency applications, and there have been designs to minimise contention where possible. A common design pattern is to have a single threaded "producer" which writes to a data structure. As demonstrated in the previous section, having a single thread writing to data storage performs better than multiple threads that need to manage mutual exclusion between themselves. The "consumers" only need read-access, so they are able to concurrently read objects without a concern for exclusivity.
 
-Incrementing 4032000 times (divisible by integers 1-8 so that the workload is evenly distributed between threads).
+The LMAX Disruptor is an example of an open-source concurrent structure that serves as an alternative to queues, which are limited when used in designs with producers/consumers and their data. More information about the design (as well as locks and concurrency) can be found in the [technical paper](https://lmax-exchange.github.io/disruptor/disruptor.html).
+
+If an application must use mutexes/locks and atomic operations, it is important to use the synchronisation primitives that are most suitable for the task. For example, [spinlocks](https://github.com/bminor/glibc/blob/master/nptl/pthread_spin_lock.c) are an implementation of a lock that are useful for short critical sections (a section of code executed by multiple threads where different sequences of execution affects the result) and/or when the lock will not often be contested... However, the worst case behaviour of spinlocks are extremely expensive and can cause [massive overheads when used incorrectly](https://matklad.github.io/2020/01/02/spinlocks-considered-harmful.html).
+
+An alternative to a spinlocks (among many others) are sleeping locks, which ask the OS to put the thread to sleep if it does not initially obtain the lock. When the lock is freed, the thread is woken back up using a system call. The problem is that the system calls to make the thread sleep are expensive, making this solution suboptimal for locks that are not held for long periods of time.
+
+There are lock implementations that combine the advantages of both spinlocks and sleeping locks (e.g. [futexes](https://en.wikipedia.org/wiki/Futex)), otherwise known as hybrid locks. It is important for the programmer to understand the advantages and disadvantages with each lock to choose the most appropriate one for each use case.
