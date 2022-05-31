@@ -6,8 +6,8 @@ import io.pkts.packet.Packet;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
+import utils.PoisonPacket;
 
 public class PacketWriter implements Runnable {
 
@@ -30,14 +30,12 @@ public class PacketWriter implements Runnable {
   @Override
   public void run() {
     try {
-      while (!(Thread.currentThread().isInterrupted())) {
-        writePacket(packetQueue.take());
-      }
-      // Drain and process remaining elements on the queue
-      final LinkedList<Packet> remainingPackets = new LinkedList<>();
-      packetQueue.drainTo(remainingPackets);
-      for (Packet complexObject : remainingPackets) {
-        writePacket(complexObject);
+      while (true) {
+        Packet packet = packetQueue.take();
+        if (!(packet instanceof PoisonPacket)) {
+          return;
+        }
+        writePacket(packet);
       }
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
