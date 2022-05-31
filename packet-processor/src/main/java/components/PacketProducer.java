@@ -4,6 +4,7 @@ import io.pkts.Pcap;
 import io.pkts.packet.Packet;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
+import utils.PoisonPacket;
 
 public class PacketProducer implements Runnable {
 
@@ -27,7 +28,9 @@ public class PacketProducer implements Runnable {
         }
         return true;
       });
-    } catch (IOException e) {
+
+      producerQueue.put(new PoisonPacket());
+    } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }
 

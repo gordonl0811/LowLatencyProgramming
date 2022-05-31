@@ -12,7 +12,7 @@ def generate_tcp_mss_packet(min_mss, max_mss):
 
 
 def generate_udp_packet():
-    return Ether() / IP()/ UDP()
+    return Ether() / IP() / UDP()
 
 
 def generate_random_packets(output_file, packet_count):
@@ -40,5 +40,5 @@ def generate_random_packets(output_file, packet_count):
 
 
 if __name__ == "__main__":
-    generate_random_packets("input.pcap", 1000)
-    # generate_random_packets("single_input.pcap", 1)
+    # generate_random_packets("input.pcap", 1000)
+    generate_random_packets("input_multiple.pcap", 100)
