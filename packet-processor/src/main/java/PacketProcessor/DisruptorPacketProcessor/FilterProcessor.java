@@ -1,31 +1,67 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
+import PacketProcessor.DisruptorPacketProcessor.components.PacketFilter;
 import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
 import PacketProcessor.DisruptorPacketProcessor.components.PacketWriter;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
-import com.lmax.disruptor.EventHandler;
+import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
 
-public class FilterProcessor {
+public class FilterProcessor implements PacketProcessor {
 
-  public static void main(String[] args) throws IOException {
+  private final PacketReader packetReader;
+  private final PacketFilter packetFilter;
+  private final PacketWriter tcpWriter;
+  private final PacketWriter udpWriter;
 
-    int bufferSize = 1024;
-    Disruptor<PacketEvent> producerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+  public FilterProcessor(int bufferSize, String source, String tcpDest, String udpDest)
+      throws IOException {
+
+    Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE);
+    Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+        DaemonThreadFactory.INSTANCE);
+    Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+        DaemonThreadFactory.INSTANCE);
+    this.packetReader = new PacketReader(source, readerDisruptor);
+    this.packetFilter = new PacketFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
+    this.tcpWriter = new PacketWriter(tcpDisruptor, tcpDest);
+    this.udpWriter = new PacketWriter(udpDisruptor, udpDest);
+  }
 
-    PacketReader packetReader = new PacketReader("src/main/resources/input.pcap",
-        producerDisruptor);
-    EventHandler<PacketEvent> packetWriter = new PacketWriter("src/main/resources/output.pcap");
+  @Override
+  public void initialize() {
 
-    // Connect the consumer
-    producerDisruptor.handleEventsWith(packetWriter);
+    // Initialise writers
+    tcpWriter.initialize();
+    udpWriter.initialize();
 
-    // Start producing packets
+    // Initialise filter
+    packetFilter.initialize();
+
+    // Initialise reader
     packetReader.initialize();
+
+  }
+
+  @Override
+  public void start() throws InterruptedException {
     packetReader.start();
+  }
+
+  public static void main(String[] args) throws IOException, InterruptedException {
+
+    FilterProcessor processor = new FilterProcessor(
+        1024,
+        "src/main/resources/input.pcap",
+        "src/main/resources/tcp_output.pcap",
+        "src/main/resources/udp_output.pcap"
+    );
+
+    processor.initialize();
+    processor.start();
 
   }
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
 
+  private final Disruptor<PacketEvent> inputDisruptor;
   private final Disruptor<PacketEvent> tcpDisruptor;
   private final Disruptor<PacketEvent> udpDisruptor;
 
@@ -16,14 +17,17 @@ public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
   private RingBuffer<PacketEvent> udpRingBuffer;
 
   public PacketFilter(
+      Disruptor<PacketEvent> inputDisruptor,
       Disruptor<PacketEvent> tcpDisruptor,
       Disruptor<PacketEvent> udpDisruptor) {
+    this.inputDisruptor = inputDisruptor;
     this.tcpDisruptor = tcpDisruptor;
     this.udpDisruptor = udpDisruptor;
   }
 
   @Override
   public void initialize() {
+    inputDisruptor.handleEventsWith(this);
     tcpRingBuffer = tcpDisruptor.start();
     udpRingBuffer = udpDisruptor.start();
   }
