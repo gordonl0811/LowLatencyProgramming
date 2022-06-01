@@ -1,25 +1,14 @@
 package PacketProcessorBenchmarks;
 
-import PacketProcessor.QueuePacketProcessor.FilterProcessor;
 import PacketProcessor.PacketProcessor;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import PacketProcessor.QueuePacketProcessor.FilterProcessor;
+import org.openjdk.jmh.annotations.*;
 
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 3, time = 5, timeUnit = TimeUnit.MILLISECONDS)
-@Measurement(iterations = 3, time = 5, timeUnit = TimeUnit.MILLISECONDS)
+import java.io.IOException;
+
+@Warmup(iterations = 1, time = 3)
+@Measurement(iterations = 5, time = 3)
+@Fork(value = 1)
 public class BenchmarkQueuePacketProcessor {
 
   @State(Scope.Benchmark)
@@ -34,7 +23,7 @@ public class BenchmarkQueuePacketProcessor {
     public void setup() throws IOException {
       processor = new FilterProcessor(
           queueSize,
-          "src/main/resources/input.pcap",
+          "src/main/resources/input_ten_thousand.pcap",
           "src/main/resources/tcp_output.pcap",
           "src/main/resources/udp_output.pcap"
       );

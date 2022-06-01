@@ -63,7 +63,7 @@ public class FilterProcessor implements PacketProcessor {
 
     FilterProcessor processor = new FilterProcessor(
         1024,
-        "src/main/resources/input.pcap",
+        "src/main/resources/input_ten_thousand.pcap",
         "src/main/resources/tcp_output.pcap",
         "src/main/resources/udp_output.pcap"
     );

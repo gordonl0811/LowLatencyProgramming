@@ -53,7 +53,7 @@ public class FilterProcessor implements PacketProcessor {
   public static void main(String[] args) throws IOException, InterruptedException {
     FilterProcessor processor = new FilterProcessor(
         1000,
-        "src/main/resources/input.pcap",
+        "src/main/resources/input_ten_thousand.pcap",
         "src/main/resources/tcp_output.pcap",
         "src/main/resources/udp_output.pcap"
     );
