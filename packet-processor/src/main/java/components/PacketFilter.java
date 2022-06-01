@@ -2,8 +2,9 @@ package components;
 
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
+import utils.PoisonPacket;
+
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 
 public class PacketFilter implements Runnable {
@@ -31,14 +32,12 @@ public class PacketFilter implements Runnable {
   @Override
   public void run() {
     try {
-      while (!(Thread.currentThread().isInterrupted())) {
-        filterPacket(producerQueue.take());
-      }
-      // Drain and process remaining elements on the queue
-      final LinkedList<Packet> remainingPackets = new LinkedList<>();
-      producerQueue.drainTo(remainingPackets);
-      for (Packet complexObject : remainingPackets) {
-        filterPacket(complexObject);
+      while (true) {
+        Packet packet = producerQueue.take();
+        if (packet instanceof PoisonPacket) {
+          return;
+        }
+        filterPacket(packet);
       }
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
