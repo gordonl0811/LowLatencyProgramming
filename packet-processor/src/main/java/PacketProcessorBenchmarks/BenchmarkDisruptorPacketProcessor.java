@@ -1,7 +1,7 @@
 package PacketProcessorBenchmarks;
 
-import PacketProcessor.QueuePacketProcessor.FilterProcessor;
 import PacketProcessor.PacketProcessor;
+import PacketProcessor.DisruptorPacketProcessor.FilterProcessor;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -20,7 +20,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 3, time = 5, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 3, time = 5, timeUnit = TimeUnit.MILLISECONDS)
-public class BenchmarkQueuePacketProcessor {
+public class BenchmarkDisruptorPacketProcessor {
 
   @State(Scope.Benchmark)
   public static class BenchmarkState {
@@ -43,7 +43,8 @@ public class BenchmarkQueuePacketProcessor {
   }
 
   @Benchmark
-  public void benchmark(BenchmarkState state) throws InterruptedException {
+  public void benchmark(BenchmarkQueuePacketProcessor.BenchmarkState state) throws InterruptedException {
     state.processor.start();
   }
+
 }

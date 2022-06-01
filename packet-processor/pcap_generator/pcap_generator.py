@@ -42,5 +42,5 @@ def generate_random_packets(output_file, packet_count):
 
 
 if __name__ == "__main__":
-    generate_random_packets("input.pcap", 1000)
+    generate_random_packets("input.pcap", 1000000)
     # generate_random_packets("input_multiple.pcap", 100)
