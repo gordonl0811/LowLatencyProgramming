@@ -6,6 +6,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PacketReader implements PacketEventProducer {
 
@@ -34,6 +35,11 @@ public class PacketReader implements PacketEventProducer {
       // Load the packets into the RingBuffer
       this.source.loop(packet -> {
         readerRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
+        try {
+          TimeUnit.MICROSECONDS.sleep(100);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
         return true;
       });
 

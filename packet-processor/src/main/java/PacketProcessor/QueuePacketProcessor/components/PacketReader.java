@@ -6,6 +6,8 @@ import io.pkts.packet.Packet;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 import PacketProcessor.utils.PoisonPacket;
 
 public class PacketReader implements Runnable {
@@ -30,6 +32,7 @@ public class PacketReader implements Runnable {
       this.source.loop(packet -> {
         try {
           producerQueue.put(packet);
+          TimeUnit.MICROSECONDS.sleep(100);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
