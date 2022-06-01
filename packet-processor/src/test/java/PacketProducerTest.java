@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import org.junit.jupiter.api.Test;
+
+import org.junit.Test;
 import utils.PoisonPacket;
 
 public class PacketProducerTest {
 
   @Test
-  void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
+  public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
 
     final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
@@ -29,7 +30,7 @@ public class PacketProducerTest {
   }
 
   @Test
-  void testProducerForwardsMultiplePackets() throws IOException, InterruptedException {
+  public void testProducerForwardsMultiplePackets() throws IOException, InterruptedException {
     // PCAP containing 100 packets
     final String source = "src/test/resources/PacketProducerTest/input_multiple.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);

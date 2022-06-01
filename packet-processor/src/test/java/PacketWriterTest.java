@@ -1,6 +1,8 @@
 import components.PacketProducer;
 import components.PacketWriter;
 import io.pkts.packet.Packet;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -10,11 +12,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.jupiter.api.Test;
 
 public class PacketWriterTest {
   @Test
-  void testWriterThreadTerminatesWithPoisonPacket()
+  public void testWriterThreadTerminatesWithPoisonPacket()
       throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
     final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
@@ -33,7 +34,7 @@ public class PacketWriterTest {
   }
 
   @Test
-  void testWriterWritesMultiplePacketsToPcap() throws IOException {
+  public void testWriterWritesMultiplePacketsToPcap() throws IOException {
     final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
     final String dest = "TODO";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
