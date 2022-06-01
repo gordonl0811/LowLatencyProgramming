@@ -8,8 +8,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class PacketProcessor {
 
-  public static void main(String[] args) throws IOException {
-
+  public static void simpleFilterPipeline() throws IOException, InterruptedException {
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(100);
     BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(100);
     BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(100);
@@ -23,10 +22,25 @@ public class PacketProcessor {
     PacketWriter tcpWriter = new PacketWriter(tcpQueue, tcpDest);
     PacketWriter udpWriter = new PacketWriter(udpQueue, udpDest);
 
-    new Thread(packetProducer).start();
-    new Thread(packetFilter).start();
-    new Thread(tcpWriter).start();
-    new Thread(udpWriter).start();
+    Thread producerThread = new Thread(packetProducer);
+    Thread filterThread = new Thread(packetFilter);
+    Thread tcpThread = new Thread(tcpWriter);
+    Thread udpThread = new Thread(udpWriter);
+
+    producerThread.start();
+    filterThread.start();
+    tcpThread.start();
+    udpThread.start();
+
+    producerThread.join();
+    System.out.println("Finished");
+    filterThread.join();
+    tcpThread.join();
+    udpThread.join();
+  }
+
+  public static void main(String[] args) throws IOException, InterruptedException {
+    simpleFilterPipeline();
   }
 
 }
