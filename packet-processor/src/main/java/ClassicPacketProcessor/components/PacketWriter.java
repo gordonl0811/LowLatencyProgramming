@@ -1,9 +1,9 @@
-package PacketProcessor.components;
+package ClassicPacketProcessor.components;
 
 import io.pkts.PcapOutputStream;
 import io.pkts.frame.PcapGlobalHeader;
 import io.pkts.packet.Packet;
-import PacketProcessor.utils.PoisonPacket;
+import ClassicPacketProcessor.utils.PoisonPacket;
 
 import java.io.File;
 import java.io.FileNotFoundException;

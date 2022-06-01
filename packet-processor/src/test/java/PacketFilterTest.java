@@ -1,5 +1,5 @@
-import PacketProcessor.components.PacketFilter;
-import PacketProcessor.components.PacketProducer;
+import ClassicPacketProcessor.components.PacketFilter;
+import ClassicPacketProcessor.components.PacketProducer;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import PacketProcessor.utils.PoisonPacket;
+import ClassicPacketProcessor.utils.PoisonPacket;
 
 public class PacketFilterTest {
 

@@ -1,7 +1,7 @@
-import PacketProcessor.components.PacketProducer;
+import ClassicPacketProcessor.components.PacketProducer;
 import io.pkts.packet.Packet;
 import org.junit.Test;
-import PacketProcessor.utils.PoisonPacket;
+import ClassicPacketProcessor.utils.PoisonPacket;
 
 import java.io.File;
 import java.io.IOException;

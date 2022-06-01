@@ -1,5 +1,5 @@
-import PacketProcessor.components.PacketProducer;
-import PacketProcessor.components.PacketWriter;
+import ClassicPacketProcessor.components.PacketProducer;
+import ClassicPacketProcessor.components.PacketWriter;
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
