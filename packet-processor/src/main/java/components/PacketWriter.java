@@ -3,11 +3,13 @@ package components;
 import io.pkts.PcapOutputStream;
 import io.pkts.frame.PcapGlobalHeader;
 import io.pkts.packet.Packet;
+import utils.PoisonPacket;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
-import utils.PoisonPacket;
 
 public class PacketWriter implements Runnable {
 
@@ -20,7 +22,14 @@ public class PacketWriter implements Runnable {
         PcapGlobalHeader.createDefaultHeader(),
         new FileOutputStream(dest)
     );
-    ;
+  }
+
+  public PacketWriter(BlockingQueue<Packet> packetQueue, File dest) throws FileNotFoundException {
+    this.packetQueue = packetQueue;
+    this.output = PcapOutputStream.create(
+            PcapGlobalHeader.createDefaultHeader(),
+            new FileOutputStream(dest)
+    );
   }
 
   private void writePacket(Packet packet) throws IOException {
@@ -32,7 +41,7 @@ public class PacketWriter implements Runnable {
     try {
       while (true) {
         Packet packet = packetQueue.take();
-        if (!(packet instanceof PoisonPacket)) {
+        if (packet instanceof PoisonPacket) {
           return;
         }
         writePacket(packet);

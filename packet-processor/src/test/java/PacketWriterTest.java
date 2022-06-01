@@ -1,25 +1,28 @@
 import components.PacketProducer;
 import components.PacketWriter;
+import io.pkts.Pcap;
 import io.pkts.packet.Packet;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class PacketWriterTest {
+
+  @Rule
+  public TemporaryFolder tempFolder = new TemporaryFolder();
+
   @Test
   public void testWriterThreadTerminatesWithPoisonPacket()
       throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
     final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
-    final String dest = "TODO";
+    final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
     PacketProducer packetProducer = new PacketProducer(source, producerQueue);
@@ -34,15 +37,43 @@ public class PacketWriterTest {
   }
 
   @Test
-  public void testWriterWritesMultiplePacketsToPcap() throws IOException {
-    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
-    final String dest = "TODO";
+  public void testWriterWritesMultiplePacketsToPcap() throws IOException, InterruptedException {
+
+    final String source = "src/test/resources/PacketProducerTest/input_multiple.pcap";
+    final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
     PacketProducer packetProducer = new PacketProducer(source, producerQueue);
     PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
 
-    new Thread(packetProducer).start();
+    Thread producerThread = new Thread(packetProducer);
+    Thread writerThread = new Thread(packetWriter);
+
+    producerThread.start();
+    producerThread.join();
+    writerThread.start();
+    writerThread.join();
+
+    // Check that each packet is the same
+    Pcap input = Pcap.openStream(source);
+    Pcap output = Pcap.openStream(dest);
+
+    // Build Lists for comparison
+    List<Packet> inputList = new ArrayList<>();
+    input.loop(inputList::add);
+
+    List<Packet> outputList = new ArrayList<>();
+    output.loop(outputList::add);
+
+    assert(inputList.size() == outputList.size());
+
+    // Check similarity by comparing ArrivalTime and Protocol
+    for (int i = 0; i < inputList.size(); i++) {
+      Packet inputPacket = inputList.get(i);
+      Packet outputPacket = outputList.get(i);
+      assert(inputPacket.getArrivalTime() == outputPacket.getArrivalTime());
+      assert(inputPacket.getProtocol() == outputPacket.getProtocol());
+    }
 
   }
 }

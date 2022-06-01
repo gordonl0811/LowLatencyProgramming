@@ -2,6 +2,8 @@ package components;
 
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import utils.PoisonPacket;
@@ -12,6 +14,11 @@ public class PacketProducer implements Runnable {
   private final BlockingQueue<Packet> producerQueue;
 
   public PacketProducer(String source, BlockingQueue<Packet> producerQueue) throws IOException {
+    this.source = Pcap.openStream(source);
+    this.producerQueue = producerQueue;
+  }
+
+  public PacketProducer(File source, BlockingQueue<Packet> producerQueue) throws IOException {
     this.source = Pcap.openStream(source);
     this.producerQueue = producerQueue;
   }
