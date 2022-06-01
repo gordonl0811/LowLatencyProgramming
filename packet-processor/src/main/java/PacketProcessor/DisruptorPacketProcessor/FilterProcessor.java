@@ -1,6 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.PacketProducer;
+import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
 import PacketProcessor.DisruptorPacketProcessor.components.PacketWriter;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.EventHandler;
@@ -16,7 +16,7 @@ public class FilterProcessor {
     Disruptor<PacketEvent> producerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE);
 
-    PacketProducer packetProducer = new PacketProducer("src/main/resources/input.pcap",
+    PacketReader packetReader = new PacketReader("src/main/resources/input.pcap",
         producerDisruptor);
     EventHandler<PacketEvent> packetWriter = new PacketWriter("src/main/resources/output.pcap");
 
@@ -24,7 +24,8 @@ public class FilterProcessor {
     producerDisruptor.handleEventsWith(packetWriter);
 
     // Start producing packets
-    packetProducer.start();
+    packetReader.initialize();
+    packetReader.start();
 
   }
 }

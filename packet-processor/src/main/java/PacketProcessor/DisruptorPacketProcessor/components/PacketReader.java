@@ -6,18 +6,19 @@ import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
 import java.io.IOException;
 
-public class PacketProducer {
+public class PacketReader implements PacketEventProducer {
 
   private final Pcap source;
   private final Disruptor<PacketEvent> producerDisruptor;
   private RingBuffer<PacketEvent> producerRingBuffer;
 
-  public PacketProducer(String source,
+  public PacketReader(String source,
       Disruptor<PacketEvent> producerDisruptor) throws IOException {
     this.source = Pcap.openStream(source);
     this.producerDisruptor = producerDisruptor;
   }
 
+  @Override
   public void initialize() {
     producerRingBuffer = this.producerDisruptor.start();
   }

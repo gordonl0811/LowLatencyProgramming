@@ -1,7 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor.components;
 
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
-import com.lmax.disruptor.EventHandler;
 import io.pkts.PcapOutputStream;
 import io.pkts.frame.PcapGlobalHeader;
 import io.pkts.packet.Packet;
@@ -9,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PacketWriter implements EventHandler<PacketEvent> {
+public class PacketWriter implements PacketEventConsumer {
 
   private final PcapOutputStream output;
 
