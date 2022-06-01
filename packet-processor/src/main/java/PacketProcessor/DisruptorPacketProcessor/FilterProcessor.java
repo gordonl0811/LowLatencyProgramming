@@ -8,6 +8,8 @@ import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FilterProcessor implements PacketProcessor {
 
@@ -25,10 +27,16 @@ public class FilterProcessor implements PacketProcessor {
         DaemonThreadFactory.INSTANCE);
     Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE);
-    this.packetReader = new PacketReader(source, readerDisruptor);
+
+    List<Disruptor<PacketEvent>> consumers = new LinkedList<>();
+    consumers.add(tcpDisruptor);
+    consumers.add(udpDisruptor);
+
+    this.packetReader = new PacketReader(source, readerDisruptor, consumers);
     this.packetFilter = new PacketFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
     this.tcpWriter = new PacketWriter(tcpDisruptor, tcpDest);
     this.udpWriter = new PacketWriter(udpDisruptor, udpDest);
+
   }
 
   @Override

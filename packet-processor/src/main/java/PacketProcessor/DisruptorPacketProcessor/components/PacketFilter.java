@@ -26,6 +26,11 @@ public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
   }
 
   @Override
+  public Disruptor<PacketEvent> getInputDisruptor() {
+    return inputDisruptor;
+  }
+
+  @Override
   public void initialize() {
     inputDisruptor.handleEventsWith(this);
     tcpRingBuffer = tcpDisruptor.start();

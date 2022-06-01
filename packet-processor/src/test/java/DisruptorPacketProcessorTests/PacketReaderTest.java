@@ -1,6 +1,5 @@
 package DisruptorPacketProcessorTests;
 
-import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.BusySpinWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -27,7 +26,7 @@ public class PacketReaderTest {
         new BusySpinWaitStrategy()
     );
 
-    PacketReader packetReader = new PacketReader(source, producerDisruptor);
+//    PacketReader packetReader = new PacketReader(source, producerDisruptor);
 
     // TODO: Check for the single packet and the poison packet
 
