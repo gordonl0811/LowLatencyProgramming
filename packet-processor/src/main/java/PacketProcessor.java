@@ -33,7 +33,6 @@ public class PacketProcessor {
     udpThread.start();
 
     producerThread.join();
-    System.out.println("Finished");
     filterThread.join();
     tcpThread.join();
     udpThread.join();
