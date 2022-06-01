@@ -10,6 +10,7 @@ public class PacketProducer {
 
   private final Pcap source;
   private final Disruptor<PacketEvent> producerDisruptor;
+  private RingBuffer<PacketEvent> producerRingBuffer;
 
   public PacketProducer(String source,
       Disruptor<PacketEvent> producerDisruptor) throws IOException {
@@ -17,9 +18,12 @@ public class PacketProducer {
     this.producerDisruptor = producerDisruptor;
   }
 
+  public void initialize() {
+    producerRingBuffer = this.producerDisruptor.start();
+  }
+
   public void start() {
 
-    RingBuffer<PacketEvent> producerRingBuffer = this.producerDisruptor.start();
     try {
       // Load the packets into the RingBuffer
       this.source.loop(packet -> {
