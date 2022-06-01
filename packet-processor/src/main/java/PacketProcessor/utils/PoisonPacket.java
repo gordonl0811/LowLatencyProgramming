@@ -1,4 +1,4 @@
-package ClassicPacketProcessor.utils;
+package PacketProcessor.utils;
 
 import io.pkts.buffer.Buffer;
 import io.pkts.packet.Packet;

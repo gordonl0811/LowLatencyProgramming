@@ -1,7 +1,7 @@
 package PacketProcessorBenchmarks;
 
-import ClassicPacketProcessor.FilterProcessor;
-import ClassicPacketProcessor.PacketProcessor;
+import PacketProcessor.QueuePacketProcessor.FilterProcessor;
+import PacketProcessor.PacketProcessor;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -16,7 +16,7 @@ import org.openjdk.jmh.annotations.State;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BenchmarkClassicPacketProcessor {
+public class BenchmarkQueuePacketProcessor {
 
   @State(Scope.Benchmark)
   public static class BenchmarkState {

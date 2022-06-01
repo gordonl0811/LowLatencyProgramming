@@ -1,5 +1,7 @@
-import ClassicPacketProcessor.components.PacketProducer;
-import ClassicPacketProcessor.components.PacketWriter;
+package QueuePacketProcessorTests;
+
+import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
+import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
@@ -21,7 +23,7 @@ public class PacketWriterTest {
   public void testWriterThreadTerminatesWithPoisonPacket()
       throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
-    final String source = "src/test/resources/PacketWriterTest/input_single.pcap";
+    final String source = "src/test/resources/QueuePacketProcessorTests.PacketWriterTest/input_single.pcap";
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
@@ -39,7 +41,7 @@ public class PacketWriterTest {
   @Test
   public void testWriterWritesMultiplePacketsToPcap() throws IOException, InterruptedException {
 
-    final String source = "src/test/resources/PacketWriterTest/input_multiple.pcap";
+    final String source = "src/test/resources/QueuePacketProcessorTests.PacketWriterTest/input_multiple.pcap";
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 

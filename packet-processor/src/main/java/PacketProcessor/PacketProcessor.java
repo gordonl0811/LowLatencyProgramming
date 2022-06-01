@@ -1,4 +1,4 @@
-package ClassicPacketProcessor;
+package PacketProcessor;
 
 public interface PacketProcessor {
 

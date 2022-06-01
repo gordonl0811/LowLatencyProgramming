@@ -1,7 +1,9 @@
-import ClassicPacketProcessor.components.PacketProducer;
+package QueuePacketProcessorTests;
+
+import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
 import io.pkts.packet.Packet;
 import org.junit.Test;
-import ClassicPacketProcessor.utils.PoisonPacket;
+import PacketProcessor.utils.PoisonPacket;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +16,7 @@ public class PacketProducerTest {
   @Test
   public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
 
-    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
+    final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketProducer packetProducer = new PacketProducer(source, producerQueue);
 
@@ -33,7 +35,7 @@ public class PacketProducerTest {
   @Test
   public void testProducerAcceptsFileObject() throws IOException, InterruptedException {
 
-    final File source = new File("src/test/resources/PacketProducerTest/input_single.pcap");
+    final File source = new File("src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketProducer packetProducer = new PacketProducer(source, producerQueue);
 
@@ -52,7 +54,7 @@ public class PacketProducerTest {
   @Test
   public void testProducerForwardsMultiplePackets() throws IOException, InterruptedException {
     // PCAP containing 100 packets
-    final String source = "src/test/resources/PacketProducerTest/input_multiple.pcap";
+    final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_multiple.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketProducer packetProducer = new PacketProducer(source, producerQueue);
 

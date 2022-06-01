@@ -1,5 +1,7 @@
-import ClassicPacketProcessor.components.PacketFilter;
-import ClassicPacketProcessor.components.PacketProducer;
+package QueuePacketProcessorTests;
+
+import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
+import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import ClassicPacketProcessor.utils.PoisonPacket;
+import PacketProcessor.utils.PoisonPacket;
 
 public class PacketFilterTest {
 
@@ -20,7 +22,7 @@ public class PacketFilterTest {
     public void testFilterThreadTerminatesWithPoisonPacket()
             throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
-        final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
+        final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap";
 
         BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
@@ -41,7 +43,7 @@ public class PacketFilterTest {
     public void testFilterThreadForwardsTwoPoisonPackets()
         throws IOException, InterruptedException, ExecutionException, TimeoutException {
 
-        final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
+        final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap";
 
         BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
@@ -76,7 +78,7 @@ public class PacketFilterTest {
         BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(1000);
 
-        final String source = "src/test/resources/PacketFilterTest/input_multiple.pcap";
+        final String source = "src/test/resources/QueuePacketProcessorTests.PacketFilterTest/input_multiple.pcap";
 
         PacketProducer packetProducer = new PacketProducer(source, producerQueue);
         PacketFilter packetFilter = new PacketFilter(producerQueue, tcpQueue, udpQueue);
