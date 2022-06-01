@@ -33,7 +33,15 @@ public class PacketWriterTest {
   }
 
   @Test
-  void testWriterWritesMultiplePacketsToPcap() {
+  void testWriterWritesMultiplePacketsToPcap() throws IOException {
+    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
+    final String dest = "TODO";
+    BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
+
+    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
+
+    new Thread(packetProducer).start();
 
   }
 }
