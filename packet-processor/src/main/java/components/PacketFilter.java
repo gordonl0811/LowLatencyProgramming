@@ -35,6 +35,8 @@ public class PacketFilter implements Runnable {
       while (true) {
         Packet packet = producerQueue.take();
         if (packet instanceof PoisonPacket) {
+          tcpQueue.put(packet);
+          udpQueue.put(packet);
           return;
         }
         filterPacket(packet);
