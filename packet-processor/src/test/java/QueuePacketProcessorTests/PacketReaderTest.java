@@ -16,7 +16,7 @@ public class PacketReaderTest {
   @Test
   public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
 
-    final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap";
+    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketReader packetReader = new PacketReader(source, producerQueue);
 
@@ -35,7 +35,7 @@ public class PacketReaderTest {
   @Test
   public void testProducerAcceptsFileObject() throws IOException, InterruptedException {
 
-    final File source = new File("src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap");
+    final File source = new File("src/test/resources/PacketProducerTest/input_single.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketReader packetReader = new PacketReader(source, producerQueue);
 
@@ -54,7 +54,7 @@ public class PacketReaderTest {
   @Test
   public void testProducerForwardsMultiplePackets() throws IOException, InterruptedException {
     // PCAP containing 100 packets
-    final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_multiple.pcap";
+    final String source = "src/test/resources/PacketProducerTest/input_multiple.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
     PacketReader packetReader = new PacketReader(source, producerQueue);
 
