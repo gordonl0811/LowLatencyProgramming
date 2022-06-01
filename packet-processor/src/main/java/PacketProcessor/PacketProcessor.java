@@ -1,3 +1,5 @@
+package PacketProcessor;
+
 public interface PacketProcessor {
 
   void initialize();

@@ -1,4 +1,4 @@
-package components;
+package PacketProcessor.components;
 
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
@@ -6,7 +6,7 @@ import io.pkts.packet.Packet;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
-import utils.PoisonPacket;
+import PacketProcessor.utils.PoisonPacket;
 
 public class PacketProducer implements Runnable {
 

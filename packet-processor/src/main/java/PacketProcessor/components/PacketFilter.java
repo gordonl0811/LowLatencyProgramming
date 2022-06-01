@@ -1,8 +1,8 @@
-package components;
+package PacketProcessor.components;
 
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
-import utils.PoisonPacket;
+import PacketProcessor.utils.PoisonPacket;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;

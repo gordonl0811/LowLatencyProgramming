@@ -1,6 +1,8 @@
-import components.PacketFilter;
-import components.PacketProducer;
-import components.PacketWriter;
+package PacketProcessor;
+
+import PacketProcessor.components.PacketFilter;
+import PacketProcessor.components.PacketProducer;
+import PacketProcessor.components.PacketWriter;
 import io.pkts.packet.Packet;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
