@@ -2,7 +2,7 @@ package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
-import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
+import PacketProcessor.QueuePacketProcessor.components.PacketReader;
 import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
 import io.pkts.packet.Packet;
 import java.io.IOException;
@@ -23,12 +23,12 @@ public class FilterProcessor implements PacketProcessor {
     final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
     final BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(queueSize);
 
-    final PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    final PacketReader packetReader = new PacketReader(source, producerQueue);
     final PacketFilter packetFilter = new PacketFilter(producerQueue, tcpQueue, udpQueue);
     final PacketWriter tcpWriter = new PacketWriter(tcpQueue, tcpDest);
     final PacketWriter udpWriter = new PacketWriter(udpQueue, udpDest);
 
-    this.producerThread = new Thread(packetProducer);
+    this.producerThread = new Thread(packetReader);
     this.filterThread = new Thread(packetFilter);
     this.tcpThread = new Thread(tcpWriter);
     this.udpThread = new Thread(udpWriter);

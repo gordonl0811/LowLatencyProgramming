@@ -1,6 +1,6 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
+import PacketProcessor.QueuePacketProcessor.components.PacketReader;
 import io.pkts.packet.Packet;
 import org.junit.Test;
 import PacketProcessor.utils.PoisonPacket;
@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class PacketProducerTest {
+public class PacketReaderTest {
 
   @Test
   public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
 
     final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketReader packetReader = new PacketReader(source, producerQueue);
 
-    Thread thread = new Thread(packetProducer);
+    Thread thread = new Thread(packetReader);
     thread.start();
     thread.join();
 
@@ -37,9 +37,9 @@ public class PacketProducerTest {
 
     final File source = new File("src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_single.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketReader packetReader = new PacketReader(source, producerQueue);
 
-    Thread thread = new Thread(packetProducer);
+    Thread thread = new Thread(packetReader);
     thread.start();
     thread.join();
 
@@ -56,9 +56,9 @@ public class PacketProducerTest {
     // PCAP containing 100 packets
     final String source = "src/test/resources/QueuePacketProcessorTests.PacketProducerTest/input_multiple.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketReader packetReader = new PacketReader(source, producerQueue);
 
-    Thread thread = new Thread(packetProducer);
+    Thread thread = new Thread(packetReader);
     thread.start();
     thread.join();
 

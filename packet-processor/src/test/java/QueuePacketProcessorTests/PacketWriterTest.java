@@ -1,6 +1,6 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
+import PacketProcessor.QueuePacketProcessor.components.PacketReader;
 import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
@@ -27,10 +27,10 @@ public class PacketWriterTest {
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
-    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketReader packetReader = new PacketReader(source, producerQueue);
     PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
 
-    new Thread(packetProducer).start();
+    new Thread(packetReader).start();
 
     // Check that the thread has completed, i.e. terminated
     ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -45,10 +45,10 @@ public class PacketWriterTest {
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
-    PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+    PacketReader packetReader = new PacketReader(source, producerQueue);
     PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
 
-    Thread producerThread = new Thread(packetProducer);
+    Thread producerThread = new Thread(packetReader);
     Thread writerThread = new Thread(packetWriter);
 
     producerThread.start();

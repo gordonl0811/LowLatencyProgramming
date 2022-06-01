@@ -1,7 +1,7 @@
 package QueuePacketProcessorTests;
 
 import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
-import PacketProcessor.QueuePacketProcessor.components.PacketProducer;
+import PacketProcessor.QueuePacketProcessor.components.PacketReader;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,10 +28,10 @@ public class PacketFilterTest {
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueTwo = new ArrayBlockingQueue<>(1000);
 
-        PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+        PacketReader packetReader = new PacketReader(source, producerQueue);
         PacketFilter packetFilter = new PacketFilter(producerQueue, dummyQueueOne, dummyQueueTwo);
 
-        new Thread(packetProducer).start();
+        new Thread(packetReader).start();
 
         // Check that the thread has completed, i.e. terminated
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -49,10 +49,10 @@ public class PacketFilterTest {
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueTwo = new ArrayBlockingQueue<>(1000);
 
-        PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+        PacketReader packetReader = new PacketReader(source, producerQueue);
         PacketFilter packetFilter = new PacketFilter(producerQueue, dummyQueueOne, dummyQueueTwo);
 
-        Thread producerThread = new Thread(packetProducer);
+        Thread producerThread = new Thread(packetReader);
         Thread filterThread = new Thread(packetFilter);
 
         producerThread.start();
@@ -80,10 +80,10 @@ public class PacketFilterTest {
 
         final String source = "src/test/resources/QueuePacketProcessorTests.PacketFilterTest/input_multiple.pcap";
 
-        PacketProducer packetProducer = new PacketProducer(source, producerQueue);
+        PacketReader packetReader = new PacketReader(source, producerQueue);
         PacketFilter packetFilter = new PacketFilter(producerQueue, tcpQueue, udpQueue);
 
-        Thread producerThread = new Thread(packetProducer);
+        Thread producerThread = new Thread(packetReader);
         Thread filterThread = new Thread(packetFilter);
 
         producerThread.start();

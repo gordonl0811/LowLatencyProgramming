@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 import PacketProcessor.utils.PoisonPacket;
 
-public class PacketProducer implements Runnable {
+public class PacketReader implements Runnable {
 
   private final Pcap source;
   private final BlockingQueue<Packet> producerQueue;
 
-  public PacketProducer(String source, BlockingQueue<Packet> producerQueue) throws IOException {
+  public PacketReader(String source, BlockingQueue<Packet> producerQueue) throws IOException {
     this.source = Pcap.openStream(source);
     this.producerQueue = producerQueue;
   }
 
-  public PacketProducer(File source, BlockingQueue<Packet> producerQueue) throws IOException {
+  public PacketReader(File source, BlockingQueue<Packet> producerQueue) throws IOException {
     this.source = Pcap.openStream(source);
     this.producerQueue = producerQueue;
   }
