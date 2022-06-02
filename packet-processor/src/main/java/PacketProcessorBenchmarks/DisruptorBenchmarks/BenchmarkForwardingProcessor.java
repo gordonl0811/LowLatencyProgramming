@@ -1,6 +1,5 @@
 package PacketProcessorBenchmarks.DisruptorBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.FilterProcessor;
 import PacketProcessor.DisruptorPacketProcessor.ForwardingProcessor;
 import PacketProcessor.PacketProcessor;
 import java.io.IOException;

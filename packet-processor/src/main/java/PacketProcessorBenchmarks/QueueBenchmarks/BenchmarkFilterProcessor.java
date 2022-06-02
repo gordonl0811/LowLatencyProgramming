@@ -1,7 +1,7 @@
 package PacketProcessorBenchmarks.QueueBenchmarks;
 
 import PacketProcessor.PacketProcessor;
-import PacketProcessor.QueuePacketProcessor.FilterProcessor;
+import PacketProcessor.QueuePacketProcessor.FilterAndWriteProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class BenchmarkFilterProcessor {
 
     @Setup(Level.Invocation)
     public void setup() throws IOException {
-      processor = new FilterProcessor(
+      processor = new FilterAndWriteProcessor(
           queueSize,
           "src/main/resources/input_thousand.pcap",
           "src/main/resources/tcp_output.pcap",

@@ -1,6 +1,6 @@
 package PacketProcessorBenchmarks.DisruptorBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.FilterProcessor;
+import PacketProcessor.DisruptorPacketProcessor.FilterAndWriteProcessor;
 import PacketProcessor.PacketProcessor;
 import java.io.IOException;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -31,7 +31,7 @@ public class BenchmarkFilterProcessor {
 
     @Setup(Level.Invocation)
     public void setup() throws IOException {
-      processor = new FilterProcessor(
+      processor = new FilterAndWriteProcessor(
           bufferSize,
           "src/main/resources/input_thousand.pcap",
           "src/main/resources/tcp_output.pcap",

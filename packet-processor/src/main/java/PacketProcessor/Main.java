@@ -1,16 +1,14 @@
 package PacketProcessor;
 
-import PacketProcessor.QueuePacketProcessor.FilterProcessor;
+import PacketProcessor.DisruptorPacketProcessor.FilterAndDropProcessor;
 
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
-        FilterProcessor processor = new FilterProcessor(
+        FilterAndDropProcessor processor = new FilterAndDropProcessor(
                 1024,
-                "src/main/resources/input_thousand.pcap",
-                "src/main/resources/output/tcp_output.pcap",
-                "src/main/resources/output/udp_output.pcap"
+                "src/main/resources/input_thousand.pcap"
         );
 
         processor.initialize();

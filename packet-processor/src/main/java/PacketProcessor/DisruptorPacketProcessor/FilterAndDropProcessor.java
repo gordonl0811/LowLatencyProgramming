@@ -1,26 +1,26 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
+import PacketProcessor.DisruptorPacketProcessor.components.PacketDropper;
 import PacketProcessor.DisruptorPacketProcessor.components.PacketFilter;
 import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketWriter;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FilterProcessor implements PacketProcessor {
-
+public class FilterAndDropProcessor implements PacketProcessor {
     private final PacketReader packetReader;
     private final PacketFilter packetFilter;
-    private final PacketWriter tcpWriter;
-    private final PacketWriter udpWriter;
+    private final PacketDropper tcpDropper;
+    private final PacketDropper udpDropper;
 
-    public FilterProcessor(int bufferSize, String source, String tcpDest, String udpDest)
+    public FilterAndDropProcessor(int bufferSize, String source)
             throws IOException {
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
@@ -36,8 +36,8 @@ public class FilterProcessor implements PacketProcessor {
 
         this.packetReader = new PacketReader(source, readerDisruptor, consumers);
         this.packetFilter = new PacketFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpWriter = new PacketWriter(tcpDisruptor, tcpDest);
-        this.udpWriter = new PacketWriter(udpDisruptor, udpDest);
+        this.tcpDropper = new PacketDropper(tcpDisruptor);
+        this.udpDropper = new PacketDropper(udpDisruptor);
 
     }
 
@@ -45,8 +45,8 @@ public class FilterProcessor implements PacketProcessor {
     public void initialize() {
 
         // Initialise writers
-        tcpWriter.initialize();
-        udpWriter.initialize();
+        tcpDropper.initialize();
+        udpDropper.initialize();
 
         // Initialise filter
         packetFilter.initialize();
@@ -61,17 +61,14 @@ public class FilterProcessor implements PacketProcessor {
         packetReader.start();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        FilterProcessor processor = new FilterProcessor(
+    public static void main(String[] args) throws InterruptedException, IOException {
+        FilterAndDropProcessor processor = new FilterAndDropProcessor(
                 1024,
-                "src/main/resources/input_ten_thousand.pcap",
-                "src/main/resources/tcp_output.pcap",
-                "src/main/resources/udp_output.pcap"
+                "src/main/resources/input_thousand.pcap"
         );
 
         processor.initialize();
         processor.start();
-
     }
+
 }
