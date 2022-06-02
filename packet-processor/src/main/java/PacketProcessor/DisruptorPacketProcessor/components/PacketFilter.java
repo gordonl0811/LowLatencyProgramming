@@ -24,12 +24,6 @@ public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
     this.tcpDisruptor = tcpDisruptor;
     this.udpDisruptor = udpDisruptor;
   }
-
-  @Override
-  public Disruptor<PacketEvent> getInputDisruptor() {
-    return inputDisruptor;
-  }
-
   @Override
   public void initialize() {
     inputDisruptor.handleEventsWith(this);

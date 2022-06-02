@@ -21,12 +21,6 @@ public class PacketWriter implements PacketEventConsumer {
         new FileOutputStream(dest)
     );
   }
-
-  @Override
-  public Disruptor<PacketEvent> getInputDisruptor() {
-    return inputDisruptor;
-  }
-
   @Override
   public void initialize() {
     inputDisruptor.handleEventsWith(this);
