@@ -1,7 +1,7 @@
-package PacketProcessorBenchmarks;
+package PacketProcessorBenchmarks.QueueBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.FilterProcessor;
 import PacketProcessor.PacketProcessor;
+import PacketProcessor.QueuePacketProcessor.FilterProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.io.IOException;
 @Warmup(iterations = 1, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
-public class BenchmarkDisruptorPacketProcessor {
+public class BenchmarkFilterProcessor {
 
   @State(Scope.Benchmark)
   public static class BenchmarkState {
@@ -18,12 +18,12 @@ public class BenchmarkDisruptorPacketProcessor {
     public PacketProcessor processor;
 
     @Param({"1", "8", "64", "512"})
-    public int bufferSize;
+    public int queueSize;
 
     @Setup(Level.Invocation)
     public void setup() throws IOException {
       processor = new FilterProcessor(
-          bufferSize,
+          queueSize,
           "src/main/resources/input_thousand.pcap",
           "src/main/resources/tcp_output.pcap",
           "src/main/resources/udp_output.pcap"
@@ -33,8 +33,7 @@ public class BenchmarkDisruptorPacketProcessor {
   }
 
   @Benchmark
-  public void benchmark(BenchmarkQueuePacketProcessor.BenchmarkState state) throws InterruptedException {
+  public void benchmark(BenchmarkState state) throws InterruptedException {
     state.processor.start();
   }
-
 }
