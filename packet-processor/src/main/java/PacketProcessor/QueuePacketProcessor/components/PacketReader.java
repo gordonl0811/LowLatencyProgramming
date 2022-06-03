@@ -32,7 +32,6 @@ public class PacketReader implements Runnable {
       this.source.loop(packet -> {
         try {
           producerQueue.put(packet);
-          TimeUnit.MICROSECONDS.sleep(100);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }

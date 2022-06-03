@@ -35,11 +35,6 @@ public class PacketReader implements PacketEventProducer {
       // Load the packets into the RingBuffer
       this.source.loop(packet -> {
         readerRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
-        try {
-          TimeUnit.MICROSECONDS.sleep(100);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
         return true;
       });
 
