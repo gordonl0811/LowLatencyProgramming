@@ -11,12 +11,12 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class ForwardingProcessor implements PacketProcessor {
+public class ForwardingDisruptorProcessor implements PacketProcessor {
 
   private final PacketReader packetReader;
   private final PacketWriter packetWriter;
 
-  public ForwardingProcessor(int bufferSize, String source, String dest) throws IOException {
+  public ForwardingDisruptorProcessor(int bufferSize, String source, String dest) throws IOException {
     Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 

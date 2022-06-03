@@ -1,8 +1,10 @@
-package PacketProcessorBenchmarks.DisruptorBenchmarks;
+package PacketProcessorBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.ForwardingProcessor;
+import PacketProcessor.DisruptorPacketProcessor.ForwardingDisruptorProcessor;
 import PacketProcessor.PacketProcessor;
 import java.io.IOException;
+
+import PacketProcessor.QueuePacketProcessor.ForwardingQueueProcessor;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -22,7 +24,7 @@ import org.openjdk.jmh.annotations.Warmup;
 public class BenchmarkForwardingProcessor {
 
   @State(Scope.Benchmark)
-  public static class BenchmarkState {
+  public static class DisruptorImplementationState {
 
     public PacketProcessor processor;
 
@@ -31,7 +33,7 @@ public class BenchmarkForwardingProcessor {
 
     @Setup(Level.Invocation)
     public void setup() throws IOException {
-      processor = new ForwardingProcessor(
+      processor = new ForwardingDisruptorProcessor(
           bufferSize,
           "src/main/resources/input_thousand.pcap",
           "src/main/resources/output/forwarded.pcap"
@@ -41,7 +43,31 @@ public class BenchmarkForwardingProcessor {
   }
 
   @Benchmark
-  public void benchmark(BenchmarkState state) throws InterruptedException {
+  public void benchmarkDisruptorImplementation(DisruptorImplementationState state) throws InterruptedException {
+    state.processor.start();
+  }
+
+  @State(Scope.Benchmark)
+  public static class QueueImplementationState {
+
+    public PacketProcessor processor;
+
+    @Param({"1", "8", "64", "512"})
+    public int queueSize;
+
+    @Setup(Level.Invocation)
+    public void setup() throws IOException {
+      processor = new ForwardingQueueProcessor(
+              queueSize,
+              "src/main/resources/input_thousand.pcap",
+              "src/main/resources/output/forwarded.pcap"
+      );
+      processor.initialize();
+    }
+  }
+
+  @Benchmark
+  public void benchmarkQueueImplementation(QueueImplementationState state) throws InterruptedException {
     state.processor.start();
   }
 

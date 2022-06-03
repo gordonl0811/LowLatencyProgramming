@@ -4,20 +4,19 @@ import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.PacketDropper;
 import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
 import PacketProcessor.QueuePacketProcessor.components.PacketReader;
-import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class FilterAndDropProcessor implements PacketProcessor {
+public class FilterAndDropQueueProcessor implements PacketProcessor {
     private final Thread producerThread;
     private final Thread filterThread;
     private final Thread tcpDropperThread;
     private final Thread udpDropperThread;
 
-    public FilterAndDropProcessor(int queueSize, String source)
+    public FilterAndDropQueueProcessor(int queueSize, String source)
             throws IOException {
 
         final BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(queueSize);
@@ -52,7 +51,7 @@ public class FilterAndDropProcessor implements PacketProcessor {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        FilterAndDropProcessor processor = new FilterAndDropProcessor(
+        FilterAndDropQueueProcessor processor = new FilterAndDropQueueProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap"
         );

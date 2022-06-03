@@ -10,14 +10,14 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class FilterAndWriteProcessor implements PacketProcessor {
+public class FilterAndWriteQueueProcessor implements PacketProcessor {
 
     private final Thread producerThread;
     private final Thread filterThread;
     private final Thread tcpThread;
     private final Thread udpThread;
 
-    public FilterAndWriteProcessor(int queueSize, String source, String tcpDest, String udpDest)
+    public FilterAndWriteQueueProcessor(int queueSize, String source, String tcpDest, String udpDest)
             throws IOException {
 
         final BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(queueSize);
@@ -52,7 +52,7 @@ public class FilterAndWriteProcessor implements PacketProcessor {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        FilterAndWriteProcessor processor = new FilterAndWriteProcessor(
+        FilterAndWriteQueueProcessor processor = new FilterAndWriteQueueProcessor(
                 1000,
                 "src/main/resources/input_ten_thousand.pcap",
                 "src/main/resources/tcp_output.pcap",

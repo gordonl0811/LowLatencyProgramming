@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ForwardingProcessor implements PacketProcessor {
+public class ForwardingQueueProcessor implements PacketProcessor {
 
   private final Thread producerThread;
   private final Thread writerThread;
 
-  public ForwardingProcessor(int queueSize, String source, String dest)
+  public ForwardingQueueProcessor(int queueSize, String source, String dest)
       throws IOException {
 
     final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
@@ -38,7 +38,7 @@ public class ForwardingProcessor implements PacketProcessor {
   }
 
   public static void main(String[] args) throws IOException, InterruptedException {
-    ForwardingProcessor processor = new ForwardingProcessor(
+    ForwardingQueueProcessor processor = new ForwardingQueueProcessor(
         1000,
         "src/main/resources/input_thousand.pcap",
         "src/main/resources/output/forwarded.pcap"
