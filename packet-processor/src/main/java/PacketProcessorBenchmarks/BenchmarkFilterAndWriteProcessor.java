@@ -11,7 +11,7 @@ import java.io.IOException;
 @Warmup(iterations = 2, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
-public class BenchmarkFilterProcessor {
+public class BenchmarkFilterAndWriteProcessor {
 
     @State(Scope.Benchmark)
     public static class DisruptorImplementationState {
