@@ -16,20 +16,16 @@ public class PacketWriter implements Runnable {
   private final BlockingQueue<Packet> packetQueue;
   private final PcapOutputStream output;
 
-  public PacketWriter(BlockingQueue<Packet> packetQueue, String dest) throws FileNotFoundException {
-    this.packetQueue = packetQueue;
-    this.output = PcapOutputStream.create(
-        PcapGlobalHeader.createDefaultHeader(),
-        new FileOutputStream(dest)
-    );
-  }
-
   public PacketWriter(BlockingQueue<Packet> packetQueue, File dest) throws FileNotFoundException {
     this.packetQueue = packetQueue;
     this.output = PcapOutputStream.create(
             PcapGlobalHeader.createDefaultHeader(),
             new FileOutputStream(dest)
     );
+  }
+
+  public PacketWriter(BlockingQueue<Packet> packetQueue, String dest) throws FileNotFoundException {
+    this(packetQueue, new File(dest));
   }
 
   private void writePacket(Packet packet) throws IOException {
@@ -40,11 +36,7 @@ public class PacketWriter implements Runnable {
   public void run() {
     try {
       while (true) {
-        Packet packet = packetQueue.take();
-        if (packet instanceof PoisonPacket) {
-          return;
-        }
-        writePacket(packet);
+        writePacket(packetQueue.take());
       }
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();

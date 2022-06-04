@@ -6,9 +6,6 @@ import io.pkts.packet.Packet;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
-
-import PacketProcessor.utils.PoisonPacket;
 
 public class PacketReader implements Runnable {
 
@@ -16,8 +13,7 @@ public class PacketReader implements Runnable {
   private final BlockingQueue<Packet> producerQueue;
 
   public PacketReader(String source, BlockingQueue<Packet> producerQueue) throws IOException {
-    this.source = Pcap.openStream(source);
-    this.producerQueue = producerQueue;
+    this(new File(source), producerQueue);
   }
 
   public PacketReader(File source, BlockingQueue<Packet> producerQueue) throws IOException {
@@ -27,8 +23,8 @@ public class PacketReader implements Runnable {
 
   @Override
   public void run() {
+    // Load the packets into the queue
     try {
-      // Load the packets into the queue
       this.source.loop(packet -> {
         try {
           producerQueue.put(packet);
@@ -37,11 +33,10 @@ public class PacketReader implements Runnable {
         }
         return true;
       });
-
-      producerQueue.put(new PoisonPacket());
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+
 
   }
 }
