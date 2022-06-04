@@ -11,25 +11,21 @@ import org.junit.Test;
 
 public class ReaderTest {
 
-  @Test
-  public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
-
-    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
-
-    ThreadFactory threadFactory = DaemonThreadFactory.INSTANCE;
-
-    Disruptor<PacketEvent> producerDisruptor = new Disruptor<>(
-        PacketEvent.EVENT_FACTORY,
-        1024,
-        threadFactory,
-        ProducerType.SINGLE,
-        new BusySpinWaitStrategy()
-    );
-
-//    PacketReader packetReader = new PacketReader(source, producerDisruptor);
-
-    // TODO: Check for the single packet and the poison packet
-
-  }
+//  @Test
+//  public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
+//
+//    final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
+//
+//    ThreadFactory threadFactory = DaemonThreadFactory.INSTANCE;
+//
+//    Disruptor<PacketEvent> producerDisruptor = new Disruptor<>(
+//        PacketEvent.EVENT_FACTORY,
+//        1024,
+//        threadFactory,
+//        ProducerType.SINGLE,
+//        new BusySpinWaitStrategy()
+//    );
+//
+//  }
 
 }

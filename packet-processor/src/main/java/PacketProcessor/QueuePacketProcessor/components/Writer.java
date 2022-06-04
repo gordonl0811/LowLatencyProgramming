@@ -10,13 +10,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Writer implements Runnable {
+public class Writer extends ProcessorComponent{
 
-  private final BlockingQueue<Packet> packetQueue;
   private final PcapOutputStream output;
 
-  public Writer(BlockingQueue<Packet> packetQueue, File dest) throws FileNotFoundException {
-    this.packetQueue = packetQueue;
+  public Writer(BlockingQueue<Packet> inputQueue, File dest) throws FileNotFoundException {
+    super(inputQueue);
     this.output = PcapOutputStream.create(
             PcapGlobalHeader.createDefaultHeader(),
             new FileOutputStream(dest)
@@ -27,18 +26,9 @@ public class Writer implements Runnable {
     this(packetQueue, new File(dest));
   }
 
-  private void writePacket(Packet packet) throws IOException {
+  @Override
+  public void process(Packet packet) throws IOException {
     output.write(packet);
   }
 
-  @Override
-  public void run() {
-    try {
-      while (true) {
-        writePacket(packetQueue.take());
-      }
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
 }

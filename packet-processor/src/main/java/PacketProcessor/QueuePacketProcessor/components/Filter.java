@@ -2,26 +2,25 @@ package PacketProcessor.QueuePacketProcessor.components;
 
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
-import PacketProcessor.utils.PoisonPacket;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Filter implements Runnable {
+public class Filter extends ProcessorComponent {
 
-  private final BlockingQueue<Packet> producerQueue;
   private final BlockingQueue<Packet> tcpQueue;
   private final BlockingQueue<Packet> udpQueue;
 
-  public Filter(BlockingQueue<Packet> producerQueue,
+  public Filter(BlockingQueue<Packet> inputQueue,
                 BlockingQueue<Packet> tcpQueue,
                 BlockingQueue<Packet> udpQueue) {
-    this.producerQueue = producerQueue;
+    super(inputQueue);
     this.tcpQueue = tcpQueue;
     this.udpQueue = udpQueue;
   }
 
-  private void filterPacket(Packet packet) throws IOException, InterruptedException {
+  @Override
+  public void process(Packet packet) throws IOException, InterruptedException {
     if (packet.hasProtocol(Protocol.TCP)) {
       tcpQueue.put(packet);
     } else if (packet.hasProtocol(Protocol.UDP)) {
@@ -29,20 +28,4 @@ public class Filter implements Runnable {
     }
   }
 
-  @Override
-  public void run() {
-    try {
-      while (true) {
-        Packet packet = producerQueue.take();
-        if (packet instanceof PoisonPacket) {
-          tcpQueue.put(packet);
-          udpQueue.put(packet);
-          return;
-        }
-        filterPacket(packet);
-      }
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
 }

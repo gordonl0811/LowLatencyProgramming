@@ -50,7 +50,9 @@ public class BenchmarkFilterAndDropProcessor {
         public void setup() throws IOException {
             processor = new FilterAndDropQueueProcessor(
                     queueSize,
-                    "src/main/resources/input_thousand.pcap"
+                    "src/main/resources/input_thousand.pcap",
+                    505,
+                    495
             );
             processor.initialize();
         }

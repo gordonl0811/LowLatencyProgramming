@@ -1,6 +1,5 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.Filter;
 import PacketProcessor.QueuePacketProcessor.components.Reader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
@@ -10,54 +9,49 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class FilterAndWriteQueueProcessor implements PacketProcessor {
+public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
 
-    private final Thread producerThread;
-    private final Thread filterThread;
-    private final Thread tcpThread;
-    private final Thread udpThread;
+    private final Writer tcpWriter;
+    private final Writer udpWriter;
 
-    public FilterAndWriteQueueProcessor(int queueSize, String source, String tcpDest, String udpDest)
+    private final long expectedTcpPackets;
+    private final long expectedUdpPackets;
+
+    public FilterAndWriteQueueProcessor(int queueSize, String source, String tcpDest, String udpDest, long expectedTcpPackets, long expectedUdpPackets)
             throws IOException {
 
-        final BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(queueSize);
+        super();
+
+        final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(queueSize);
 
-        final Reader reader = new Reader(source, producerQueue);
-        final Filter filter = new Filter(producerQueue, tcpQueue, udpQueue);
-        final Writer tcpWriter = new Writer(tcpQueue, tcpDest);
-        final Writer udpWriter = new Writer(udpQueue, udpDest);
+        Filter filter = new Filter(readerQueue, tcpQueue, udpQueue);
+        this.tcpWriter = new Writer(tcpQueue, tcpDest);
+        this.udpWriter = new Writer(udpQueue, udpDest);
 
-        this.producerThread = new Thread(reader);
-        this.filterThread = new Thread(filter);
-        this.tcpThread = new Thread(tcpWriter);
-        this.udpThread = new Thread(udpWriter);
+        this.expectedTcpPackets = expectedTcpPackets;
+        this.expectedUdpPackets = expectedUdpPackets;
+
+        setReader(new Reader(source, readerQueue));
+        addComponent(filter);
+        addComponent(this.tcpWriter);
+        addComponent(this.udpWriter);
+
     }
 
     @Override
-    public void initialize() {
-        filterThread.start();
-        tcpThread.start();
-        udpThread.start();
-    }
-
-    @Override
-    public void start() throws InterruptedException {
-        producerThread.start();
-        producerThread.join();
-        filterThread.join();
-        tcpThread.join();
-        udpThread.join();
+    public boolean shouldTerminate() {
+        return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         FilterAndWriteQueueProcessor processor = new FilterAndWriteQueueProcessor(
                 1000,
-                "src/main/resources/input_ten_thousand.pcap",
-                "src/main/resources/tcp_output.pcap",
-                "src/main/resources/udp_output.pcap"
-        );
+                "src/main/resources/input_thousand.pcap",
+                "src/main/resources/output/tcp_output.pcap",
+                "src/main/resources/output/udp_output.pcap",
+                505, 495);
 
         processor.initialize();
         processor.start();

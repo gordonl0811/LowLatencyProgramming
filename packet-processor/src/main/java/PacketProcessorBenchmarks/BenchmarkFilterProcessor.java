@@ -52,8 +52,8 @@ public class BenchmarkFilterProcessor {
                     queueSize,
                     "src/main/resources/input_thousand.pcap",
                     "src/main/resources/output/tcp_output.pcap",
-                    "src/main/resources/output/udp_output.pcap"
-            );
+                    "src/main/resources/output/udp_output.pcap",
+                    505, 495);
             processor.initialize();
         }
     }

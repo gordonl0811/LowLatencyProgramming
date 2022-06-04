@@ -1,28 +1,16 @@
 package PacketProcessor.QueuePacketProcessor.components;
 
-import PacketProcessor.utils.PoisonPacket;
 import io.pkts.packet.Packet;
 
 import java.util.concurrent.BlockingQueue;
 
-public class Dropper implements Runnable {
-    private final BlockingQueue<Packet> packetQueue;
+public class Dropper extends ProcessorComponent {
 
-    public Dropper(BlockingQueue<Packet> packetQueue) {
-        this.packetQueue = packetQueue;
+    public Dropper(BlockingQueue<Packet> inputQueue) {
+        super(inputQueue);
     }
 
     @Override
-    public void run() {
-        try {
-            while (true) {
-                Packet packet = packetQueue.take();
-                if (packet instanceof PoisonPacket) {
-                    return;
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    public void process(Packet packet) {}
+
 }

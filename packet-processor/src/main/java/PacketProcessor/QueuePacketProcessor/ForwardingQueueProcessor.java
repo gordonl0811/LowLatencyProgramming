@@ -4,48 +4,47 @@ import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.Reader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
+
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ForwardingQueueProcessor implements PacketProcessor {
+public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
-  private final Thread producerThread;
-  private final Thread writerThread;
+    private final Writer writer;
+    private final long expectedPackets;
 
-  public ForwardingQueueProcessor(int queueSize, String source, String dest)
-      throws IOException {
+    public ForwardingQueueProcessor(int queueSize, String source, String dest, long expectedPackets)
+            throws IOException {
 
-    final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
+        super();
 
-    final Reader reader = new Reader(source, readerQueue);
-    final Writer writer = new Writer(readerQueue, dest);
+        final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
 
-    this.producerThread = new Thread(reader);
-    this.writerThread = new Thread(writer);
-  }
+        final Reader reader = new Reader(source, readerQueue);
+        this.writer = new Writer(readerQueue, dest);
 
-  @Override
-  public void initialize() {
-    writerThread.start();
-  }
+        this.expectedPackets = expectedPackets;
 
-  @Override
-  public void start() throws InterruptedException {
-    producerThread.start();
-    producerThread.join();
-    writerThread.join();
-  }
+        setReader(reader);
+        addComponent(this.writer);
+    }
 
-  public static void main(String[] args) throws IOException, InterruptedException {
-    ForwardingQueueProcessor processor = new ForwardingQueueProcessor(
-        1000,
-        "src/main/resources/input_thousand.pcap",
-        "src/main/resources/output/forwarded.pcap"
-    );
+    @Override
+    public boolean shouldTerminate() {
+        return writer.getPacketCount() >= expectedPackets;
+    }
 
-    processor.initialize();
-    processor.start();
-  }
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ForwardingQueueProcessor processor = new ForwardingQueueProcessor(
+                1000,
+                "src/main/resources/input_thousand.pcap",
+                "src/main/resources/output/forwarded.pcap",
+                1000
+        );
+
+        processor.initialize();
+        processor.start();
+    }
 
 }

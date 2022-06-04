@@ -60,7 +60,8 @@ public class BenchmarkForwardingProcessor {
       processor = new ForwardingQueueProcessor(
               queueSize,
               "src/main/resources/input_thousand.pcap",
-              "src/main/resources/output/forwarded.pcap"
+              "src/main/resources/output/forwarded.pcap",
+              1000
       );
       processor.initialize();
     }

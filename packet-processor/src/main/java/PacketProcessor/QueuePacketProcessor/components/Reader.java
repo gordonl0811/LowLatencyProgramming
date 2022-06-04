@@ -10,15 +10,15 @@ import java.util.concurrent.BlockingQueue;
 public class Reader implements Runnable {
 
   private final Pcap source;
-  private final BlockingQueue<Packet> producerQueue;
+  private final BlockingQueue<Packet> outputQueue;
 
-  public Reader(String source, BlockingQueue<Packet> producerQueue) throws IOException {
-    this(new File(source), producerQueue);
+  public Reader(String source, BlockingQueue<Packet> outputQueue) throws IOException {
+    this(new File(source), outputQueue);
   }
 
-  public Reader(File source, BlockingQueue<Packet> producerQueue) throws IOException {
+  public Reader(File source, BlockingQueue<Packet> outputQueue) throws IOException {
     this.source = Pcap.openStream(source);
-    this.producerQueue = producerQueue;
+    this.outputQueue = outputQueue;
   }
 
   @Override
@@ -27,7 +27,7 @@ public class Reader implements Runnable {
     try {
       this.source.loop(packet -> {
         try {
-          producerQueue.put(packet);
+          outputQueue.put(packet);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
