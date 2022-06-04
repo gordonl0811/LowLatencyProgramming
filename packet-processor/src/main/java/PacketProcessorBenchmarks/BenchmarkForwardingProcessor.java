@@ -18,7 +18,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 @BenchmarkMode(Mode.AverageTime)
-@Warmup(iterations = 1, time = 3)
+@Warmup(iterations = 2, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
 public class BenchmarkForwardingProcessor {

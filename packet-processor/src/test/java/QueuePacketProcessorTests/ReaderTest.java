@@ -1,16 +1,5 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.Reader;
-import io.pkts.packet.Packet;
-import org.junit.Test;
-import PacketProcessor.utils.PoisonPacket;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
 public class ReaderTest {
 
 //  @Test

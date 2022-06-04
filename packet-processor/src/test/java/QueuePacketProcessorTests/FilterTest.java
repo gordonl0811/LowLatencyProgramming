@@ -1,18 +1,5 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.Filter;
-import PacketProcessor.QueuePacketProcessor.components.Reader;
-import PacketProcessor.utils.PoisonPacket;
-import io.pkts.packet.Packet;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
 public class FilterTest {
 
 //    @Rule
