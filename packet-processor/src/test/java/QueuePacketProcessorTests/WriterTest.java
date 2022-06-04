@@ -1,7 +1,7 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.PacketReader;
-import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
+import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class PacketWriterTest {
+public class WriterTest {
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -27,14 +27,14 @@ public class PacketWriterTest {
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
-    PacketReader packetReader = new PacketReader(source, producerQueue);
-    PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
+    Reader reader = new Reader(source, producerQueue);
+    Writer writer = new Writer(producerQueue, dest);
 
-    new Thread(packetReader).start();
+    new Thread(reader).start();
 
     // Check that the thread has completed, i.e. terminated
     ExecutorService executor = Executors.newSingleThreadExecutor();
-    Future<?> future = executor.submit(packetWriter);
+    Future<?> future = executor.submit(writer);
     future.get(5, TimeUnit.SECONDS);
   }
 
@@ -45,11 +45,11 @@ public class PacketWriterTest {
     final File dest = tempFolder.newFile("output.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
 
-    PacketReader packetReader = new PacketReader(source, producerQueue);
-    PacketWriter packetWriter = new PacketWriter(producerQueue, dest);
+    Reader reader = new Reader(source, producerQueue);
+    Writer writer = new Writer(producerQueue, dest);
 
-    Thread producerThread = new Thread(packetReader);
-    Thread writerThread = new Thread(packetWriter);
+    Thread producerThread = new Thread(reader);
+    Thread writerThread = new Thread(writer);
 
     producerThread.start();
     producerThread.join();

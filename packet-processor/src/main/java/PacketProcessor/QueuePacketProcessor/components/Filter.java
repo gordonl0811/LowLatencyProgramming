@@ -7,15 +7,15 @@ import PacketProcessor.utils.PoisonPacket;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class PacketFilter implements Runnable {
+public class Filter implements Runnable {
 
   private final BlockingQueue<Packet> producerQueue;
   private final BlockingQueue<Packet> tcpQueue;
   private final BlockingQueue<Packet> udpQueue;
 
-  public PacketFilter(BlockingQueue<Packet> producerQueue,
-      BlockingQueue<Packet> tcpQueue,
-      BlockingQueue<Packet> udpQueue) {
+  public Filter(BlockingQueue<Packet> producerQueue,
+                BlockingQueue<Packet> tcpQueue,
+                BlockingQueue<Packet> udpQueue) {
     this.producerQueue = producerQueue;
     this.tcpQueue = tcpQueue;
     this.udpQueue = udpQueue;

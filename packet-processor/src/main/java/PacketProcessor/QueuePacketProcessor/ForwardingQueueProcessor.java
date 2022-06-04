@@ -1,8 +1,8 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.PacketProcessor;
-import PacketProcessor.QueuePacketProcessor.components.PacketReader;
-import PacketProcessor.QueuePacketProcessor.components.PacketWriter;
+import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
 import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,11 +18,11 @@ public class ForwardingQueueProcessor implements PacketProcessor {
 
     final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
 
-    final PacketReader packetReader = new PacketReader(source, readerQueue);
-    final PacketWriter packetWriter = new PacketWriter(readerQueue, dest);
+    final Reader reader = new Reader(source, readerQueue);
+    final Writer writer = new Writer(readerQueue, dest);
 
-    this.producerThread = new Thread(packetReader);
-    this.writerThread = new Thread(packetWriter);
+    this.producerThread = new Thread(reader);
+    this.writerThread = new Thread(writer);
   }
 
   @Override

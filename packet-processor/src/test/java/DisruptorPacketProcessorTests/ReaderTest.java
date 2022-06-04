@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.ThreadFactory;
 import org.junit.Test;
 
-public class PacketReaderTest {
+public class ReaderTest {
 
   @Test
   public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {

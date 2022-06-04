@@ -1,6 +1,6 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.PacketReader;
+import PacketProcessor.QueuePacketProcessor.components.Reader;
 import io.pkts.packet.Packet;
 import org.junit.Test;
 import PacketProcessor.utils.PoisonPacket;
@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class PacketReaderTest {
+public class ReaderTest {
 
   @Test
   public void testProducerSendsPoisonPacket() throws IOException, InterruptedException {
 
     final String source = "src/test/resources/PacketProducerTest/input_single.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketReader packetReader = new PacketReader(source, producerQueue);
+    Reader reader = new Reader(source, producerQueue);
 
-    Thread thread = new Thread(packetReader);
+    Thread thread = new Thread(reader);
     thread.start();
     thread.join();
 
@@ -37,9 +37,9 @@ public class PacketReaderTest {
 
     final File source = new File("src/test/resources/PacketProducerTest/input_single.pcap");
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketReader packetReader = new PacketReader(source, producerQueue);
+    Reader reader = new Reader(source, producerQueue);
 
-    Thread thread = new Thread(packetReader);
+    Thread thread = new Thread(reader);
     thread.start();
     thread.join();
 
@@ -56,9 +56,9 @@ public class PacketReaderTest {
     // PCAP containing 100 packets
     final String source = "src/test/resources/PacketProducerTest/input_multiple.pcap";
     BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(1000);
-    PacketReader packetReader = new PacketReader(source, producerQueue);
+    Reader reader = new Reader(source, producerQueue);
 
-    Thread thread = new Thread(packetReader);
+    Thread thread = new Thread(reader);
     thread.start();
     thread.join();
 

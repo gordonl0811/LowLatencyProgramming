@@ -1,7 +1,7 @@
 package QueuePacketProcessorTests;
 
-import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
-import PacketProcessor.QueuePacketProcessor.components.PacketReader;
+import PacketProcessor.QueuePacketProcessor.components.Filter;
+import PacketProcessor.QueuePacketProcessor.components.Reader;
 import PacketProcessor.utils.PoisonPacket;
 import io.pkts.packet.Packet;
 import org.junit.Rule;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class PacketFilterTest {
+public class FilterTest {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
@@ -28,14 +28,14 @@ public class PacketFilterTest {
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueTwo = new ArrayBlockingQueue<>(1000);
 
-        PacketReader packetReader = new PacketReader(source, producerQueue);
-        PacketFilter packetFilter = new PacketFilter(producerQueue, dummyQueueOne, dummyQueueTwo);
+        Reader reader = new Reader(source, producerQueue);
+        Filter filter = new Filter(producerQueue, dummyQueueOne, dummyQueueTwo);
 
-        new Thread(packetReader).start();
+        new Thread(reader).start();
 
         // Check that the thread has completed, i.e. terminated
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<?> future = executor.submit(packetFilter);
+        Future<?> future = executor.submit(filter);
         future.get(5, TimeUnit.SECONDS);
     }
 
@@ -49,11 +49,11 @@ public class PacketFilterTest {
         BlockingQueue<Packet> dummyQueueOne = new ArrayBlockingQueue<>(1000);
         BlockingQueue<Packet> dummyQueueTwo = new ArrayBlockingQueue<>(1000);
 
-        PacketReader packetReader = new PacketReader(source, producerQueue);
-        PacketFilter packetFilter = new PacketFilter(producerQueue, dummyQueueOne, dummyQueueTwo);
+        Reader reader = new Reader(source, producerQueue);
+        Filter filter = new Filter(producerQueue, dummyQueueOne, dummyQueueTwo);
 
-        Thread producerThread = new Thread(packetReader);
-        Thread filterThread = new Thread(packetFilter);
+        Thread producerThread = new Thread(reader);
+        Thread filterThread = new Thread(filter);
 
         producerThread.start();
         filterThread.start();
@@ -80,11 +80,11 @@ public class PacketFilterTest {
 
         final String source = "src/test/resources/PacketFilterTest/input_multiple.pcap";
 
-        PacketReader packetReader = new PacketReader(source, producerQueue);
-        PacketFilter packetFilter = new PacketFilter(producerQueue, tcpQueue, udpQueue);
+        Reader reader = new Reader(source, producerQueue);
+        Filter filter = new Filter(producerQueue, tcpQueue, udpQueue);
 
-        Thread producerThread = new Thread(packetReader);
-        Thread filterThread = new Thread(packetFilter);
+        Thread producerThread = new Thread(reader);
+        Thread filterThread = new Thread(filter);
 
         producerThread.start();
         filterThread.start();

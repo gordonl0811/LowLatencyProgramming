@@ -1,9 +1,9 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.PacketProcessor;
-import PacketProcessor.QueuePacketProcessor.components.PacketDropper;
-import PacketProcessor.QueuePacketProcessor.components.PacketFilter;
-import PacketProcessor.QueuePacketProcessor.components.PacketReader;
+import PacketProcessor.QueuePacketProcessor.components.Dropper;
+import PacketProcessor.QueuePacketProcessor.components.Filter;
+import PacketProcessor.QueuePacketProcessor.components.Reader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -23,13 +23,13 @@ public class FilterAndDropQueueProcessor implements PacketProcessor {
         final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(queueSize);
 
-        final PacketReader packetReader = new PacketReader(source, producerQueue);
-        final PacketFilter packetFilter = new PacketFilter(producerQueue, tcpQueue, udpQueue);
-        final PacketDropper tcpDropper = new PacketDropper(tcpQueue);
-        final PacketDropper udpDropper = new PacketDropper(udpQueue);
+        final Reader reader = new Reader(source, producerQueue);
+        final Filter filter = new Filter(producerQueue, tcpQueue, udpQueue);
+        final Dropper tcpDropper = new Dropper(tcpQueue);
+        final Dropper udpDropper = new Dropper(udpQueue);
 
-        this.producerThread = new Thread(packetReader);
-        this.filterThread = new Thread(packetFilter);
+        this.producerThread = new Thread(reader);
+        this.filterThread = new Thread(filter);
         this.tcpDropperThread = new Thread(tcpDropper);
         this.udpDropperThread = new Thread(udpDropper);
     }

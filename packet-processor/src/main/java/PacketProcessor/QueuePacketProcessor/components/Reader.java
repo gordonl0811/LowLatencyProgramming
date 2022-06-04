@@ -7,16 +7,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class PacketReader implements Runnable {
+public class Reader implements Runnable {
 
   private final Pcap source;
   private final BlockingQueue<Packet> producerQueue;
 
-  public PacketReader(String source, BlockingQueue<Packet> producerQueue) throws IOException {
+  public Reader(String source, BlockingQueue<Packet> producerQueue) throws IOException {
     this(new File(source), producerQueue);
   }
 
-  public PacketReader(File source, BlockingQueue<Packet> producerQueue) throws IOException {
+  public Reader(File source, BlockingQueue<Packet> producerQueue) throws IOException {
     this.source = Pcap.openStream(source);
     this.producerQueue = producerQueue;
   }

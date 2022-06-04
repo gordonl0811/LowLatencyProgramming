@@ -5,10 +5,10 @@ import io.pkts.packet.Packet;
 
 import java.util.concurrent.BlockingQueue;
 
-public class PacketDropper implements Runnable {
+public class Dropper implements Runnable {
     private final BlockingQueue<Packet> packetQueue;
 
-    public PacketDropper(BlockingQueue<Packet> packetQueue) {
+    public Dropper(BlockingQueue<Packet> packetQueue) {
         this.packetQueue = packetQueue;
     }
 
