@@ -7,7 +7,7 @@ import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
 import java.io.IOException;
 
-public class Filter implements PacketEventProducer, PacketEventConsumer {
+public class Filter extends ProcessorComponent {
 
   private final Disruptor<PacketEvent> inputDisruptor;
   private final Disruptor<PacketEvent> tcpDisruptor;
@@ -32,11 +32,7 @@ public class Filter implements PacketEventProducer, PacketEventConsumer {
   }
 
   @Override
-  public void onEvent(PacketEvent packetEvent, long l, boolean b) throws Exception {
-    filterPacket(packetEvent.getValue());
-  }
-
-  private void filterPacket(Packet packet) throws IOException {
+  public void process(Packet packet) throws IOException {
     if (packet.hasProtocol(Protocol.TCP)) {
       tcpRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
     } else if (packet.hasProtocol(Protocol.UDP)) {

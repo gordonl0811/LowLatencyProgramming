@@ -4,14 +4,11 @@ import PacketProcessor.DisruptorPacketProcessor.components.Filter;
 import PacketProcessor.DisruptorPacketProcessor.components.Reader;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
-import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
 
@@ -20,7 +17,10 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
     private final Writer tcpWriter;
     private final Writer udpWriter;
 
-    public FilterAndWriteDisruptorProcessor(int bufferSize, String source, String tcpDest, String udpDest)
+    private final long expectedTcpPackets;
+    private final long expectedUdpPackets;
+
+    public FilterAndWriteDisruptorProcessor(int bufferSize, String source, String tcpDest, String udpDest, long expectedTcpPackets, long expectedUdpPackets)
             throws IOException {
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
@@ -35,6 +35,10 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
         this.tcpWriter = new Writer(tcpDisruptor, tcpDest);
         this.udpWriter = new Writer(udpDisruptor, udpDest);
 
+        this.expectedTcpPackets = expectedTcpPackets;
+        this.expectedUdpPackets = expectedUdpPackets;
+
+        setReader(this.reader);
     }
 
     @Override
@@ -53,13 +57,8 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
     }
 
     @Override
-    public void start() throws InterruptedException {
-        reader.start();
-    }
-
-    @Override
     public boolean shouldTerminate() {
-        return false;
+        return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -67,9 +66,9 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
         FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap",
-                "src/main/resources/tcp_output.pcap",
-                "src/main/resources/udp_output.pcap"
-        );
+                "src/main/resources/output/tcp_output.pcap",
+                "src/main/resources/output/udp_output.pcap",
+                505, 495);
 
         processor.initialize();
         processor.start();

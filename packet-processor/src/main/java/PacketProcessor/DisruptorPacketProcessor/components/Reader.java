@@ -8,7 +8,7 @@ import io.pkts.Pcap;
 import java.io.IOException;
 import java.util.List;
 
-public class Reader implements PacketEventProducer {
+public class Reader {
 
     private final Pcap source;
     private final Disruptor<PacketEvent> readerDisruptor;
@@ -21,7 +21,6 @@ public class Reader implements PacketEventProducer {
         this.readerDisruptor = readerDisruptor;
     }
 
-    @Override
     public void initialize() {
         readerRingBuffer = this.readerDisruptor.start();
     }

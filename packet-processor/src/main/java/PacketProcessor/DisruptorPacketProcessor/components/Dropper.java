@@ -2,8 +2,9 @@ package PacketProcessor.DisruptorPacketProcessor.components;
 
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
+import io.pkts.packet.Packet;
 
-public class Dropper implements PacketEventConsumer {
+public class Dropper extends ProcessorComponent {
 
     private final Disruptor<PacketEvent> inputDisruptor;
 
@@ -16,6 +17,7 @@ public class Dropper implements PacketEventConsumer {
         inputDisruptor.handleEventsWith(this);
     }
 
+
     @Override
-    public void onEvent(PacketEvent packetEvent, long l, boolean b) { }
+    public void process(Packet packet) {}
 }

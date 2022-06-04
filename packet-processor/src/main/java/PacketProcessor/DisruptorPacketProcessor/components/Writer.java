@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Writer implements PacketEventConsumer {
+public class Writer extends ProcessorComponent {
 
   private final Disruptor<PacketEvent> inputDisruptor;
   private final PcapOutputStream output;
@@ -27,11 +27,8 @@ public class Writer implements PacketEventConsumer {
   }
 
   @Override
-  public void onEvent(PacketEvent packetEvent, long l, boolean b) throws Exception {
-    writePacket(packetEvent.getValue());
-  }
-
-  private void writePacket(Packet packet) throws IOException {
+  public void process(Packet packet) throws IOException {
     output.write(packet);
   }
+
 }
