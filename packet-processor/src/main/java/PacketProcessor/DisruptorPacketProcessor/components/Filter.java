@@ -7,7 +7,7 @@ import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
 import java.io.IOException;
 
-public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
+public class Filter implements PacketEventProducer, PacketEventConsumer {
 
   private final Disruptor<PacketEvent> inputDisruptor;
   private final Disruptor<PacketEvent> tcpDisruptor;
@@ -16,7 +16,7 @@ public class PacketFilter implements PacketEventProducer, PacketEventConsumer {
   private RingBuffer<PacketEvent> tcpRingBuffer;
   private RingBuffer<PacketEvent> udpRingBuffer;
 
-  public PacketFilter(
+  public Filter(
       Disruptor<PacketEvent> inputDisruptor,
       Disruptor<PacketEvent> tcpDisruptor,
       Disruptor<PacketEvent> udpDisruptor) {

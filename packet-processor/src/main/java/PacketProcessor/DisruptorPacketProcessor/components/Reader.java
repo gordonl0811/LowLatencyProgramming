@@ -6,17 +6,16 @@ import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public class PacketReader implements PacketEventProducer {
+public class Reader implements PacketEventProducer {
 
   private final Pcap source;
   private final Disruptor<PacketEvent> readerDisruptor;
   private RingBuffer<PacketEvent> readerRingBuffer;
   private final List<Disruptor<PacketEvent>> dependants;
 
-  public PacketReader(String source,
-      Disruptor<PacketEvent> readerDisruptor, List<Disruptor<PacketEvent>> dependants)
+  public Reader(String source,
+                Disruptor<PacketEvent> readerDisruptor, List<Disruptor<PacketEvent>> dependants)
       throws IOException {
     this.source = Pcap.openStream(source);
     this.readerDisruptor = readerDisruptor;

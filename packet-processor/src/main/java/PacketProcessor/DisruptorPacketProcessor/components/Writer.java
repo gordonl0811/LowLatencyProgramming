@@ -9,12 +9,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PacketWriter implements PacketEventConsumer {
+public class Writer implements PacketEventConsumer {
 
   private final Disruptor<PacketEvent> inputDisruptor;
   private final PcapOutputStream output;
 
-  public PacketWriter(Disruptor<PacketEvent> inputDisruptor, String dest) throws FileNotFoundException {
+  public Writer(Disruptor<PacketEvent> inputDisruptor, String dest) throws FileNotFoundException {
     this.inputDisruptor = inputDisruptor;
     this.output = PcapOutputStream.create(
         PcapGlobalHeader.createDefaultHeader(),

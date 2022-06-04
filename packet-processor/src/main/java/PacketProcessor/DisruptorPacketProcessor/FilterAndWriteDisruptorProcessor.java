@@ -1,8 +1,8 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.PacketFilter;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketWriter;
+import PacketProcessor.DisruptorPacketProcessor.components.Filter;
+import PacketProcessor.DisruptorPacketProcessor.components.Reader;
+import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -15,10 +15,10 @@ import java.util.List;
 
 public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
 
-    private final PacketReader packetReader;
-    private final PacketFilter packetFilter;
-    private final PacketWriter tcpWriter;
-    private final PacketWriter udpWriter;
+    private final Reader reader;
+    private final Filter filter;
+    private final Writer tcpWriter;
+    private final Writer udpWriter;
 
     public FilterAndWriteDisruptorProcessor(int bufferSize, String source, String tcpDest, String udpDest)
             throws IOException {
@@ -34,10 +34,10 @@ public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
         consumers.add(tcpDisruptor);
         consumers.add(udpDisruptor);
 
-        this.packetReader = new PacketReader(source, readerDisruptor, consumers);
-        this.packetFilter = new PacketFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpWriter = new PacketWriter(tcpDisruptor, tcpDest);
-        this.udpWriter = new PacketWriter(udpDisruptor, udpDest);
+        this.reader = new Reader(source, readerDisruptor, consumers);
+        this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
+        this.tcpWriter = new Writer(tcpDisruptor, tcpDest);
+        this.udpWriter = new Writer(udpDisruptor, udpDest);
 
     }
 
@@ -49,16 +49,16 @@ public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
         udpWriter.initialize();
 
         // Initialise filter
-        packetFilter.initialize();
+        filter.initialize();
 
         // Initialise reader
-        packetReader.initialize();
+        reader.initialize();
 
     }
 
     @Override
     public void start() throws InterruptedException {
-        packetReader.start();
+        reader.start();
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

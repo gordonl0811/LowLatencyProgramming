@@ -1,8 +1,8 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.PacketDropper;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketFilter;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
+import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
+import PacketProcessor.DisruptorPacketProcessor.components.Filter;
+import PacketProcessor.DisruptorPacketProcessor.components.Reader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class FilterAndDropDisruptorProcessor implements PacketProcessor {
-    private final PacketReader packetReader;
-    private final PacketFilter packetFilter;
-    private final PacketDropper tcpDropper;
-    private final PacketDropper udpDropper;
+    private final Reader reader;
+    private final Filter filter;
+    private final Dropper tcpDropper;
+    private final Dropper udpDropper;
 
     public FilterAndDropDisruptorProcessor(int bufferSize, String source)
             throws IOException {
@@ -34,10 +34,10 @@ public class FilterAndDropDisruptorProcessor implements PacketProcessor {
         consumers.add(tcpDisruptor);
         consumers.add(udpDisruptor);
 
-        this.packetReader = new PacketReader(source, readerDisruptor, consumers);
-        this.packetFilter = new PacketFilter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpDropper = new PacketDropper(tcpDisruptor);
-        this.udpDropper = new PacketDropper(udpDisruptor);
+        this.reader = new Reader(source, readerDisruptor, consumers);
+        this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
+        this.tcpDropper = new Dropper(tcpDisruptor);
+        this.udpDropper = new Dropper(udpDisruptor);
 
     }
 
@@ -49,16 +49,16 @@ public class FilterAndDropDisruptorProcessor implements PacketProcessor {
         udpDropper.initialize();
 
         // Initialise filter
-        packetFilter.initialize();
+        filter.initialize();
 
         // Initialise reader
-        packetReader.initialize();
+        reader.initialize();
 
     }
 
     @Override
     public void start() throws InterruptedException {
-        packetReader.start();
+        reader.start();
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {

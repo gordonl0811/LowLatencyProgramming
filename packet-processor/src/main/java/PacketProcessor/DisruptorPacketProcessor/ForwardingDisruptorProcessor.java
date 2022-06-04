@@ -1,7 +1,7 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.PacketReader;
-import PacketProcessor.DisruptorPacketProcessor.components.PacketWriter;
+import PacketProcessor.DisruptorPacketProcessor.components.Reader;
+import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import PacketProcessor.PacketProcessor;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -13,27 +13,27 @@ import java.util.LinkedList;
 
 public class ForwardingDisruptorProcessor implements PacketProcessor {
 
-  private final PacketReader packetReader;
-  private final PacketWriter packetWriter;
+  private final Reader reader;
+  private final Writer writer;
 
   public ForwardingDisruptorProcessor(int bufferSize, String source, String dest) throws IOException {
     Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-    this.packetReader = new PacketReader(source, readerDisruptor, new LinkedList<>());
-    this.packetWriter = new PacketWriter(readerDisruptor, dest);
+    this.reader = new Reader(source, readerDisruptor, new LinkedList<>());
+    this.writer = new Writer(readerDisruptor, dest);
 
 
   }
 
   @Override
   public void initialize() {
-    packetWriter.initialize();
-    packetReader.initialize();
+    writer.initialize();
+    reader.initialize();
   }
 
   @Override
   public void start() throws InterruptedException {
-    packetReader.start();
+    reader.start();
   }
 }
