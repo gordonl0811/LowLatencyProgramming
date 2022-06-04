@@ -11,10 +11,8 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
-public class FilterAndDropDisruptorProcessor implements PacketProcessor {
+public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
     private final Reader reader;
     private final Filter filter;
     private final Dropper tcpDropper;
@@ -30,11 +28,7 @@ public class FilterAndDropDisruptorProcessor implements PacketProcessor {
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
                 DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-        List<Disruptor<PacketEvent>> consumers = new LinkedList<>();
-        consumers.add(tcpDisruptor);
-        consumers.add(udpDisruptor);
-
-        this.reader = new Reader(source, readerDisruptor, consumers);
+        this.reader = new Reader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpDropper = new Dropper(tcpDisruptor);
         this.udpDropper = new Dropper(udpDisruptor);
@@ -59,6 +53,11 @@ public class FilterAndDropDisruptorProcessor implements PacketProcessor {
     @Override
     public void start() throws InterruptedException {
         reader.start();
+    }
+
+    @Override
+    public boolean shouldTerminate() {
+        return false;
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {

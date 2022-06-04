@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
+public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
 
     private final Reader reader;
     private final Filter filter;
@@ -30,11 +30,7 @@ public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
                 DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-        List<Disruptor<PacketEvent>> consumers = new LinkedList<>();
-        consumers.add(tcpDisruptor);
-        consumers.add(udpDisruptor);
-
-        this.reader = new Reader(source, readerDisruptor, consumers);
+        this.reader = new Reader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpWriter = new Writer(tcpDisruptor, tcpDest);
         this.udpWriter = new Writer(udpDisruptor, udpDest);
@@ -61,11 +57,16 @@ public class FilterAndWriteDisruptorProcessor implements PacketProcessor {
         reader.start();
     }
 
+    @Override
+    public boolean shouldTerminate() {
+        return false;
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
 
         FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(
                 1024,
-                "src/main/resources/input_ten_thousand.pcap",
+                "src/main/resources/input_thousand.pcap",
                 "src/main/resources/tcp_output.pcap",
                 "src/main/resources/udp_output.pcap"
         );

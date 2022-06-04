@@ -17,7 +17,5 @@ public class Dropper implements PacketEventConsumer {
     }
 
     @Override
-    public void onEvent(PacketEvent packetEvent, long l, boolean b) throws Exception {
-        packetEvent.getValue();
-    }
+    public void onEvent(PacketEvent packetEvent, long l, boolean b) { }
 }

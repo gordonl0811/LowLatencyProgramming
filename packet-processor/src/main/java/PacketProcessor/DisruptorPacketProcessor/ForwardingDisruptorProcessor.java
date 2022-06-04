@@ -8,10 +8,10 @@ import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
-import java.io.IOException;
-import java.util.LinkedList;
 
-public class ForwardingDisruptorProcessor implements PacketProcessor {
+import java.io.IOException;
+
+public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
 
   private final Reader reader;
   private final Writer writer;
@@ -20,7 +20,7 @@ public class ForwardingDisruptorProcessor implements PacketProcessor {
     Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
         DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-    this.reader = new Reader(source, readerDisruptor, new LinkedList<>());
+    this.reader = new Reader(source, readerDisruptor);
     this.writer = new Writer(readerDisruptor, dest);
 
 
@@ -35,5 +35,10 @@ public class ForwardingDisruptorProcessor implements PacketProcessor {
   @Override
   public void start() throws InterruptedException {
     reader.start();
+  }
+
+  @Override
+  public boolean shouldTerminate() {
+    return false;
   }
 }
