@@ -17,6 +17,11 @@ public class Dropper extends ProcessorComponent {
         inputDisruptor.handleEventsWith(this);
     }
 
+    @Override
+    public void shutdown() {
+        inputDisruptor.shutdown();
+    }
+
 
     @Override
     public void process(Packet packet) {

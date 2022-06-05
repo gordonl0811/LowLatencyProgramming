@@ -12,7 +12,6 @@ import java.io.IOException;
 
 public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
 
-    private final Disruptor<PacketEvent> readerDisruptor;
 
     private final Reader reader;
     private final Writer writer;
@@ -20,8 +19,8 @@ public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
     private final long expectedPackets;
 
     public ForwardingDisruptorProcessor(int bufferSize, String source, String dest, long expectedPackets) throws IOException {
-        this.readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
-                DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+
+        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new Reader(source, readerDisruptor);
         this.writer = new Writer(readerDisruptor, dest);
@@ -39,7 +38,8 @@ public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
 
     @Override
     public void shutdown() {
-        readerDisruptor.shutdown();
+        reader.shutdown();
+        writer.shutdown();
     }
 
     @Override

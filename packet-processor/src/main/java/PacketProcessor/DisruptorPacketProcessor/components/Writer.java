@@ -29,6 +29,11 @@ public class Writer extends ProcessorComponent {
     }
 
     @Override
+    public void shutdown() {
+        inputDisruptor.shutdown();
+    }
+
+    @Override
     public void process(Packet packet) throws IOException {
         output.write(packet);
     }

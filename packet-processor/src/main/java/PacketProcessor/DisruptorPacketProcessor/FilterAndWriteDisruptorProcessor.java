@@ -13,10 +13,6 @@ import java.io.IOException;
 
 public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
 
-    private final Disruptor<PacketEvent> readerDisruptor;
-    private final Disruptor<PacketEvent> tcpDisruptor;
-    private final Disruptor<PacketEvent> udpDisruptor;
-
     private final Reader reader;
     private final Filter filter;
     private final Writer tcpWriter;
@@ -25,15 +21,11 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
     private final long expectedTcpPackets;
     private final long expectedUdpPackets;
 
-    public FilterAndWriteDisruptorProcessor(int bufferSize, String source, String tcpDest, String udpDest, long expectedTcpPackets, long expectedUdpPackets)
-            throws IOException {
+    public FilterAndWriteDisruptorProcessor(int bufferSize, String source, String tcpDest, String udpDest, long expectedTcpPackets, long expectedUdpPackets) throws IOException {
 
-        this.readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
-                DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        this.tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
-                DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        this.udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
-                DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new Reader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
@@ -48,12 +40,7 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
-        FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(
-                1024,
-                "src/main/resources/input_thousand.pcap",
-                "src/main/resources/output/tcp_output.pcap",
-                "src/main/resources/output/udp_output.pcap",
-                505, 495);
+        FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(1024, "src/main/resources/input_thousand.pcap", "src/main/resources/output/tcp_output.pcap", "src/main/resources/output/udp_output.pcap", 505, 495);
 
         processor.initialize();
         processor.start();
@@ -77,9 +64,10 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
 
     @Override
     public void shutdown() {
-        readerDisruptor.shutdown();
-        tcpDisruptor.shutdown();
-        udpDisruptor.shutdown();
+        reader.shutdown();
+        filter.shutdown();
+        tcpWriter.shutdown();
+        udpWriter.shutdown();
     }
 
     @Override

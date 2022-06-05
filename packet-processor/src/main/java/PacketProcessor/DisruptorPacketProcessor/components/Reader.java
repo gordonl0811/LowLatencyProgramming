@@ -1,7 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor.components;
 
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.Pcap;
 
@@ -18,12 +17,12 @@ public class Reader {
         this.readerDisruptor = readerDisruptor;
     }
 
-    public Disruptor<PacketEvent> getReaderDisruptor() {
-        return readerDisruptor;
-    }
-
     public void initialize() {
         readerDisruptor.start();
+    }
+
+    public void shutdown() {
+        readerDisruptor.shutdown();
     }
 
     public void start() {

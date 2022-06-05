@@ -1,7 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor.components;
 
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
-import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
 import io.pkts.protocol.Protocol;
@@ -28,6 +27,13 @@ public class Filter extends ProcessorComponent {
         inputDisruptor.handleEventsWith(this);
         tcpDisruptor.start();
         udpDisruptor.start();
+    }
+
+    @Override
+    public void shutdown() {
+        inputDisruptor.shutdown();
+        tcpDisruptor.shutdown();
+        udpDisruptor.shutdown();
     }
 
     @Override

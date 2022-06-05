@@ -16,6 +16,8 @@ public abstract class ProcessorComponent implements EventHandler<PacketEvent> {
 
     public abstract void initialize();
 
+    public abstract void shutdown();
+
     public abstract void process(Packet packet) throws IOException;
 
     @Override
