@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 2, time = 3)
-@Measurement(iterations = 1, time = 3)
+@Warmup(iterations = 3, time = 3)
+@Measurement(iterations = 3, time = 3)
 @Fork(value = 1)
 public class BenchmarkFilterAndDropProcessor {
 
@@ -30,6 +30,11 @@ public class BenchmarkFilterAndDropProcessor {
                     "src/main/resources/input_thousand.pcap",
                     505, 495);
             processor.initialize();
+        }
+
+        @TearDown(Level.Invocation)
+        public void teardown() {
+            processor.shutdown();
         }
     }
 

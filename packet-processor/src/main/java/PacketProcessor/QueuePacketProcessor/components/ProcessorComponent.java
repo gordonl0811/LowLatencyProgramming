@@ -25,8 +25,7 @@ public abstract class ProcessorComponent implements Runnable {
                 process(inputQueue.take());
                 packetCount++;
             }
-        } catch (InterruptedException | IOException e) {
-            System.out.println("Closing thread");
+        } catch (InterruptedException | IOException ignored) {
         }
     }
 

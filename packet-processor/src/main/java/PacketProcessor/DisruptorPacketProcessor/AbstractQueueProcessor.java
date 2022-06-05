@@ -25,5 +25,8 @@ public abstract class AbstractQueueProcessor implements PacketProcessor {
 
     }
 
+    @Override
+    public abstract void shutdown();
+
     public abstract boolean shouldTerminate();
 }

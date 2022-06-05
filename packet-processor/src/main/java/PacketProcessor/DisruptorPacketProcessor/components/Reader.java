@@ -11,6 +11,11 @@ import java.util.List;
 public class Reader {
 
     private final Pcap source;
+
+    public Disruptor<PacketEvent> getReaderDisruptor() {
+        return readerDisruptor;
+    }
+
     private final Disruptor<PacketEvent> readerDisruptor;
     private RingBuffer<PacketEvent> readerRingBuffer;
 
@@ -36,6 +41,8 @@ public class Reader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        source.close();
 
     }
 

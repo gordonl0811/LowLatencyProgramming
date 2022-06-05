@@ -12,6 +12,11 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
 
 public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
+
+    private final Disruptor<PacketEvent> readerDisruptor;
+    private final Disruptor<PacketEvent> tcpDisruptor;
+    private final Disruptor<PacketEvent> udpDisruptor;
+
     private final Reader reader;
     private final Filter filter;
     private final Dropper tcpDropper;
@@ -23,11 +28,11 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
     public FilterAndDropDisruptorProcessor(int bufferSize, String source, long expectedTcpPackets, long expectedUdpPackets)
             throws IOException {
 
-        Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+        this.readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
                 DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+        this.tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
                 DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+        this.udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
                 DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new Reader(source, readerDisruptor);
@@ -54,6 +59,13 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
         // Initialise reader
         reader.initialize();
 
+    }
+
+    @Override
+    public void shutdown() {
+        readerDisruptor.shutdown();
+        tcpDisruptor.shutdown();
+        udpDisruptor.shutdown();
     }
 
     @Override

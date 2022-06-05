@@ -56,4 +56,9 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
         processor.initialize();
         processor.start();
     }
+
+    @Override
+    public void shutdown() {
+
+    }
 }

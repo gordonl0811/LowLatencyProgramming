@@ -47,4 +47,8 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
         processor.start();
     }
 
+    @Override
+    public void shutdown() {
+
+    }
 }

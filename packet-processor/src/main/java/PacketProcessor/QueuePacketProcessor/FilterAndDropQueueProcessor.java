@@ -53,4 +53,9 @@ public class FilterAndDropQueueProcessor extends AbstractQueueProcessor {
         processor.initialize();
         processor.start();
     }
+
+    @Override
+    public void shutdown() {
+
+    }
 }
