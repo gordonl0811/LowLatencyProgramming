@@ -35,7 +35,6 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
 
-        setReader(this.reader);
     }
 
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -66,6 +65,11 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
         filter.shutdown();
         tcpDropper.shutdown();
         udpDropper.shutdown();
+    }
+
+    @Override
+    public void releasePackets() {
+        reader.start();
     }
 
     @Override

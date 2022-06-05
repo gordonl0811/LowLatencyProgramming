@@ -12,7 +12,6 @@ import java.io.IOException;
 
 public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
 
-
     private final Reader reader;
     private final Writer writer;
 
@@ -26,8 +25,6 @@ public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
         this.writer = new Writer(readerDisruptor, dest);
 
         this.expectedPackets = expectedPackets;
-
-        setReader(this.reader);
     }
 
     @Override
@@ -40,6 +37,11 @@ public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
     public void shutdown() {
         reader.shutdown();
         writer.shutdown();
+    }
+
+    @Override
+    public void releasePackets() {
+        reader.start();
     }
 
     @Override

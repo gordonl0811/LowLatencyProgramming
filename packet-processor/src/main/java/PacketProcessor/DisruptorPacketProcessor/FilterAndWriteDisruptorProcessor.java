@@ -35,7 +35,6 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
 
-        setReader(this.reader);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -68,6 +67,11 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
         filter.shutdown();
         tcpWriter.shutdown();
         udpWriter.shutdown();
+    }
+
+    @Override
+    public void releasePackets() {
+        reader.start();
     }
 
     @Override
