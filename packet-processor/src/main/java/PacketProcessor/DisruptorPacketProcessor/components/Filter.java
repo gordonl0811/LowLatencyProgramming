@@ -14,9 +14,6 @@ public class Filter extends ProcessorComponent {
     private final Disruptor<PacketEvent> tcpDisruptor;
     private final Disruptor<PacketEvent> udpDisruptor;
 
-    private RingBuffer<PacketEvent> tcpRingBuffer;
-    private RingBuffer<PacketEvent> udpRingBuffer;
-
     public Filter(
             Disruptor<PacketEvent> inputDisruptor,
             Disruptor<PacketEvent> tcpDisruptor,
@@ -29,16 +26,16 @@ public class Filter extends ProcessorComponent {
     @Override
     public void initialize() {
         inputDisruptor.handleEventsWith(this);
-        tcpRingBuffer = tcpDisruptor.start();
-        udpRingBuffer = udpDisruptor.start();
+        tcpDisruptor.start();
+        udpDisruptor.start();
     }
 
     @Override
     public void process(Packet packet) throws IOException {
         if (packet.hasProtocol(Protocol.TCP)) {
-            tcpRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
+            tcpDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
         } else if (packet.hasProtocol(Protocol.UDP)) {
-            udpRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
+            udpDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
         }
     }
 

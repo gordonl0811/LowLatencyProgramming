@@ -11,7 +11,7 @@ public class Reader {
 
     private final Pcap source;
     private final Disruptor<PacketEvent> readerDisruptor;
-    private RingBuffer<PacketEvent> readerRingBuffer;
+
     public Reader(String source, Disruptor<PacketEvent> readerDisruptor)
             throws IOException {
         this.source = Pcap.openStream(source);
@@ -23,7 +23,7 @@ public class Reader {
     }
 
     public void initialize() {
-        readerRingBuffer = this.readerDisruptor.start();
+        readerDisruptor.start();
     }
 
     public void start() {
@@ -31,7 +31,7 @@ public class Reader {
         try {
             // Load the packets into the RingBuffer
             this.source.loop(packet -> {
-                readerRingBuffer.publishEvent((event, sequence, buffer) -> event.setValue(packet));
+                readerDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
                 return true;
             });
         } catch (IOException e) {
