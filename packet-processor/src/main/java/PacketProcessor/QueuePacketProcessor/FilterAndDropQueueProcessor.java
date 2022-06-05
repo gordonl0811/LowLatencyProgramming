@@ -27,7 +27,7 @@ public class FilterAndDropQueueProcessor extends AbstractQueueProcessor {
 
         Filter filter = new Filter(producerQueue, tcpQueue, udpQueue);
         this.tcpDropper = new Dropper(tcpQueue);
-        this.udpDropper =new Dropper(udpQueue);
+        this.udpDropper = new Dropper(udpQueue);
 
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
@@ -36,11 +36,6 @@ public class FilterAndDropQueueProcessor extends AbstractQueueProcessor {
         addComponent(filter);
         addComponent(this.tcpDropper);
         addComponent(this.udpDropper);
-    }
-
-    @Override
-    public boolean shouldTerminate() {
-        return tcpDropper.getPacketCount() >= expectedTcpPackets && udpDropper.getPacketCount() >= expectedUdpPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -52,6 +47,11 @@ public class FilterAndDropQueueProcessor extends AbstractQueueProcessor {
 
         processor.initialize();
         processor.start();
+    }
+
+    @Override
+    public boolean shouldTerminate() {
+        return tcpDropper.getPacketCount() >= expectedTcpPackets && udpDropper.getPacketCount() >= expectedUdpPackets;
     }
 
     @Override

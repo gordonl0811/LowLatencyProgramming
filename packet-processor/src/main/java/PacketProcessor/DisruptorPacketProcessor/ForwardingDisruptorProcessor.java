@@ -12,38 +12,38 @@ import java.io.IOException;
 
 public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
 
-  private final Disruptor<PacketEvent> readerDisruptor;
+    private final Disruptor<PacketEvent> readerDisruptor;
 
-  private final Reader reader;
-  private final Writer writer;
+    private final Reader reader;
+    private final Writer writer;
 
-  private final long expectedPackets;
+    private final long expectedPackets;
 
-  public ForwardingDisruptorProcessor(int bufferSize, String source, String dest, long expectedPackets) throws IOException {
-    this.readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
-        DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
+    public ForwardingDisruptorProcessor(int bufferSize, String source, String dest, long expectedPackets) throws IOException {
+        this.readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize,
+                DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-    this.reader = new Reader(source, readerDisruptor);
-    this.writer = new Writer(readerDisruptor, dest);
+        this.reader = new Reader(source, readerDisruptor);
+        this.writer = new Writer(readerDisruptor, dest);
 
-    this.expectedPackets = expectedPackets;
+        this.expectedPackets = expectedPackets;
 
-    setReader(this.reader);
-  }
+        setReader(this.reader);
+    }
 
-  @Override
-  public void initialize() {
-    writer.initialize();
-    reader.initialize();
-  }
+    @Override
+    public void initialize() {
+        writer.initialize();
+        reader.initialize();
+    }
 
-  @Override
-  public void shutdown() {
-    readerDisruptor.shutdown();
-  }
+    @Override
+    public void shutdown() {
+        readerDisruptor.shutdown();
+    }
 
-  @Override
-  public boolean shouldTerminate() {
-    return writer.getPacketCount() >= expectedPackets;
-  }
+    @Override
+    public boolean shouldTerminate() {
+        return writer.getPacketCount() >= expectedPackets;
+    }
 }

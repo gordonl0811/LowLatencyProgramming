@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Warmup(iterations = 3, time = 3)
-@Measurement(iterations = 3, time = 3)
+@Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
 public class BenchmarkFilterAndDropProcessor {
 
@@ -20,7 +20,7 @@ public class BenchmarkFilterAndDropProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "8", "64", "512"})
+        @Param({"8", "64", "512", "4096"})
         public int bufferSize;
 
         @Setup(Level.Invocation)
@@ -48,7 +48,7 @@ public class BenchmarkFilterAndDropProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "8", "64", "512"})
+        @Param({"8", "64", "512", "4096"})
         public int queueSize;
 
         @Setup(Level.Invocation)

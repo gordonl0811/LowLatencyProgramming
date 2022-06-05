@@ -9,7 +9,9 @@ public abstract class AbstractQueueProcessor implements PacketProcessor {
 
     private Reader reader;
 
-    public void setReader(Reader reader) { this.reader = reader; }
+    public void setReader(Reader reader) {
+        this.reader = reader;
+    }
 
     @Override
     public abstract void initialize();

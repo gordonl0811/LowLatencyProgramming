@@ -46,6 +46,16 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
         setReader(this.reader);
     }
 
+    public static void main(String[] args) throws InterruptedException, IOException {
+        FilterAndDropDisruptorProcessor processor = new FilterAndDropDisruptorProcessor(
+                1024,
+                "src/main/resources/input_thousand.pcap",
+                505, 495);
+
+        processor.initialize();
+        processor.start();
+    }
+
     @Override
     public void initialize() {
 
@@ -71,16 +81,6 @@ public class FilterAndDropDisruptorProcessor extends AbstractQueueProcessor {
     @Override
     public boolean shouldTerminate() {
         return tcpDropper.getPacketCount() >= expectedTcpPackets && udpDropper.getPacketCount() >= expectedUdpPackets;
-    }
-
-    public static void main(String[] args) throws InterruptedException, IOException {
-        FilterAndDropDisruptorProcessor processor = new FilterAndDropDisruptorProcessor(
-                1024,
-                "src/main/resources/input_thousand.pcap",
-                505, 495);
-
-        processor.initialize();
-        processor.start();
     }
 
 }

@@ -2,9 +2,9 @@ package PacketProcessor;
 
 public interface PacketProcessor {
 
-  void initialize();
+    void initialize();
 
-  void start() throws InterruptedException;
+    void start() throws InterruptedException;
 
-  void shutdown();
+    void shutdown();
 }

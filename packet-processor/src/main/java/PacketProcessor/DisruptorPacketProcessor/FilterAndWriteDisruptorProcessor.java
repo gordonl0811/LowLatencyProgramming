@@ -8,6 +8,7 @@ import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+
 import java.io.IOException;
 
 public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
@@ -45,6 +46,20 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
         setReader(this.reader);
     }
 
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(
+                1024,
+                "src/main/resources/input_thousand.pcap",
+                "src/main/resources/output/tcp_output.pcap",
+                "src/main/resources/output/udp_output.pcap",
+                505, 495);
+
+        processor.initialize();
+        processor.start();
+
+    }
+
     @Override
     public void initialize() {
 
@@ -70,19 +85,5 @@ public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
     @Override
     public boolean shouldTerminate() {
         return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        FilterAndWriteDisruptorProcessor processor = new FilterAndWriteDisruptorProcessor(
-                1024,
-                "src/main/resources/input_thousand.pcap",
-                "src/main/resources/output/tcp_output.pcap",
-                "src/main/resources/output/udp_output.pcap",
-                505, 495);
-
-        processor.initialize();
-        processor.start();
-
     }
 }

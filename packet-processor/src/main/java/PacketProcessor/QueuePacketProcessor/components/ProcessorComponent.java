@@ -14,7 +14,9 @@ public abstract class ProcessorComponent implements Runnable {
         this.inputQueue = inputQueue;
     }
 
-    public long getPacketCount() { return packetCount; }
+    public long getPacketCount() {
+        return packetCount;
+    }
 
     public abstract void process(Packet packet) throws IOException, InterruptedException;
 

@@ -5,6 +5,6 @@ import com.lmax.disruptor.EventHandler;
 
 public interface PacketEventConsumer extends EventHandler<PacketEvent> {
 
-  void initialize();
+    void initialize();
 
 }

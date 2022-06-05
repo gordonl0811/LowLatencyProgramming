@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractQueueProcessor implements PacketProcessor {
 
-    protected Thread readerThread;
     private final List<Thread> componentsThreads;
+    protected Thread readerThread;
 
     public AbstractQueueProcessor() {
         componentsThreads = new ArrayList<>();
@@ -20,6 +20,7 @@ public abstract class AbstractQueueProcessor implements PacketProcessor {
     public void setReader(Reader reader) {
         this.readerThread = new Thread(reader);
     }
+
     public void addComponent(ProcessorComponent component) {
         componentsThreads.add(new Thread(component));
     }

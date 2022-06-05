@@ -1,6 +1,5 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.Reader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
@@ -30,11 +29,6 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
         addComponent(this.writer);
     }
 
-    @Override
-    public boolean shouldTerminate() {
-        return writer.getPacketCount() >= expectedPackets;
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         ForwardingQueueProcessor processor = new ForwardingQueueProcessor(
                 1000,
@@ -45,6 +39,11 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
         processor.initialize();
         processor.start();
+    }
+
+    @Override
+    public boolean shouldTerminate() {
+        return writer.getPacketCount() >= expectedPackets;
     }
 
     @Override

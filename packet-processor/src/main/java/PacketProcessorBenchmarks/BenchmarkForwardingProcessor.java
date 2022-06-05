@@ -3,12 +3,14 @@ package PacketProcessorBenchmarks;
 import PacketProcessor.DisruptorPacketProcessor.ForwardingDisruptorProcessor;
 import PacketProcessor.PacketProcessor;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import PacketProcessor.QueuePacketProcessor.ForwardingQueueProcessor;
 import org.openjdk.jmh.annotations.*;
 
 @BenchmarkMode(Mode.AverageTime)
-@Warmup(iterations = 2, time = 3)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 3, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
 public class BenchmarkForwardingProcessor {
@@ -18,7 +20,7 @@ public class BenchmarkForwardingProcessor {
 
     public PacketProcessor processor;
 
-    @Param({"1", "8", "64", "512"})
+    @Param({"8", "64", "512", "4096"})
     public int bufferSize;
 
     @Setup(Level.Invocation)
@@ -47,7 +49,7 @@ public class BenchmarkForwardingProcessor {
 
     public PacketProcessor processor;
 
-    @Param({"1", "8", "64", "512"})
+    @Param({"8", "64", "512", "4096"})
     public int queueSize;
 
     @Setup(Level.Invocation)

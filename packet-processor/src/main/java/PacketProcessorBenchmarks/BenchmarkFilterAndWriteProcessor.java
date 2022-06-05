@@ -6,9 +6,11 @@ import PacketProcessor.QueuePacketProcessor.FilterAndWriteQueueProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@Warmup(iterations = 2, time = 3)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 3, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
 public class BenchmarkFilterAndWriteProcessor {
@@ -31,7 +33,7 @@ public class BenchmarkFilterAndWriteProcessor {
                     505, 495);
             processor.initialize();
         }
-        
+
         @TearDown(Level.Invocation)
         public void teardown() {
             processor.shutdown();
@@ -48,7 +50,7 @@ public class BenchmarkFilterAndWriteProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "8", "64", "512"})
+        @Param({"8", "64", "512", "4096"})
         public int queueSize;
 
         @Setup(Level.Invocation)

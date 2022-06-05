@@ -19,5 +19,6 @@ public class Dropper extends ProcessorComponent {
 
 
     @Override
-    public void process(Packet packet) {}
+    public void process(Packet packet) {
+    }
 }
