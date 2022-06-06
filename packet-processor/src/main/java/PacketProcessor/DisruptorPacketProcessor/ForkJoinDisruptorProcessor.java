@@ -1,9 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.Filter;
-import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
-import PacketProcessor.DisruptorPacketProcessor.components.Reader;
-import PacketProcessor.DisruptorPacketProcessor.components.Writer;
+import PacketProcessor.DisruptorPacketProcessor.components.*;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -18,14 +15,13 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
     private final Filter filter;
     private final PortRewriter tcpRewriter;
     private final PortRewriter udpRewriter;
-    private final Writer writer;
+    private final Dropper dropper;
 
     private final long expectedPackets;
 
     public ForkJoinDisruptorProcessor(
             int bufferSize,
             String source,
-            String dest,
             int tcpSrcPort,
             int tcpDestPort,
             int udpSrcPort,
@@ -41,7 +37,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
         this.udpRewriter = new PortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);
-        this.writer = new Writer(rewriterDisruptor, dest);
+        this.dropper = new Dropper(rewriterDisruptor);
 
         this.expectedPackets = expectedPackets;
     }
@@ -49,7 +45,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     @Override
     public void initialize() {
-        writer.initialize();
+        dropper.initialize();
         tcpRewriter.initialize();
         udpRewriter.initialize();
         filter.initialize();
@@ -62,7 +58,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
         filter.shutdown();
         tcpRewriter.shutdown();
         udpRewriter.shutdown();
-        writer.shutdown();
+        dropper.shutdown();
     }
 
     @Override
@@ -72,14 +68,13 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     @Override
     public boolean shouldTerminate() {
-        return writer.getPacketCount() >= expectedPackets;
+        return dropper.getPacketCount() >= expectedPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
         ForkJoinDisruptorProcessor processor = new ForkJoinDisruptorProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap",
-                "src/main/resources/output/rewritten.pcap",
                 12,
                 34,
                 56,

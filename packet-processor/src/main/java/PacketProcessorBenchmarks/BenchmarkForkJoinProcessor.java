@@ -30,7 +30,6 @@ public class BenchmarkForkJoinProcessor {
             processor = new ForkJoinDisruptorProcessor(
                     bufferSize,
                     "src/main/resources/input_thousand.pcap",
-                    "src/main/resources/output/rewritten.pcap",
                     12,
                     34,
                     56,
@@ -64,7 +63,6 @@ public class BenchmarkForkJoinProcessor {
             processor = new ForkJoinQueueProcessor(
                     queueSize,
                     "src/main/resources/input_thousand.pcap",
-                    "src/main/resources/output/rewritten.pcap",
                     12,
                     34,
                     56,
