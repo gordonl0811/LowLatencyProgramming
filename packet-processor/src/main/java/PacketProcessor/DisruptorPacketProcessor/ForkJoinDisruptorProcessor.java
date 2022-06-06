@@ -35,13 +35,13 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
-        Disruptor<PacketEvent> rewriteDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
+        Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
 
         this.reader = new Reader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriteDisruptor, tcpSrcPort, tcpDestPort);
-        this.udpRewriter = new PortRewriter(udpDisruptor, rewriteDisruptor, udpSrcPort, udpDestPort);
-        this.writer = new Writer(rewriteDisruptor, dest);
+        this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
+        this.udpRewriter = new PortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);
+        this.writer = new Writer(rewriterDisruptor, dest);
 
         this.expectedPackets = expectedPackets;
     }
