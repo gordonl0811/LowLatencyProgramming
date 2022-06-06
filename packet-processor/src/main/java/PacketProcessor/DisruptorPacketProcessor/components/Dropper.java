@@ -12,12 +12,11 @@ public class Dropper extends ProcessorComponent {
 
     public Dropper(Disruptor<PacketEvent> inputDisruptor) {
         this.inputDisruptor = inputDisruptor;
+        inputDisruptor.handleEventsWith(this);
     }
 
     @Override
     public void initialize() {
-
-        inputDisruptor.handleEventsWith(this);
         startDisruptor(inputDisruptor);
     }
 
@@ -29,5 +28,6 @@ public class Dropper extends ProcessorComponent {
 
     @Override
     public void process(Packet packet) {
+//        System.out.println("Processed " + getPacketCount());
     }
 }

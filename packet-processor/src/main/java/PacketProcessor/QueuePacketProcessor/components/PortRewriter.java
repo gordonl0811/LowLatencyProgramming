@@ -19,6 +19,7 @@ public class PortRewriter extends ProcessorComponent {
         this.srcPort = srcPort;
         this.destPort = destPort;
     }
+
     @Override
     public void process(Packet packet) throws IOException, InterruptedException {
         Protocol layerFourProtocol = packet.hasProtocol(Protocol.TCP) ? Protocol.TCP : Protocol.UDP;

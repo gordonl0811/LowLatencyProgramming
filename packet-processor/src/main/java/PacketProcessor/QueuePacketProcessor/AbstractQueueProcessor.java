@@ -1,31 +1,49 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.PacketProcessor;
+import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractQueueProcessor implements PacketProcessor {
+public abstract class AbstractQueueProcessor extends AbstractPacketProcessor {
 
-    @Override
-    public abstract void initialize();
+    private final List<Thread> readerThreads = new ArrayList<>();
+    private final List<Thread> componentsThreads = new ArrayList<>();
 
-    @Override
-    public final void start() throws InterruptedException {
+    protected void addReader(PcapReader reader) {
+        readerThreads.add(new Thread(reader));
+    }
 
-        releasePackets();
-
-        while (!shouldTerminate()) {
-            TimeUnit.MILLISECONDS.sleep(1);
-        }
-
+    protected void addComponent(ProcessorComponent component) {
+        componentsThreads.add(new Thread(component));
     }
 
     @Override
-    public abstract void shutdown();
+    public final void initialize() {
+        for (Thread thread : componentsThreads) {
+            thread.start();
+        }
+    }
 
-    public abstract boolean shouldTerminate();
+    @Override
+    public final void shutdown() {
+        for (Thread thread : readerThreads) {
+            thread.interrupt();
+        }
+        for (Thread thread : componentsThreads) {
+            thread.interrupt();
+        }
+    }
+
+    @Override
+    protected final void releasePackets() {
+        for (Thread thread : readerThreads) {
+            thread.start();
+        }
+    }
+
+    @Override
+    protected abstract boolean shouldTerminate();
 }

@@ -1,7 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -25,8 +25,13 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
         this.expectedPackets = expectedPackets;
 
-        setReader(reader);
+        addReader(reader);
         addComponent(this.writer);
+    }
+
+    @Override
+    public boolean shouldTerminate() {
+        return writer.getPacketCount() >= expectedPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -41,13 +46,4 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
         processor.start();
     }
 
-    @Override
-    public boolean shouldTerminate() {
-        return writer.getPacketCount() >= expectedPackets;
-    }
-
-    @Override
-    public void shutdown() {
-
-    }
 }

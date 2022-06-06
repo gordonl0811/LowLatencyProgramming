@@ -1,9 +1,9 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
-import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
+import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -11,8 +11,10 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-public class RewritePortDisruptorProcessor extends AbstractPacketProcessor {
+public class RewritePortDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
     private final PortRewriter rewriter;
@@ -34,27 +36,13 @@ public class RewritePortDisruptorProcessor extends AbstractPacketProcessor {
     }
 
     @Override
-    public void initialize() {
-
-        // Initialise writers
-        writer.initialize();
-        rewriter.initialize();
-
-        // Initialise reader
-        reader.initialize();
-
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
     }
 
     @Override
-    public void shutdown() {
-        reader.shutdown();
-        rewriter.shutdown();
-        writer.shutdown();
-    }
-
-    @Override
-    public void releasePackets() {
-        reader.start();
+    protected List<ProcessorComponent> setComponents() {
+        return Arrays.asList(rewriter, writer);
     }
 
     @Override

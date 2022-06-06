@@ -1,8 +1,8 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.Filter;
-import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -20,8 +20,6 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
     public FilterAndWriteQueueProcessor(int queueSize, String source, String tcpDest, String udpDest, long expectedTcpPackets, long expectedUdpPackets)
             throws IOException {
 
-        super();
-
         final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(queueSize);
@@ -33,7 +31,7 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
 
-        setReader(new PcapReader(source, readerQueue));
+        addReader(new PcapReader(source, readerQueue));
         addComponent(filter);
         addComponent(this.tcpWriter);
         addComponent(this.udpWriter);
@@ -43,11 +41,6 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
     @Override
     public boolean shouldTerminate() {
         return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
-    }
-
-    @Override
-    public void shutdown() {
-
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

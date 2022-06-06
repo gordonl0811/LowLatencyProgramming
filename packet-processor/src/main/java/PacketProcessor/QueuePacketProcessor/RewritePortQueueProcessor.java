@@ -1,8 +1,8 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.PortRewriter;
-import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -25,14 +25,9 @@ public class RewritePortQueueProcessor extends AbstractQueueProcessor {
 
         this.expectedPackets = expectedPackets;
 
-        setReader(new PcapReader(source, producerQueue));
+        addReader(new PcapReader(source, producerQueue));
         addComponent(portRewriter);
         addComponent(this.packetWriter);
-    }
-
-    @Override
-    public void shutdown() {
-
     }
 
     @Override

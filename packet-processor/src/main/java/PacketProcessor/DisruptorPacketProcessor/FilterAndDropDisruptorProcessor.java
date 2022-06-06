@@ -1,8 +1,8 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
 import PacketProcessor.DisruptorPacketProcessor.components.Filter;
+import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -11,8 +11,10 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-public class FilterAndDropDisruptorProcessor extends AbstractPacketProcessor {
+public class FilterAndDropDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
     private final Filter filter;
@@ -39,32 +41,15 @@ public class FilterAndDropDisruptorProcessor extends AbstractPacketProcessor {
     }
 
     @Override
-    public void initialize() {
-
-        // Initialise writers
-        tcpDropper.initialize();
-        udpDropper.initialize();
-
-        // Initialise filter
-        filter.initialize();
-
-        // Initialise reader
-        reader.initialize();
-
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
     }
 
     @Override
-    public void shutdown() {
-        reader.shutdown();
-        filter.shutdown();
-        tcpDropper.shutdown();
-        udpDropper.shutdown();
+    protected List<ProcessorComponent> setComponents() {
+        return Arrays.asList(filter, tcpDropper, udpDropper);
     }
 
-    @Override
-    public void releasePackets() {
-        reader.start();
-    }
 
     @Override
     public boolean shouldTerminate() {

@@ -1,8 +1,8 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.AbstractPacketProcessor;
-import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
+import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -10,8 +10,9 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
+import java.util.List;
 
-public class ForwardingDisruptorProcessor extends AbstractPacketProcessor {
+public class ForwardingDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
     private final Writer writer;
@@ -29,20 +30,13 @@ public class ForwardingDisruptorProcessor extends AbstractPacketProcessor {
     }
 
     @Override
-    public void initialize() {
-        writer.initialize();
-        reader.initialize();
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
     }
 
     @Override
-    public void shutdown() {
-        reader.shutdown();
-        writer.shutdown();
-    }
-
-    @Override
-    public void releasePackets() {
-        reader.start();
+    protected List<ProcessorComponent> setComponents() {
+        return List.of(writer);
     }
 
     @Override

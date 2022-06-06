@@ -1,7 +1,9 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.AbstractPacketProcessor;
-import PacketProcessor.DisruptorPacketProcessor.components.*;
+import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
+import PacketProcessor.DisruptorPacketProcessor.components.Filter;
+import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
+import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -10,8 +12,10 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
-public class ForkJoinDisruptorProcessor extends AbstractPacketProcessor {
+public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
     private final Filter filter;
@@ -44,28 +48,14 @@ public class ForkJoinDisruptorProcessor extends AbstractPacketProcessor {
         this.expectedPackets = expectedPackets;
     }
 
-
     @Override
-    public void initialize() {
-        dropper.initialize();
-        tcpRewriter.initialize();
-        udpRewriter.initialize();
-        filter.initialize();
-        reader.initialize();
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
     }
 
     @Override
-    public void shutdown() {
-        reader.shutdown();
-        filter.shutdown();
-        tcpRewriter.shutdown();
-        udpRewriter.shutdown();
-        dropper.shutdown();
-    }
-
-    @Override
-    public void releasePackets() {
-        reader.start();
+    protected List<ProcessorComponent> setComponents() {
+        return Arrays.asList(filter, tcpRewriter, udpRewriter, dropper);
     }
 
     @Override
@@ -82,7 +72,7 @@ public class ForkJoinDisruptorProcessor extends AbstractPacketProcessor {
                 56,
                 78,
                 1000
-                );
+        );
 
         processor.initialize();
         processor.start();

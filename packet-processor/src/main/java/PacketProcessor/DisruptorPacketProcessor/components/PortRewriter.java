@@ -20,7 +20,7 @@ public class PortRewriter extends ProcessorComponent {
     public PortRewriter(Disruptor<PacketEvent> inputDisruptor, Disruptor<PacketEvent> outputDisruptor, int srcPort, int destPort) {
         this.inputDisruptor = inputDisruptor;
         this.outputDisruptor = outputDisruptor;
-
+        inputDisruptor.handleEventsWith(this);
         // Set srcPort/destPort to a negative value (i.e. -1) to retain their values
         this.srcPort = srcPort;
         this.destPort = destPort;
@@ -28,7 +28,6 @@ public class PortRewriter extends ProcessorComponent {
 
     @Override
     public void initialize() {
-        inputDisruptor.handleEventsWith(this);
         startDisruptor(inputDisruptor);
         startDisruptor(outputDisruptor);
     }

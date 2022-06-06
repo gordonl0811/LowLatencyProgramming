@@ -22,11 +22,12 @@ public class Filter extends ProcessorComponent {
         this.inputDisruptor = inputDisruptor;
         this.tcpDisruptor = tcpDisruptor;
         this.udpDisruptor = udpDisruptor;
+        inputDisruptor.handleEventsWith(this);
     }
 
     @Override
     public void initialize() {
-        inputDisruptor.handleEventsWith(this);
+
         startDisruptor(inputDisruptor);
         startDisruptor(tcpDisruptor);
         startDisruptor(udpDisruptor);

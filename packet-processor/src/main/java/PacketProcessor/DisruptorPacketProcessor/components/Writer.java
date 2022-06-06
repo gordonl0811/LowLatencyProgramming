@@ -19,6 +19,7 @@ public class Writer extends ProcessorComponent {
 
     public Writer(Disruptor<PacketEvent> inputDisruptor, String dest) throws FileNotFoundException {
         this.inputDisruptor = inputDisruptor;
+        inputDisruptor.handleEventsWith(this);
         this.output = PcapOutputStream.create(
                 PcapGlobalHeader.createDefaultHeader(),
                 new FileOutputStream(dest)
@@ -27,7 +28,6 @@ public class Writer extends ProcessorComponent {
 
     @Override
     public void initialize() {
-        inputDisruptor.handleEventsWith(this);
         startDisruptor(inputDisruptor);
     }
 

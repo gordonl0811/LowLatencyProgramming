@@ -1,6 +1,8 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.QueuePacketProcessor.components.*;
+import PacketProcessor.QueuePacketProcessor.components.Dropper;
+import PacketProcessor.QueuePacketProcessor.components.Filter;
+import PacketProcessor.QueuePacketProcessor.components.PortRewriter;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
@@ -14,17 +16,9 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
 
     private final long expectedPackets;
 
-    public ForkJoinQueueProcessor(
-            int queueSize,
-            String source,
-            int tcpSrcPort,
-            int tcpDestPort,
-            int udpSrcPort,
-            int udpDestPort,
-            long expectedPackets
+    public ForkJoinQueueProcessor(int queueSize, String source, int tcpSrcPort, int tcpDestPort, int udpSrcPort, int udpDestPort, long expectedPackets
 
-    )
-            throws IOException {
+    ) throws IOException {
 
         super();
 
@@ -39,7 +33,7 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
         this.dropper = new Dropper(rewriterQueue);
         this.expectedPackets = expectedPackets;
 
-        setReader(new PcapReader(source, readerQueue));
+        addReader(new PcapReader(source, readerQueue));
         addComponent(filter);
         addComponent(tcpRewriter);
         addComponent(udpRewriter);
@@ -52,20 +46,8 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
         return dropper.getPacketCount() >= expectedPackets;
     }
 
-    @Override
-    public void shutdown() {
-
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
-        ForkJoinQueueProcessor processor = new ForkJoinQueueProcessor(
-                1000,
-                "src/main/resources/input_thousand.pcap",
-                12,
-                34,
-                56,
-                78,
-                1000);
+        ForkJoinQueueProcessor processor = new ForkJoinQueueProcessor(1000, "src/main/resources/input_thousand.pcap", 12, 34, 56, 78, 1000);
 
         processor.initialize();
         processor.start();
