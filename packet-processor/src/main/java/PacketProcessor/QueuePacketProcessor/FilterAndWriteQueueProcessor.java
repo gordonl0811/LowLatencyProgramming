@@ -40,6 +40,16 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
 
     }
 
+    @Override
+    public boolean shouldTerminate() {
+        return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
+    }
+
+    @Override
+    public void shutdown() {
+
+    }
+
     public static void main(String[] args) throws IOException, InterruptedException {
         FilterAndWriteQueueProcessor processor = new FilterAndWriteQueueProcessor(
                 1000,
@@ -50,15 +60,6 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
 
         processor.initialize();
         processor.start();
-    }
-
-    @Override
-    public boolean shouldTerminate() {
-        return tcpWriter.getPacketCount() >= expectedTcpPackets && udpWriter.getPacketCount() >= expectedUdpPackets;
-    }
-
-    @Override
-    public void shutdown() {
-
+        processor.shutdown();
     }
 }

@@ -8,6 +8,8 @@ import io.pkts.protocol.Protocol;
 
 import java.io.IOException;
 
+import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+
 public class PortRewriter extends ProcessorComponent {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -27,7 +29,8 @@ public class PortRewriter extends ProcessorComponent {
     @Override
     public void initialize() {
         inputDisruptor.handleEventsWith(this);
-        outputDisruptor.start();
+        startDisruptor(inputDisruptor);
+        startDisruptor(outputDisruptor);
     }
 
     @Override

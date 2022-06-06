@@ -7,6 +7,8 @@ import io.pkts.protocol.Protocol;
 
 import java.io.IOException;
 
+import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+
 public class Filter extends ProcessorComponent {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -25,8 +27,9 @@ public class Filter extends ProcessorComponent {
     @Override
     public void initialize() {
         inputDisruptor.handleEventsWith(this);
-        tcpDisruptor.start();
-        udpDisruptor.start();
+        startDisruptor(inputDisruptor);
+        startDisruptor(tcpDisruptor);
+        startDisruptor(udpDisruptor);
     }
 
     @Override

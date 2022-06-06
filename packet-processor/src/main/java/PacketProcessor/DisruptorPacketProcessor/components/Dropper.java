@@ -4,6 +4,8 @@ import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
 import io.pkts.packet.Packet;
 
+import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+
 public class Dropper extends ProcessorComponent {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -14,7 +16,9 @@ public class Dropper extends ProcessorComponent {
 
     @Override
     public void initialize() {
+
         inputDisruptor.handleEventsWith(this);
+        startDisruptor(inputDisruptor);
     }
 
     @Override

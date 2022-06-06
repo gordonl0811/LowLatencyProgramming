@@ -32,17 +32,6 @@ public class RewritePortDisruptorProcessor extends AbstractDisruptorProcessor {
 
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-
-        RewritePortDisruptorProcessor processor = new RewritePortDisruptorProcessor(1024, "src/main/resources/input_thousand.pcap", "src/main/resources/output/rewritten.pcap", 6969, 6969, 1000);
-
-        processor.initialize();
-        processor.start();
-
-        processor.shutdown();
-
-    }
-
     @Override
     public void initialize() {
 
@@ -70,5 +59,16 @@ public class RewritePortDisruptorProcessor extends AbstractDisruptorProcessor {
     @Override
     public boolean shouldTerminate() {
         return writer.getPacketCount() >= expectedPackets;
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        RewritePortDisruptorProcessor processor = new RewritePortDisruptorProcessor(1024, "src/main/resources/input_thousand.pcap", "src/main/resources/output/rewritten.pcap", 6969, 6969, 1000);
+
+        processor.initialize();
+        processor.start();
+
+        processor.shutdown();
+
     }
 }

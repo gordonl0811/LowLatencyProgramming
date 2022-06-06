@@ -6,23 +6,25 @@ import io.pkts.Pcap;
 
 import java.io.IOException;
 
+import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+
 public class Reader {
 
     private final Pcap source;
-    private final Disruptor<PacketEvent> readerDisruptor;
+    private final Disruptor<PacketEvent> outputDisruptor;
 
-    public Reader(String source, Disruptor<PacketEvent> readerDisruptor)
+    public Reader(String source, Disruptor<PacketEvent> outputDisruptor)
             throws IOException {
         this.source = Pcap.openStream(source);
-        this.readerDisruptor = readerDisruptor;
+        this.outputDisruptor = outputDisruptor;
     }
 
     public void initialize() {
-        readerDisruptor.start();
+        startDisruptor(outputDisruptor);
     }
 
     public void shutdown() {
-        readerDisruptor.shutdown();
+        outputDisruptor.shutdown();
     }
 
     public void start() {
@@ -30,7 +32,7 @@ public class Reader {
         try {
             // Load the packets into the RingBuffer
             this.source.loop(packet -> {
-                readerDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
+                outputDisruptor.publishEvent((event, sequence) -> event.setValue(packet));
                 return true;
             });
         } catch (IOException e) {

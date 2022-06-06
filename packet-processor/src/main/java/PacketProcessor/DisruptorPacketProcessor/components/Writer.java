@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
+
 public class Writer extends ProcessorComponent {
 
     private final Disruptor<PacketEvent> inputDisruptor;
@@ -26,6 +28,7 @@ public class Writer extends ProcessorComponent {
     @Override
     public void initialize() {
         inputDisruptor.handleEventsWith(this);
+        startDisruptor(inputDisruptor);
     }
 
     @Override
@@ -35,6 +38,7 @@ public class Writer extends ProcessorComponent {
 
     @Override
     public void process(Packet packet) throws IOException {
+//        System.out.println("Processed " + getPacketCount());
         output.write(packet);
     }
 
