@@ -1,11 +1,10 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.Reader;
 import PacketProcessor.PacketProcessor;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractQueueProcessor implements PacketProcessor {
+public abstract class AbstractDisruptorProcessor implements PacketProcessor {
 
     @Override
     public abstract void initialize();

@@ -10,7 +10,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
 
-public class ForwardingDisruptorProcessor extends AbstractQueueProcessor {
+public class ForwardingDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final Reader reader;
     private final Writer writer;

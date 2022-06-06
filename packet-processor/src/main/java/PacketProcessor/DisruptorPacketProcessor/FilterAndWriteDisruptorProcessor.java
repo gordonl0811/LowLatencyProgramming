@@ -11,7 +11,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
 
-public class FilterAndWriteDisruptorProcessor extends AbstractQueueProcessor {
+public class FilterAndWriteDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final Reader reader;
     private final Filter filter;
