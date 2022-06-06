@@ -63,6 +63,11 @@ public class BenchmarkFilterAndWriteProcessor {
                     505, 495);
             processor.initialize();
         }
+
+        @TearDown(Level.Invocation)
+        public void teardown() {
+            processor.shutdown();
+        }
     }
 
     @Benchmark

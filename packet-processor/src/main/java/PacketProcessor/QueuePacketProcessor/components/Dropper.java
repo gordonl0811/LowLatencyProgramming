@@ -12,7 +12,7 @@ public class Dropper extends ProcessorComponent {
 
     @Override
     public void process(Packet packet) {
-        System.out.println("Processing " + getPacketCount());
+//        System.out.println("Processing " + getPacketCount());
     }
 
 }

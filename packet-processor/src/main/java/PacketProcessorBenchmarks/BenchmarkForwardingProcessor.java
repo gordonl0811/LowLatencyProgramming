@@ -62,6 +62,11 @@ public class BenchmarkForwardingProcessor {
       );
       processor.initialize();
     }
+
+    @TearDown(Level.Invocation)
+    public void teardown() {
+      processor.shutdown();
+    }
   }
 
   @Benchmark

@@ -65,6 +65,11 @@ public class BenchmarkRewritePortProcessor {
                     1000);
             processor.initialize();
         }
+
+        @TearDown(Level.Invocation)
+        public void teardown() {
+            processor.shutdown();
+        }
     }
 
     @Benchmark
