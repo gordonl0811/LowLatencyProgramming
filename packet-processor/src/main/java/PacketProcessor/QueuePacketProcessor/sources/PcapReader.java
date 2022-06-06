@@ -28,14 +28,14 @@ public class PcapReader implements Runnable {
             this.source.loop(packet -> {
                 try {
                     outputQueue.put(packet);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException ignored) { }
                 return true;
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        source.close();
 
 
     }
