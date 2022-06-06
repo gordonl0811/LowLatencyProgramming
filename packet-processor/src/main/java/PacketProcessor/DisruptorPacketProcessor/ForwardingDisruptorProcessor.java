@@ -1,5 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
+import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
@@ -10,7 +11,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
 
-public class ForwardingDisruptorProcessor extends AbstractDisruptorProcessor {
+public class ForwardingDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final Writer writer;

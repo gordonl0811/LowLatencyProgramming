@@ -10,42 +10,22 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractQueueProcessor implements PacketProcessor {
 
-    private final List<Thread> componentsThreads;
-    protected Thread readerThread;
-
-    public AbstractQueueProcessor() {
-        componentsThreads = new ArrayList<>();
-    }
-
-    public void setReader(PcapReader reader) {
-        this.readerThread = new Thread(reader);
-    }
-
-    public void addComponent(ProcessorComponent component) {
-        componentsThreads.add(new Thread(component));
-    }
-
     @Override
-    public final void initialize() {
-        for (Thread thread : componentsThreads) {
-            thread.start();
-        }
-    }
+    public abstract void initialize();
 
     @Override
     public final void start() throws InterruptedException {
 
-        readerThread.start();
+        releasePackets();
 
         while (!shouldTerminate()) {
             TimeUnit.MILLISECONDS.sleep(1);
         }
 
-        readerThread.interrupt();
-        for (Thread thread : componentsThreads) {
-            thread.interrupt();
-        }
     }
+
+    @Override
+    public abstract void shutdown();
 
     public abstract boolean shouldTerminate();
 }

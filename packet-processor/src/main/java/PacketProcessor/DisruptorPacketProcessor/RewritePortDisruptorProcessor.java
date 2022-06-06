@@ -1,5 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
+import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
@@ -11,7 +12,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
 
-public class RewritePortDisruptorProcessor extends AbstractDisruptorProcessor {
+public class RewritePortDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final PortRewriter rewriter;

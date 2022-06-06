@@ -1,5 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
+import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
 import PacketProcessor.DisruptorPacketProcessor.components.Filter;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
@@ -11,7 +12,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
 
-public class FilterAndDropDisruptorProcessor extends AbstractDisruptorProcessor {
+public class FilterAndDropDisruptorProcessor extends AbstractPacketProcessor {
 
     private final PcapReader reader;
     private final Filter filter;

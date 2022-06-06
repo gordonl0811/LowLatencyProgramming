@@ -1,10 +1,8 @@
-package PacketProcessor.DisruptorPacketProcessor;
-
-import PacketProcessor.PacketProcessor;
+package PacketProcessor;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractDisruptorProcessor implements PacketProcessor {
+public abstract class AbstractPacketProcessor implements PacketProcessor {
 
     @Override
     public abstract void initialize();
@@ -23,7 +21,7 @@ public abstract class AbstractDisruptorProcessor implements PacketProcessor {
     @Override
     public abstract void shutdown();
 
-    public abstract void releasePackets();
+    protected abstract void releasePackets();
 
-    public abstract boolean shouldTerminate();
+    protected abstract boolean shouldTerminate();
 }
