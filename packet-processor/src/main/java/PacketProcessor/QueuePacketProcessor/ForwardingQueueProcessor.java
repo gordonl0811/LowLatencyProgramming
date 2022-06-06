@@ -1,32 +1,42 @@
 package PacketProcessor.QueuePacketProcessor;
 
+import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
+    private final PcapReader reader;
     private final Writer writer;
     private final long expectedPackets;
 
     public ForwardingQueueProcessor(int queueSize, String source, String dest, long expectedPackets)
             throws IOException {
 
-        super();
+
 
         final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
 
-        final PcapReader reader = new PcapReader(source, readerQueue);
+        this.reader = new PcapReader(source, readerQueue);
         this.writer = new Writer(readerQueue, dest);
 
         this.expectedPackets = expectedPackets;
+    }
 
-        addReader(reader);
-        addComponent(this.writer);
+    @Override
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
+    }
+
+    @Override
+    protected List<ProcessorComponent> setComponents() {
+        return List.of(writer);
     }
 
     @Override
@@ -44,6 +54,7 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
         processor.initialize();
         processor.start();
+        processor.shutdown();
     }
 
 }

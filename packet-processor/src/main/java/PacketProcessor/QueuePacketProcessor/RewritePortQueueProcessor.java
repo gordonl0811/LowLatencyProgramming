@@ -1,38 +1,49 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.PortRewriter;
+import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class RewritePortQueueProcessor extends AbstractQueueProcessor {
 
-    private final Writer packetWriter;
+    private final PcapReader reader;
+    private final PortRewriter rewriter;
+    private final Writer writer;
     private final long expectedPackets;
 
     public RewritePortQueueProcessor(int queueSize, String source, String dest, int srcPort, int destPort, long expectedPackets) throws IOException {
-        super();
 
         final BlockingQueue<Packet> producerQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> rewriterQueue = new ArrayBlockingQueue<>(queueSize);
 
-        PortRewriter portRewriter = new PortRewriter(producerQueue, rewriterQueue, srcPort, destPort);
-        this.packetWriter = new Writer(rewriterQueue, dest);
+        this.reader = new PcapReader(source, producerQueue);
+        this.rewriter = new PortRewriter(producerQueue, rewriterQueue, srcPort, destPort);
+        this.writer = new Writer(rewriterQueue, dest);
 
         this.expectedPackets = expectedPackets;
+    }
 
-        addReader(new PcapReader(source, producerQueue));
-        addComponent(portRewriter);
-        addComponent(this.packetWriter);
+    @Override
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
+    }
+
+    @Override
+    protected List<ProcessorComponent> setComponents() {
+        return Arrays.asList(rewriter, writer);
     }
 
     @Override
     public boolean shouldTerminate() {
-        return packetWriter.getPacketCount() >= expectedPackets;
+        return writer.getPacketCount() >= expectedPackets;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -45,5 +56,6 @@ public class RewritePortQueueProcessor extends AbstractQueueProcessor {
 
         processor.initialize();
         processor.start();
+        processor.shutdown();
     }
 }

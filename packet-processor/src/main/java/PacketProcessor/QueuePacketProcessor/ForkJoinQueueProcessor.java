@@ -3,42 +3,51 @@ package PacketProcessor.QueuePacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.Dropper;
 import PacketProcessor.QueuePacketProcessor.components.Filter;
 import PacketProcessor.QueuePacketProcessor.components.PortRewriter;
+import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
 
+    private final PcapReader reader;
+    private final Filter filter;
+    private final PortRewriter tcpRewriter;
+    private final PortRewriter udpRewriter;
     private final Dropper dropper;
 
     private final long expectedPackets;
 
-    public ForkJoinQueueProcessor(int queueSize, String source, int tcpSrcPort, int tcpDestPort, int udpSrcPort, int udpDestPort, long expectedPackets
-
-    ) throws IOException {
-
-        super();
+    public ForkJoinQueueProcessor(int queueSize, String source, int tcpSrcPort, int tcpDestPort, int udpSrcPort, int udpDestPort, long expectedPackets) throws IOException {
 
         final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> udpQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> rewriterQueue = new ArrayBlockingQueue<>(queueSize);
 
-        Filter filter = new Filter(readerQueue, tcpQueue, udpQueue);
-        PortRewriter tcpRewriter = new PortRewriter(tcpQueue, rewriterQueue, tcpSrcPort, tcpDestPort);
-        PortRewriter udpRewriter = new PortRewriter(udpQueue, rewriterQueue, udpSrcPort, udpDestPort);
+        this.reader = new PcapReader(source, readerQueue);
+        this.filter = new Filter(readerQueue, tcpQueue, udpQueue);
+        this.tcpRewriter = new PortRewriter(tcpQueue, rewriterQueue, tcpSrcPort, tcpDestPort);
+        this.udpRewriter = new PortRewriter(udpQueue, rewriterQueue, udpSrcPort, udpDestPort);
         this.dropper = new Dropper(rewriterQueue);
+
         this.expectedPackets = expectedPackets;
 
-        addReader(new PcapReader(source, readerQueue));
-        addComponent(filter);
-        addComponent(tcpRewriter);
-        addComponent(udpRewriter);
-        addComponent(this.dropper);
+    }
 
+    @Override
+    protected List<PcapReader> setReaders() {
+        return List.of(reader);
+    }
+
+    @Override
+    protected List<ProcessorComponent> setComponents() {
+        return Arrays.asList(filter, tcpRewriter, udpRewriter, dropper);
     }
 
     @Override

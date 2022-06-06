@@ -6,22 +6,21 @@ import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class AbstractQueueProcessor extends AbstractPacketProcessor {
 
-    private final List<Thread> readerThreads = new ArrayList<>();
-    private final List<Thread> componentsThreads = new ArrayList<>();
+    private List<Thread> readerThreads;
+    private List<Thread> componentsThreads;
 
-    protected void addReader(PcapReader reader) {
-        readerThreads.add(new Thread(reader));
-    }
+    protected abstract List<PcapReader> setReaders();
 
-    protected void addComponent(ProcessorComponent component) {
-        componentsThreads.add(new Thread(component));
-    }
+    protected abstract List<ProcessorComponent> setComponents();
 
     @Override
     public final void initialize() {
+        readerThreads = setReaders().stream().map(Thread::new).collect(Collectors.toList());
+        componentsThreads = setComponents().stream().map(Thread::new).collect(Collectors.toList());
         for (Thread thread : componentsThreads) {
             thread.start();
         }
