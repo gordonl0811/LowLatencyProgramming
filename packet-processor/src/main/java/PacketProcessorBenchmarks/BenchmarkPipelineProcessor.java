@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
 @Warmup(iterations = 5, time = 3)
 @Measurement(iterations = 5, time = 3)
 @Fork(value = 1)
