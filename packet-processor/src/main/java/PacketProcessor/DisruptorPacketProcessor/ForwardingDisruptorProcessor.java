@@ -1,6 +1,6 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
-import PacketProcessor.DisruptorPacketProcessor.components.Reader;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class ForwardingDisruptorProcessor extends AbstractDisruptorProcessor {
 
-    private final Reader reader;
+    private final PcapReader reader;
     private final Writer writer;
 
     private final long expectedPackets;
@@ -21,7 +21,7 @@ public class ForwardingDisruptorProcessor extends AbstractDisruptorProcessor {
 
         Disruptor<PacketEvent> readerDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-        this.reader = new Reader(source, readerDisruptor);
+        this.reader = new PcapReader(source, readerDisruptor);
         this.writer = new Writer(readerDisruptor, dest);
 
         this.expectedPackets = expectedPackets;

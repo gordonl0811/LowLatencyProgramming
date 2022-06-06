@@ -1,4 +1,4 @@
-package PacketProcessor.DisruptorPacketProcessor.components;
+package PacketProcessor.DisruptorPacketProcessor.sources;
 
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -8,12 +8,12 @@ import java.io.IOException;
 
 import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
 
-public class Reader {
+public class PcapReader {
 
     private final Pcap source;
     private final Disruptor<PacketEvent> outputDisruptor;
 
-    public Reader(String source, Disruptor<PacketEvent> outputDisruptor)
+    public PcapReader(String source, Disruptor<PacketEvent> outputDisruptor)
             throws IOException {
         this.source = Pcap.openStream(source);
         this.outputDisruptor = outputDisruptor;

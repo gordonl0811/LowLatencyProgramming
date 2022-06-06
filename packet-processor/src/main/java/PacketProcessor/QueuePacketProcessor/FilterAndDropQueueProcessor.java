@@ -2,7 +2,7 @@ package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.Dropper;
 import PacketProcessor.QueuePacketProcessor.components.Filter;
-import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class FilterAndDropQueueProcessor extends AbstractQueueProcessor {
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
 
-        setReader(new Reader(source, producerQueue));
+        setReader(new PcapReader(source, producerQueue));
         addComponent(filter);
         addComponent(this.tcpDropper);
         addComponent(this.udpDropper);

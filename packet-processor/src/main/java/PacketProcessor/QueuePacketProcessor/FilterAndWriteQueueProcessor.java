@@ -1,7 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.Filter;
-import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
 
@@ -33,7 +33,7 @@ public class FilterAndWriteQueueProcessor extends AbstractQueueProcessor {
         this.expectedTcpPackets = expectedTcpPackets;
         this.expectedUdpPackets = expectedUdpPackets;
 
-        setReader(new Reader(source, readerQueue));
+        setReader(new PcapReader(source, readerQueue));
         addComponent(filter);
         addComponent(this.tcpWriter);
         addComponent(this.udpWriter);

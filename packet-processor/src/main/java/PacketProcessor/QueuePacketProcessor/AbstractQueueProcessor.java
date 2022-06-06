@@ -2,7 +2,7 @@ package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
-import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public abstract class AbstractQueueProcessor implements PacketProcessor {
         componentsThreads = new ArrayList<>();
     }
 
-    public void setReader(Reader reader) {
+    public void setReader(PcapReader reader) {
         this.readerThread = new Thread(reader);
     }
 

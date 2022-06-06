@@ -1,6 +1,6 @@
 package PacketProcessor.QueuePacketProcessor;
 
-import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
 
@@ -20,7 +20,7 @@ public class ForwardingQueueProcessor extends AbstractQueueProcessor {
 
         final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
 
-        final Reader reader = new Reader(source, readerQueue);
+        final PcapReader reader = new PcapReader(source, readerQueue);
         this.writer = new Writer(readerQueue, dest);
 
         this.expectedPackets = expectedPackets;

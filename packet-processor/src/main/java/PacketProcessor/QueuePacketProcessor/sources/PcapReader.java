@@ -1,4 +1,4 @@
-package PacketProcessor.QueuePacketProcessor.components;
+package PacketProcessor.QueuePacketProcessor.sources;
 
 import io.pkts.Pcap;
 import io.pkts.packet.Packet;
@@ -7,16 +7,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Reader implements Runnable {
+public class PcapReader implements Runnable {
 
     private final Pcap source;
     private final BlockingQueue<Packet> outputQueue;
 
-    public Reader(String source, BlockingQueue<Packet> outputQueue) throws IOException {
+    public PcapReader(String source, BlockingQueue<Packet> outputQueue) throws IOException {
         this(new File(source), outputQueue);
     }
 
-    public Reader(File source, BlockingQueue<Packet> outputQueue) throws IOException {
+    public PcapReader(File source, BlockingQueue<Packet> outputQueue) throws IOException {
         this.source = Pcap.openStream(source);
         this.outputQueue = outputQueue;
     }

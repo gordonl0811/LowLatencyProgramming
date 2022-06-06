@@ -1,7 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.PortRewriter;
-import PacketProcessor.QueuePacketProcessor.components.Reader;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import PacketProcessor.QueuePacketProcessor.components.Writer;
 import io.pkts.packet.Packet;
 
@@ -25,7 +25,7 @@ public class RewritePortQueueProcessor extends AbstractQueueProcessor {
 
         this.expectedPackets = expectedPackets;
 
-        setReader(new Reader(source, producerQueue));
+        setReader(new PcapReader(source, producerQueue));
         addComponent(portRewriter);
         addComponent(this.packetWriter);
     }

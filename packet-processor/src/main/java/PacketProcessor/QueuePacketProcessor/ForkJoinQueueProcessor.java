@@ -1,6 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.*;
+import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
         this.dropper = new Dropper(rewriterQueue);
         this.expectedPackets = expectedPackets;
 
-        setReader(new Reader(source, readerQueue));
+        setReader(new PcapReader(source, readerQueue));
         addComponent(filter);
         addComponent(tcpRewriter);
         addComponent(udpRewriter);

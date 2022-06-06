@@ -1,6 +1,7 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.*;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
-    private final Reader reader;
+    private final PcapReader reader;
     private final Filter filter;
     private final PortRewriter tcpRewriter;
     private final PortRewriter udpRewriter;
@@ -33,7 +34,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.MULTI, new YieldingWaitStrategy());
 
-        this.reader = new Reader(source, readerDisruptor);
+        this.reader = new PcapReader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
         this.udpRewriter = new PortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);

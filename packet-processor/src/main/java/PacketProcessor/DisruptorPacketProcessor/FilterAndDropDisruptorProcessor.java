@@ -2,7 +2,7 @@ package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
 import PacketProcessor.DisruptorPacketProcessor.components.Filter;
-import PacketProcessor.DisruptorPacketProcessor.components.Reader;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class FilterAndDropDisruptorProcessor extends AbstractDisruptorProcessor {
 
-    private final Reader reader;
+    private final PcapReader reader;
     private final Filter filter;
     private final Dropper tcpDropper;
     private final Dropper udpDropper;
@@ -27,7 +27,7 @@ public class FilterAndDropDisruptorProcessor extends AbstractDisruptorProcessor 
         Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-        this.reader = new Reader(source, readerDisruptor);
+        this.reader = new PcapReader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpDropper = new Dropper(tcpDisruptor);
         this.udpDropper = new Dropper(udpDisruptor);

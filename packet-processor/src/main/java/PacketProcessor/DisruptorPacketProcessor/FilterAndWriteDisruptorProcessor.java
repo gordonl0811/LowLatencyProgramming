@@ -1,7 +1,7 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.Filter;
-import PacketProcessor.DisruptorPacketProcessor.components.Reader;
+import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.components.Writer;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class FilterAndWriteDisruptorProcessor extends AbstractDisruptorProcessor {
 
-    private final Reader reader;
+    private final PcapReader reader;
     private final Filter filter;
     private final Writer tcpWriter;
     private final Writer udpWriter;
@@ -27,7 +27,7 @@ public class FilterAndWriteDisruptorProcessor extends AbstractDisruptorProcessor
         Disruptor<PacketEvent> tcpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
         Disruptor<PacketEvent> udpDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
-        this.reader = new Reader(source, readerDisruptor);
+        this.reader = new PcapReader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
         this.tcpWriter = new Writer(tcpDisruptor, tcpDest);
         this.udpWriter = new Writer(udpDisruptor, udpDest);
