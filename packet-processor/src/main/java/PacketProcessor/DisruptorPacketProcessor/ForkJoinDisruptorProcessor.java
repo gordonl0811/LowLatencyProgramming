@@ -12,7 +12,6 @@ import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
@@ -55,7 +54,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     @Override
     protected List<ProcessorComponent> setComponents() {
-        return Arrays.asList(filter, tcpRewriter, udpRewriter, dropper);
+        return List.of(filter, tcpRewriter, udpRewriter, dropper);
     }
 
     @Override

@@ -4,7 +4,6 @@ import PacketProcessor.AbstractPacketProcessor;
 import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,8 +1,8 @@
 package PacketProcessorBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.RewritePortDisruptorProcessor;
+import PacketProcessor.DisruptorPacketProcessor.PipelineDisruptorProcessor;
 import PacketProcessor.PacketProcessor;
-import PacketProcessor.QueuePacketProcessor.RewritePortQueueProcessor;
+import PacketProcessor.QueuePacketProcessor.PipelineQueueProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 3, time = 3)
 @Measurement(iterations = 1, time = 3)
 @Fork(value = 1)
-public class BenchmarkRewritePortProcessor {
+public class BenchmarkPipelineProcessor {
 
     @State(Scope.Benchmark)
     public static class DisruptorImplementationState {
@@ -25,13 +25,7 @@ public class BenchmarkRewritePortProcessor {
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new RewritePortDisruptorProcessor(
-                    bufferSize,
-                    "src/main/resources/input_thousand.pcap",
-                    "src/main/resources/output/rewritten.pcap",
-                    6969,
-                    6969,
-                    1000);
+            processor = new PipelineDisruptorProcessor(bufferSize, "src/main/resources/input_thousand.pcap", 100, 200, 1000);
             processor.initialize();
         }
 
@@ -56,13 +50,7 @@ public class BenchmarkRewritePortProcessor {
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new RewritePortQueueProcessor(
-                    queueSize,
-                    "src/main/resources/input_thousand.pcap",
-                    "src/main/resources/output/rewritten.pcap",
-                    6969,
-                    6969,
-                    1000);
+            processor = new PipelineQueueProcessor(queueSize, "src/main/resources/input_thousand.pcap", 100, 200, 1000);
             processor.initialize();
         }
 

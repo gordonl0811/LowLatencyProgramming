@@ -1,10 +1,8 @@
 package PacketProcessorBenchmarks;
 
 import PacketProcessor.DisruptorPacketProcessor.ForkJoinDisruptorProcessor;
-import PacketProcessor.DisruptorPacketProcessor.RewritePortDisruptorProcessor;
 import PacketProcessor.PacketProcessor;
 import PacketProcessor.QueuePacketProcessor.ForkJoinQueueProcessor;
-import PacketProcessor.QueuePacketProcessor.RewritePortQueueProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
