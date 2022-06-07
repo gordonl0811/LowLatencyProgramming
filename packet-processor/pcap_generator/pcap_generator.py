@@ -4,9 +4,9 @@ from scapy.layers.inet import Ether, IP, TCP, UDP
 from random import randint, uniform
 
 
-def generate_tcp_mss_packet(min_mss, max_mss):
+def generate_tcp_packet():
 
-    packet = Ether() / IP() / TCP(options=[("MSS", randint(min_mss, max_mss))])
+    packet = Ether() / IP() / TCP()
 
     return packet
 
@@ -27,7 +27,7 @@ def generate_random_packets(output_file, packet_count):
 
         if tcp_chance > 0.5:
             tcp_count += 1
-            packet = generate_tcp_mss_packet(1400, 1600)
+            packet = generate_tcp_packet()
         else:
             packet = generate_udp_packet()
 
@@ -42,5 +42,5 @@ def generate_random_packets(output_file, packet_count):
 
 
 if __name__ == "__main__":
-    generate_random_packets("example_three.pcap", 1000)
+    generate_random_packets("input_100000.pcap", 100000)
     # generate_random_packets("input_multiple.pcap", 100)

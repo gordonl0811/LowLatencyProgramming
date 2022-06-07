@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(iterations = 5, time = 3)
-@Measurement(iterations = 5, time = 3)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(value = 1)
 public class BenchmarkMultipleProducerProcessor {
 
@@ -20,17 +18,20 @@ public class BenchmarkMultipleProducerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"8", "64", "512", "4096"})
-        public int bufferSize;
+        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
+        public int size;
+
+        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             processor = new MultipleProducerDisruptorProcessor(
                     1024,
-                    "src/main/resources/example_one.pcap",
-                    "src/main/resources/example_two.pcap",
-                    "src/main/resources/example_three.pcap",
-                    3000
+                    "src/main/resources/inputs/copies/input_1_" + numPackets + ".pcap",
+                    "src/main/resources/inputs/copies/input_2_" + numPackets + ".pcap",
+                    "src/main/resources/inputs/copies/input_3_" + numPackets + ".pcap",
+                    numPackets * 3
             );
             processor.initialize();
         }
@@ -51,17 +52,20 @@ public class BenchmarkMultipleProducerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"8", "64", "512", "4096"})
-        public int queueSize;
+        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
+        public int size;
+
+        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             processor = new MultipleProducerQueueProcessor(
                     1024,
-                    "src/main/resources/example_one.pcap",
-                    "src/main/resources/example_two.pcap",
-                    "src/main/resources/example_three.pcap",
-                    3000
+                    "src/main/resources/inputs/copies/input_1_" + numPackets + ".pcap",
+                    "src/main/resources/inputs/copies/input_2_" + numPackets + ".pcap",
+                    "src/main/resources/inputs/copies/input_3_" + numPackets + ".pcap",
+                    numPackets * 3
             );
             processor.initialize();
         }

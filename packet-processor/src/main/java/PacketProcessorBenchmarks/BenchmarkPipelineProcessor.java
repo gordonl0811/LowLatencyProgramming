@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(iterations = 5, time = 3)
-@Measurement(iterations = 5, time = 3)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(value = 1)
 public class BenchmarkPipelineProcessor {
 
@@ -20,12 +18,17 @@ public class BenchmarkPipelineProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"8", "64", "512", "4096"})
-        public int bufferSize;
+        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
+        public int size;
+
+        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        public int numPackets;
+
+        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new PipelineDisruptorProcessor(bufferSize, "src/main/resources/input_thousand.pcap", 100, 200, 1000);
+            processor = new PipelineDisruptorProcessor(size, source, 100, 200, numPackets);
             processor.initialize();
         }
 
@@ -45,12 +48,17 @@ public class BenchmarkPipelineProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"8", "64", "512", "4096"})
-        public int queueSize;
+        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
+        public int size;
+
+        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        public int numPackets;
+
+        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new PipelineQueueProcessor(queueSize, "src/main/resources/input_thousand.pcap", 100, 200, 1000);
+            processor = new PipelineQueueProcessor(size, source, 100, 200, numPackets);
             processor.initialize();
         }
 
