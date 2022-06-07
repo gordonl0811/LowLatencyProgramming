@@ -24,10 +24,9 @@ public class BenchmarkPipelineProcessor {
         @Param({"1", "10", "100", "1000", "10000", "1000000"})
         public int numPackets;
 
-        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-
         @Setup(Level.Invocation)
         public void setup() throws IOException {
+            String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
             processor = new PipelineDisruptorProcessor(size, source, 100, 200, numPackets);
             processor.initialize();
         }
@@ -54,10 +53,9 @@ public class BenchmarkPipelineProcessor {
         @Param({"1", "10", "100", "1000", "10000", "1000000"})
         public int numPackets;
 
-        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-
         @Setup(Level.Invocation)
         public void setup() throws IOException {
+            String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
             processor = new PipelineQueueProcessor(size, source, 100, 200, numPackets);
             processor.initialize();
         }

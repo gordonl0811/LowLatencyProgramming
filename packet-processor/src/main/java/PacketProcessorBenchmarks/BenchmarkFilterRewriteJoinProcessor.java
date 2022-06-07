@@ -25,10 +25,10 @@ public class BenchmarkFilterRewriteJoinProcessor {
         @Param({"1", "10", "100", "1000", "10000", "1000000"})
         public int numPackets;
 
-        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-
         @Setup(Level.Invocation)
         public void setup() throws IOException {
+
+            String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
 
             processor = new FilterRewriteJoinDisruptorProcessor(
                     size,
@@ -64,10 +64,10 @@ public class BenchmarkFilterRewriteJoinProcessor {
         @Param({"1", "10", "100", "1000", "10000", "1000000"})
         public int numPackets;
 
-        private final String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-
         @Setup(Level.Invocation)
         public void setup() throws IOException {
+
+            String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
 
             processor = new FilterRewriteJoinQueueProcessor(
                     size,
