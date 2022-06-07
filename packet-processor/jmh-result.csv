@@ -1,0 +1,25 @@
+"Benchmark","Mode","Threads","Samples","Score","Score Error (99.9%)","Unit","Param: bufferSize","Param: queueSize"
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkDisruptorImplementation","avgt",1,5,1613.794051,8.784421,"us/op",8,
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkDisruptorImplementation","avgt",1,5,1631.389499,507.804981,"us/op",64,
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkDisruptorImplementation","avgt",1,5,1884.668769,1119.640593,"us/op",512,
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkDisruptorImplementation","avgt",1,5,2584.655703,834.939567,"us/op",4096,
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkQueueImplementation","avgt",1,5,2908.380992,66.146868,"us/op",,8
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkQueueImplementation","avgt",1,5,2573.988560,54.592123,"us/op",,64
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkQueueImplementation","avgt",1,5,2548.357869,102.709851,"us/op",,512
+"PacketProcessorBenchmarks.BenchmarkForkJoinProcessor.benchmarkQueueImplementation","avgt",1,5,2365.512148,53.003376,"us/op",,4096
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkDisruptorImplementation","avgt",1,5,4624.782059,119.812513,"us/op",8,
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkDisruptorImplementation","avgt",1,5,4678.743741,210.257000,"us/op",64,
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkDisruptorImplementation","avgt",1,5,4681.947238,174.328082,"us/op",512,
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkDisruptorImplementation","avgt",1,5,4606.466670,141.277138,"us/op",4096,
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkQueueImplementation","avgt",1,5,4656.543412,5061.412968,"us/op",,8
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkQueueImplementation","avgt",1,5,5303.723031,475.063527,"us/op",,64
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkQueueImplementation","avgt",1,5,4080.960263,3570.823434,"us/op",,512
+"PacketProcessorBenchmarks.BenchmarkMultipleProducerProcessor.benchmarkQueueImplementation","avgt",1,5,3531.168045,180.400245,"us/op",,4096
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkDisruptorImplementation","avgt",1,5,1770.567224,187.552941,"us/op",8,
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkDisruptorImplementation","avgt",1,5,1745.412590,212.520267,"us/op",64,
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkDisruptorImplementation","avgt",1,5,1800.242582,303.141760,"us/op",512,
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkDisruptorImplementation","avgt",1,5,1720.250331,313.117046,"us/op",4096,
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkQueueImplementation","avgt",1,5,3384.983461,249.941176,"us/op",,8
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkQueueImplementation","avgt",1,5,3242.948584,67.075744,"us/op",,64
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkQueueImplementation","avgt",1,5,3269.169506,402.664421,"us/op",,512
+"PacketProcessorBenchmarks.BenchmarkPipelineProcessor.benchmarkQueueImplementation","avgt",1,5,3225.171015,583.456267,"us/op",,4096
