@@ -10,24 +10,25 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 2, time = 5)
+@Measurement(iterations = 3, time = 5)
 @Fork(value = 1)
 public class BenchmarkMultipleProducerProcessor {
+
+    private static final int BUFFER_SIZE = 1024;
 
     @State(Scope.Benchmark)
     public static class DisruptorImplementationState {
 
         public PacketProcessor processor;
 
-        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
-        public int size;
-
-        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        @Param({"1", "10", "100", "1000", "10000", "100000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             processor = new MultipleProducerDisruptorProcessor(
-                    1024,
+                    BUFFER_SIZE,
                     "src/main/resources/inputs/copies/input_1_" + numPackets + ".pcap",
                     "src/main/resources/inputs/copies/input_2_" + numPackets + ".pcap",
                     "src/main/resources/inputs/copies/input_3_" + numPackets + ".pcap",
@@ -52,16 +53,13 @@ public class BenchmarkMultipleProducerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
-        public int size;
-
-        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        @Param({"1", "10", "100", "1000", "10000", "100000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             processor = new MultipleProducerQueueProcessor(
-                    1024,
+                    BUFFER_SIZE,
                     "src/main/resources/inputs/copies/input_1_" + numPackets + ".pcap",
                     "src/main/resources/inputs/copies/input_2_" + numPackets + ".pcap",
                     "src/main/resources/inputs/copies/input_3_" + numPackets + ".pcap",

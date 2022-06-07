@@ -24,8 +24,8 @@ public class MultipleProducerQueueProcessor extends AbstractQueueProcessor {
         BlockingQueue<Packet> sharedQueue = new ArrayBlockingQueue<>(queueSize);
 
         this.readerOne = new PcapReader(sourceOne, sharedQueue);
-        this.readerTwo = new PcapReader(sourceOne, sharedQueue);
-        this.readerThree = new PcapReader(sourceOne, sharedQueue);
+        this.readerTwo = new PcapReader(sourceTwo, sharedQueue);
+        this.readerThree = new PcapReader(sourceThree, sharedQueue);
         this.dropper = new Dropper(sharedQueue);
 
         this.expectedPackets = expectedPackets;

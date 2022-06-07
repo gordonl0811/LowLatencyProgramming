@@ -10,24 +10,25 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
+@Warmup(iterations = 2, time = 5)
+@Measurement(iterations = 3, time = 5)
 @Fork(value = 1)
 public class BenchmarkMultipleConsumerProcessor {
+
+    private static final int BUFFER_SIZE = 1024;
 
     @State(Scope.Benchmark)
     public static class DisruptorImplementationState {
 
         public PacketProcessor processor;
 
-        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
-        public int size;
-
-        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        @Param({"1", "10", "100", "1000", "10000", "100000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-            processor = new MultipleConsumerDisruptorProcessor(size, source, numPackets);
+            processor = new MultipleConsumerDisruptorProcessor(BUFFER_SIZE, source, numPackets);
             processor.initialize();
         }
 
@@ -47,16 +48,13 @@ public class BenchmarkMultipleConsumerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "4", "16", "64", "256", "1024", "4096", "16384"})
-        public int size;
-
-        @Param({"1", "10", "100", "1000", "10000", "1000000"})
+        @Param({"1", "10", "100", "1000", "10000", "100000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
             String source = "src/main/resources/inputs/input_" + numPackets + ".pcap";
-            processor = new MultipleConsumerQueueProcessor(size, source,numPackets);
+            processor = new MultipleConsumerQueueProcessor(BUFFER_SIZE, source, numPackets);
             processor.initialize();
         }
 

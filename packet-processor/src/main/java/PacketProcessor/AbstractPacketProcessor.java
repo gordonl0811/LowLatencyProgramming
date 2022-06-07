@@ -13,7 +13,7 @@ public abstract class AbstractPacketProcessor implements PacketProcessor {
         releasePackets();
 
         while (!shouldTerminate()) {
-            TimeUnit.MILLISECONDS.sleep(1);
+            TimeUnit.NANOSECONDS.sleep(1);
         }
 
     }
