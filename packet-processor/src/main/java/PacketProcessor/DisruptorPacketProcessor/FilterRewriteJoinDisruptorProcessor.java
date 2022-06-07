@@ -2,7 +2,7 @@ package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
 import PacketProcessor.DisruptorPacketProcessor.components.Filter;
-import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
+import PacketProcessor.DisruptorPacketProcessor.components.LayerFourPortRewriter;
 import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
@@ -18,8 +18,8 @@ public class FilterRewriteJoinDisruptorProcessor extends AbstractDisruptorProces
 
     private final PcapReader reader;
     private final Filter filter;
-    private final PortRewriter tcpRewriter;
-    private final PortRewriter udpRewriter;
+    private final LayerFourPortRewriter tcpRewriter;
+    private final LayerFourPortRewriter udpRewriter;
     private final Dropper dropper;
 
     private final long expectedPackets;
@@ -40,8 +40,8 @@ public class FilterRewriteJoinDisruptorProcessor extends AbstractDisruptorProces
 
         this.reader = new PcapReader(source, readerDisruptor);
         this.filter = new Filter(readerDisruptor, tcpDisruptor, udpDisruptor);
-        this.tcpRewriter = new PortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
-        this.udpRewriter = new PortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);
+        this.tcpRewriter = new LayerFourPortRewriter(tcpDisruptor, rewriterDisruptor, tcpSrcPort, tcpDestPort);
+        this.udpRewriter = new LayerFourPortRewriter(udpDisruptor, rewriterDisruptor, udpSrcPort, udpDestPort);
         this.dropper = new Dropper(rewriterDisruptor);
 
         this.expectedPackets = expectedPackets;
