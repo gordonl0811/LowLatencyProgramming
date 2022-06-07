@@ -14,7 +14,7 @@ import com.lmax.disruptor.util.DaemonThreadFactory;
 import java.io.IOException;
 import java.util.List;
 
-public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
+public class FilterRewriteJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
     private final Filter filter;
@@ -24,7 +24,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final long expectedPackets;
 
-    public ForkJoinDisruptorProcessor(
+    public FilterRewriteJoinDisruptorProcessor(
             int bufferSize,
             String source,
             int tcpSrcPort,
@@ -63,7 +63,7 @@ public class ForkJoinDisruptorProcessor extends AbstractDisruptorProcessor {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ForkJoinDisruptorProcessor processor = new ForkJoinDisruptorProcessor(
+        FilterRewriteJoinDisruptorProcessor processor = new FilterRewriteJoinDisruptorProcessor(
                 1024,
                 "src/main/resources/input_thousand.pcap",
                 12,

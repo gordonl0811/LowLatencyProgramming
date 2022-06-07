@@ -1,8 +1,8 @@
 package PacketProcessorBenchmarks;
 
-import PacketProcessor.DisruptorPacketProcessor.ForkJoinDisruptorProcessor;
+import PacketProcessor.DisruptorPacketProcessor.FilterRewriteJoinDisruptorProcessor;
 import PacketProcessor.PacketProcessor;
-import PacketProcessor.QueuePacketProcessor.ForkJoinQueueProcessor;
+import PacketProcessor.QueuePacketProcessor.FilterRewriteJoinQueueProcessor;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 5, time = 3)
 @Measurement(iterations = 5, time = 3)
 @Fork(value = 1)
-public class BenchmarkForkJoinProcessor {
+public class BenchmarkFilterRewriteJoinProcessor {
 
     @State(Scope.Benchmark)
     public static class DisruptorImplementationState {
@@ -25,7 +25,7 @@ public class BenchmarkForkJoinProcessor {
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new ForkJoinDisruptorProcessor(
+            processor = new FilterRewriteJoinDisruptorProcessor(
                     bufferSize,
                     "src/main/resources/input_thousand.pcap",
                     12,
@@ -58,7 +58,7 @@ public class BenchmarkForkJoinProcessor {
 
         @Setup(Level.Invocation)
         public void setup() throws IOException {
-            processor = new ForkJoinQueueProcessor(
+            processor = new FilterRewriteJoinQueueProcessor(
                     queueSize,
                     "src/main/resources/input_thousand.pcap",
                     12,

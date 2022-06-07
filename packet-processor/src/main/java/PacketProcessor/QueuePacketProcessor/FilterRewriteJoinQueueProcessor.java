@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
+public class FilterRewriteJoinQueueProcessor extends AbstractQueueProcessor {
 
     private final PcapReader reader;
     private final Filter filter;
@@ -23,7 +23,7 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
 
     private final long expectedPackets;
 
-    public ForkJoinQueueProcessor(int queueSize, String source, int tcpSrcPort, int tcpDestPort, int udpSrcPort, int udpDestPort, long expectedPackets) throws IOException {
+    public FilterRewriteJoinQueueProcessor(int queueSize, String source, int tcpSrcPort, int tcpDestPort, int udpSrcPort, int udpDestPort, long expectedPackets) throws IOException {
 
         final BlockingQueue<Packet> readerQueue = new ArrayBlockingQueue<>(queueSize);
         final BlockingQueue<Packet> tcpQueue = new ArrayBlockingQueue<>(queueSize);
@@ -56,7 +56,7 @@ public class ForkJoinQueueProcessor extends AbstractQueueProcessor {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        ForkJoinQueueProcessor processor = new ForkJoinQueueProcessor(1000, "src/main/resources/input_thousand.pcap", 12, 34, 56, 78, 1000);
+        FilterRewriteJoinQueueProcessor processor = new FilterRewriteJoinQueueProcessor(1000, "src/main/resources/input_thousand.pcap", 12, 34, 56, 78, 1000);
 
         processor.initialize();
         processor.start();
