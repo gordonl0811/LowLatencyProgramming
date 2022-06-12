@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 2, time = 5)
+@Warmup(iterations = 3, time = 5)
 @Measurement(iterations = 3, time = 5)
 @Fork(value = 1)
 public class BenchmarkMultipleProducerProcessor {
