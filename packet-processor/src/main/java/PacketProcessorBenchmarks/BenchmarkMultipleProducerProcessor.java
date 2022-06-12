@@ -22,7 +22,7 @@ public class BenchmarkMultipleProducerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "10", "100", "1000", "10000", "100000"})
+        @Param({"100", "1000", "10000", "100000", "1000000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
@@ -53,7 +53,7 @@ public class BenchmarkMultipleProducerProcessor {
 
         public PacketProcessor processor;
 
-        @Param({"1", "10", "100", "1000", "10000", "100000"})
+        @Param({"100", "1000", "10000", "100000", "1000000"})
         public int numPackets;
 
         @Setup(Level.Invocation)
