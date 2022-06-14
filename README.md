@@ -21,6 +21,7 @@ The following table is a directory of the strategies included and their correspo
 | Branch Prediction   | [Link](docs/branch_prediction.md)   | [Link](examples/branch_prediction/benchmark.cpp)   |
 | Resource Contention | [Link](docs/resource_contention.md) | [Link](examples/resource_contention/benchmark.cpp) |
 | Kernel Bypass       | [Link](docs/kernel_bypass.md)       | N/A                                                |
+| Cache Warming       | [Link](docs/cache_warming.md)       | N/A                                                |
 
 The repository is gradually being expanded - if there are any mistakes within the documentation, or there are any interesting optimisations that haven't been included, please feel free to get in touch!
 
