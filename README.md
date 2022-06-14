@@ -53,3 +53,11 @@ make
 // Run the benchmark
 ./{OPTIMISATION}Benchmarks
 ```
+
+## Reimplementing the Java Modular Packet Processor Library
+
+The Java Modular Packet Processor (JMPP) library is a lightweight Java library for processing network packets with a user-defined graph of individual processing operations. The JMPP library is not intended for production-level applications, but to be a supplementary educational resource that demonstrates the quantitative advantages of using appropriate data structures and reducing resource contention, as outlined in [this repository's documentation](docs/resource_contention.md).
+
+[Link: The JMPP Repository](https://github.com/gordonl0811/jmpp)
+
+This repository contains a reimplementation of the library, with an additional variant using queues. These are benchmarked, and results are published in the JMPP repository's README.
