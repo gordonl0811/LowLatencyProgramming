@@ -24,7 +24,7 @@ There are different schemes to solve the performance issues with branches at the
 
 One method of branch prediction is to use a state machine with four states, as shown below:
 
-![Branch Prediction State Machine](./images/StateMachine.png)
+![Branch Prediction State Machine](images/benchmarks/StateMachine.png)
 
 Evaluated branches update their corresponding state machine by moving its state closer towards the "strongly not taken" and "strongly taken" states based on the result of the conditional branch.
 
@@ -53,7 +53,7 @@ static int CountEvens(std::vector<int> &nums) {
 
 Benchmarking this function with vectors that have different proportions of even numbers yields an interesting graph of results, shown below:
 
-![CountEvens Benchmark Results](./images/CountEvens.png)
+![CountEvens Benchmark Results](images/benchmarks/CountEvens.png)
 
 | Percentage of Even Numbers in Vector | CountEvens Execution Time (ns) |
 |--------------------------------------|--------------------------------|

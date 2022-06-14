@@ -74,7 +74,7 @@ The two "mid" locations are prefetched for the next iteration of the `while` loo
 |  100000000 |                              506 |                                        450 |
 | 1000000000 |                              745 |                                        653 |
 
-![BinarySearch Benchmark Results](./images/BinarySearch.png)
+![BinarySearch Benchmark Results](images/benchmarks/BinarySearch.png)
 
 The benchmarks run tests on the `BinarySearch` examples above, increasing the size of the array each time by a factor of 10. The results show that there was not any benefit to prefetching - up until an array size of 100000 a few nanoseconds were lost, possibly due to mistimed prefetch instructions. Beyond this value, the results show a performance of improvement of around 10%.
 

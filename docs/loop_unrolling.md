@@ -144,7 +144,7 @@ Naturally, larger loop unrolling factors can be used to reduce the number of bra
 
 # Benchmark Results
 
-![SumVectors Benchmark Results](./images/SumVectors.png)
+![SumVectors Benchmark Results](images/benchmarks/SumVectors.png)
 
 | Vector Size (8^n) | SumVectors Execution Time (ns) | SumVectorsUnrolledTwo Execution Time (ns) | SumVectorsUnrolledFour Execution Time (ns) |
 |-------------------|--------------------------------|-------------------------------------------|--------------------------------------------|

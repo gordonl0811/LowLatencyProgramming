@@ -36,7 +36,7 @@ static __m256 MultiplyAddVectorized(__m256 a, __m256 b, __m256 c) {
 
 # Benchmark Results
 
-![SumVectors Benchmark Results](./images/MultiplyAdd.png)
+![SumVectors Benchmark Results](images/benchmarks/MultiplyAdd.png)
 
 | Iterations Performed | MultiplyAddScalar Execution Time (ns) | MultiplyAddVectorized Execution Time (ns) |
 |----------------------|---------------------------------------|-------------------------------------------|

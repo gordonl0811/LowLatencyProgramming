@@ -86,7 +86,7 @@ Together the instructions have both function calls, but one will execute whilst 
 
 # Benchmark Results
 
-![TrimVector Benchmark Results](./images/TrimVector.png)
+![TrimVector Benchmark Results](images/benchmarks/TrimVector.png)
 
 | Vector Size | TrimVector Execution Time (ns) | TrimVectorPredicated Execution Time (ns) |
 |-------------|--------------------------------|------------------------------------------|

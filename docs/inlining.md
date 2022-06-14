@@ -103,7 +103,7 @@ These are a few of the main cases - several more subtle restrictions can be foun
 
 # Benchmark Results
 
-![Cube Benchmark Results](./images/Cube.png)
+![Cube Benchmark Results](images/benchmarks/Cube.png)
 
 | Iterations Performed | Cube Execution Time (ns) | CubeInlined Execution Time (ns) |
 |----------------------|--------------------------|---------------------------------|
