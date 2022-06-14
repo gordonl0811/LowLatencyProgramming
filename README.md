@@ -27,8 +27,6 @@ The repository is gradually being expanded - if there are any mistakes within th
 
 ## Benchmarks
 
-### Overview
-
 Benchmarks were collected using Imperial College London Department of Computing's undergraduate laboratory machines, with an Intel Core i7-8700 (3.20GHz) and 16GB of RAM, using g++ `9.4.0`. Most of the benchmarks were run without optimisations enabled (`-O0`), particularly because some optimisations may already be performed at certain optimisation levels.
 
 ### Requirements
