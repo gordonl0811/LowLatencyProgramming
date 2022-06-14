@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
 
-public class Writer extends ProcessorComponent {
+public class Writer extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final PcapOutputStream output;

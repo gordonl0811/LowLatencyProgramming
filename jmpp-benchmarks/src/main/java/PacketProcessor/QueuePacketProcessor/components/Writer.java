@@ -10,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Writer extends ProcessorComponent {
+public class Writer extends Component {
 
     private final PcapOutputStream output;
 

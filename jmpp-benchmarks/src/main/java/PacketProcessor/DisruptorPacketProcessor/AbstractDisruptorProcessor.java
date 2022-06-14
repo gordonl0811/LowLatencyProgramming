@@ -1,7 +1,7 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.AbstractPacketProcessor;
-import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
+import PacketProcessor.DisruptorPacketProcessor.components.Component;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 
 import java.util.List;
@@ -9,11 +9,11 @@ import java.util.List;
 public abstract class AbstractDisruptorProcessor extends AbstractPacketProcessor {
 
     private List<PcapReader> readers;
-    private List<ProcessorComponent> components;
+    private List<Component> components;
 
     protected abstract List<PcapReader> setReaders();
 
-    protected abstract List<ProcessorComponent> setComponents();
+    protected abstract List<Component> setComponents();
 
     @Override
     public final void initialize() {
@@ -22,7 +22,7 @@ public abstract class AbstractDisruptorProcessor extends AbstractPacketProcessor
         for (PcapReader reader : readers) {
             reader.initialize();
         }
-        for (ProcessorComponent component : components) {
+        for (Component component : components) {
             component.initialize();
         }
     }
@@ -32,7 +32,7 @@ public abstract class AbstractDisruptorProcessor extends AbstractPacketProcessor
         for (PcapReader reader : readers) {
             reader.shutdown();
         }
-        for (ProcessorComponent component : components) {
+        for (Component component : components) {
             component.shutdown();
         }
     }

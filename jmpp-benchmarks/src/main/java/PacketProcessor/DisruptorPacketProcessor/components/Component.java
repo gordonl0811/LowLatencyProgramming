@@ -6,7 +6,7 @@ import io.pkts.packet.Packet;
 
 import java.io.IOException;
 
-public abstract class ProcessorComponent implements EventHandler<PacketEvent> {
+public abstract class Component implements EventHandler<PacketEvent> {
 
     private long packetCount = 0;
 

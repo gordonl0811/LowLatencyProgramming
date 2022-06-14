@@ -1,7 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.QueuePacketProcessor.components.Dropper;
-import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
+import PacketProcessor.QueuePacketProcessor.components.Component;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 import io.pkts.packet.Packet;
 
@@ -37,7 +37,7 @@ public class MultipleProducerQueueProcessor extends AbstractQueueProcessor {
     }
 
     @Override
-    protected List<ProcessorComponent> setComponents() {
+    protected List<Component> setComponents() {
         return List.of(dropper);
     }
 

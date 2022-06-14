@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class Multicaster extends ProcessorComponent {
+public class Multicaster extends Component {
 
     List<BlockingQueue<Packet>> outputQueues;
 

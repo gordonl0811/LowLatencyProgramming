@@ -6,7 +6,7 @@ import io.pkts.protocol.Protocol;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class Filter extends ProcessorComponent {
+public class Filter extends Component {
 
     private final BlockingQueue<Packet> tcpQueue;
     private final BlockingQueue<Packet> udpQueue;

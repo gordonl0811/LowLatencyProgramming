@@ -5,12 +5,12 @@ import io.pkts.packet.Packet;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public abstract class ProcessorComponent implements Runnable {
+public abstract class Component implements Runnable {
 
     private final BlockingQueue<Packet> inputQueue;
     private long packetCount = 0;
 
-    public ProcessorComponent(BlockingQueue<Packet> inputQueue) {
+    public Component(BlockingQueue<Packet> inputQueue) {
         this.inputQueue = inputQueue;
     }
 

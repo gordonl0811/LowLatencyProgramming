@@ -7,7 +7,7 @@ import io.pkts.protocol.Protocol;
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
 
-public class PortRewriter extends ProcessorComponent {
+public class PortRewriter extends Component {
 
     private final BlockingQueue<Packet> outputQueue;
     private final int srcPort;

@@ -1,7 +1,7 @@
 package PacketProcessor.QueuePacketProcessor;
 
 import PacketProcessor.AbstractPacketProcessor;
-import PacketProcessor.QueuePacketProcessor.components.ProcessorComponent;
+import PacketProcessor.QueuePacketProcessor.components.Component;
 import PacketProcessor.QueuePacketProcessor.sources.PcapReader;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public abstract class AbstractQueueProcessor extends AbstractPacketProcessor {
 
     protected abstract List<PcapReader> setReaders();
 
-    protected abstract List<ProcessorComponent> setComponents();
+    protected abstract List<Component> setComponents();
 
     @Override
     public final void initialize() {

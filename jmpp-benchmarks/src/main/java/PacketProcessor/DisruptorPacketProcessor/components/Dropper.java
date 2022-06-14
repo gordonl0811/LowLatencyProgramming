@@ -6,7 +6,7 @@ import io.pkts.packet.Packet;
 
 import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
 
-public class Dropper extends ProcessorComponent {
+public class Dropper extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
 

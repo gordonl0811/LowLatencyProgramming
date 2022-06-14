@@ -4,7 +4,7 @@ import io.pkts.packet.Packet;
 
 import java.util.concurrent.BlockingQueue;
 
-public class Dropper extends ProcessorComponent {
+public class Dropper extends Component {
 
     public Dropper(BlockingQueue<Packet> inputQueue) {
         super(inputQueue);

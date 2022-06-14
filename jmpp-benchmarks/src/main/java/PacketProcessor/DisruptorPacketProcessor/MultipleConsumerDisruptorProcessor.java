@@ -1,7 +1,7 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
-import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
+import PacketProcessor.DisruptorPacketProcessor.components.Component;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -38,7 +38,7 @@ public class MultipleConsumerDisruptorProcessor extends AbstractDisruptorProcess
     }
 
     @Override
-    protected List<ProcessorComponent> setComponents() {
+    protected List<Component> setComponents() {
         return List.of(consumerOne, consumerTwo, consumerThree);
     }
 

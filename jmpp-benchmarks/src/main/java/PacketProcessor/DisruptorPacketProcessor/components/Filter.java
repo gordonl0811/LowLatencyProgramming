@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import static PacketProcessor.DisruptorPacketProcessor.utils.Utils.startDisruptor;
 
-public class Filter extends ProcessorComponent {
+public class Filter extends Component {
 
     private final Disruptor<PacketEvent> inputDisruptor;
     private final Disruptor<PacketEvent> tcpDisruptor;

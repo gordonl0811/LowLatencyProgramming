@@ -1,8 +1,8 @@
 package PacketProcessor.DisruptorPacketProcessor;
 
 import PacketProcessor.DisruptorPacketProcessor.components.Dropper;
-import PacketProcessor.DisruptorPacketProcessor.components.LayerFourPortRewriter;
-import PacketProcessor.DisruptorPacketProcessor.components.ProcessorComponent;
+import PacketProcessor.DisruptorPacketProcessor.components.PortRewriter;
+import PacketProcessor.DisruptorPacketProcessor.components.Component;
 import PacketProcessor.DisruptorPacketProcessor.sources.PcapReader;
 import PacketProcessor.DisruptorPacketProcessor.utils.PacketEvent;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -16,7 +16,7 @@ import java.util.List;
 public class PipelineDisruptorProcessor extends AbstractDisruptorProcessor {
 
     private final PcapReader reader;
-    private final LayerFourPortRewriter rewriter;
+    private final PortRewriter rewriter;
     private final Dropper dropper;
 
     private final long expectedPackets;
@@ -27,7 +27,7 @@ public class PipelineDisruptorProcessor extends AbstractDisruptorProcessor {
         Disruptor<PacketEvent> rewriterDisruptor = new Disruptor<>(PacketEvent::new, bufferSize, DaemonThreadFactory.INSTANCE, ProducerType.SINGLE, new YieldingWaitStrategy());
 
         this.reader = new PcapReader(source, readerDisruptor);
-        this.rewriter = new LayerFourPortRewriter(readerDisruptor, rewriterDisruptor, srcPort, destPort);
+        this.rewriter = new PortRewriter(readerDisruptor, rewriterDisruptor, srcPort, destPort);
         this.dropper = new Dropper(rewriterDisruptor);
 
         this.expectedPackets = expectedPackets;
@@ -39,7 +39,7 @@ public class PipelineDisruptorProcessor extends AbstractDisruptorProcessor {
     }
 
     @Override
-    protected List<ProcessorComponent> setComponents() {
+    protected List<Component> setComponents() {
         return List.of(rewriter, dropper);
     }
 
