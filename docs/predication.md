@@ -51,6 +51,16 @@ static std::vector<int> TrimVectorPredicated(int max, const std::vector<int>& in
 
 This implementation exploits the evaluation of `input[i] < max` into a boolean, where `true` and `false` is equivalent to `1` and `0` respectively. This value is then added to the `outputI` variable, (used to indicate the position in the array) which eliminates the branch altogether - this technique is known as "predication".
 
+This predicated function, however, is functionally different to the original. You may notice that `output[outputI]` will hold the last element of `input` as the elements of `input` are always assigned somewhere to the back of `output`. Therefore, we have an edge case where the last element of `output` will be incorrect if the last value of `input` is not greater than `max`. There is a simple fix to this, by adding this final check at the end of the code:
+
+```c++
+if (output[outputI] < max) {
+    output.pop_back();
+}
+```
+
+The back of `output` (i.e. the last element of `input`) will be removed if it is lower than the maximum value. We still expect this implementation to perform better than the original version; though we have a branch in at the end of the function, it is an improvement over a branch for every iteration.
+
 Using a more general example, consider the following code:
 
 ```c++

@@ -31,6 +31,10 @@ public:
             outputI += (input[i] < max);
         }
 
+        if (output[outputI] < max) {
+            output.pop_back();
+        }
+
         return output;
     }
 };
