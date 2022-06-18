@@ -59,7 +59,7 @@ if (output[outputI] < max) {
 }
 ```
 
-The back of `output` (i.e. the last element of `input`) will be removed if it is lower than the maximum value. We still expect this implementation to perform better than the original version; though we have a branch in at the end of the function, it is an improvement over a branch for every iteration.
+The back of `output` (i.e. the last element of `input`) will be removed if it is lower than the maximum value. We still expect this implementation to perform better than the original version; though we have a branch at the end of the function, it is an improvement over a branch for every iteration.
 
 Using a more general example, consider the following code:
 
